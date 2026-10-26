@@ -45,6 +45,10 @@ export interface ObserverSettings {
   longitude: number;
   elevation: number;
   timeZone: string;
+  lightPollution: number;
+  cloudCover: number;
+  transparency: number;
+  horizonObstruction: number;
 }
 
 export interface HorizontalPosition {

@@ -86,7 +86,7 @@ function calculateTwilightWindows(observer: Astronomy.Observer, instant: Date): 
   };
 }
 
-function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition): CalculatedObject {
+function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition, settings: ObserverSettings): CalculatedObject {
   const body = getBody(object);
   const equatorial = Astronomy.Equator(body, instant, observer, true, true);
   const geometricHorizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec);
@@ -106,7 +106,7 @@ function calculateObject(object: CatalogueObject, instant: Date, observer: Astro
     apparentAltitude: apparentHorizontal.altitude,
     aboveHorizon,
     observingStatus: aboveHorizon ? condition === 'night' ? 'good-window' : 'twilight' : 'below-horizon',
-    visibility: assessVisibility(object, geometricHorizontal.altitude, condition, solarSeparation),
+    visibility: assessVisibility(object, geometricHorizontal.altitude, condition, solarSeparation, settings),
     ...events,
   };
 }
@@ -120,7 +120,7 @@ export function calculateSky(instant: Date, settings: ObserverSettings): SkySnap
   const sunHorizontal = Astronomy.Horizon(instant, observer, sunEquatorial.ra, sunEquatorial.dec);
   const skyCondition = calculateSkyCondition(sunHorizontal.altitude);
   const twilightWindows = calculateTwilightWindows(observer, instant);
-  const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, skyCondition));
+  const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, skyCondition, settings));
   return { instant, observer: settings, sunAltitude: sunHorizontal.altitude, skyCondition, twilight: skyCondition, twilightWindows, objects };
 }
 

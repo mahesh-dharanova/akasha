@@ -46,7 +46,7 @@ The typed local catalogue contains the Sun, Moon, planets, bright stars, and sel
 
 ### Planner
 
-The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, and observing difficulty. It provides score reasons alongside each recommendation. It is guidance, not a guarantee of visibility: weather, light pollution, obstructions, optics, and eyesight are outside v0.2.
+The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, observing difficulty, and explicit user-supplied observing conditions: Bortle light pollution, cloud cover, transparency, and horizon obstruction. It provides score reasons alongside each recommendation. These inputs affect guidance only; they never alter astronomical positions. It remains guidance, not a guarantee of visibility, and does not automatically retrieve weather.
 
 ### Tracking
 

@@ -92,10 +92,16 @@ npm run test:astronomy # run deterministic astronomy checks
 - Observer-frame validation for Bengaluru, London, and Cape Town using Polaris latitude and Saturn same-UTC location invariants.
 - Existing JPL samples remain the external ephemeris reference while additional Horizons queries are unavailable.
 
+## Implemented in v0.3.5
+
+- Local observing-condition controls for Bortle light pollution, cloud cover, transparency, and horizon obstruction.
+- Visibility scoring now includes those conditions and explains their effect without changing calculated astronomical positions.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
 - Weather, cloud cover, atmospheric transparency, light-pollution, obstruction, and eyesight modelling.
+- Automatic weather retrieval and live light-pollution services; v0.3.5 uses explicit local user inputs instead.
 - Advanced constellation boundaries, photographic Milky Way rendering, and a full WebGL planetarium projection.
 - AI question answering, Android client, orientation sensors, and telescope/mount control.
 
