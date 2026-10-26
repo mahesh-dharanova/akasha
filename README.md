@@ -73,7 +73,7 @@ npm run test:astronomy # run deterministic astronomy checks
 ## Implemented in v0.3.0
 
 - Journal export/import with a versioned `akasha-journal` JSON envelope and validation before import.
-- Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, and twilight ordering.
+- Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons samples.
 
 ## Deferred from v0.1
 
@@ -91,12 +91,12 @@ Verified on 2026-10-26:
 - Vite served the application at `http://127.0.0.1:5173/` and headless Chrome rendered the map, object tracker, planner, and journal without unexpected `NaN`, `undefined`, or `null` values.
 - Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
 - Mobile viewport test — at `390×844`, the sky map and journal remained present with no horizontal overflow.
-- Astronomy invariant checks — Polaris altitude was `12.78°` for latitude `12.97°`; Saturn changed from `12.60°` to `72.79°` over six hours; rise/transit APIs returned valid events where applicable.
+- Astronomy invariant checks — Polaris altitude, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons Saturn/Jupiter samples passed.
 - v0.2 browser smoke test — twilight rows, score summary, deep-sky entries, and OpenNGC attribution rendered without unexpected `NaN`, `undefined`, or `null` values.
 - v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
 - v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.
 
-The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). These checks validate application wiring and broad astronomical invariants; a future reference-data test suite should add JPL Horizons or another independently produced ephemeris sample set.
+The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html) with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
 
 ## Scientific and product limitations
 

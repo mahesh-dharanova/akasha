@@ -1,0 +1,16 @@
+{
+  "source": "NASA/JPL Horizons API",
+  "sourceUrl": "https://ssd-api.jpl.nasa.gov/api/horizons.api",
+  "documentationUrl": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
+  "retrievedAt": "2026-10-26",
+  "settings": {
+    "observer": { "latitude": 12.9716, "longitude": 77.5946, "elevationKm": 0.92 },
+    "timeScale": "UTC",
+    "atmosphericRefraction": false,
+    "coordinateType": "topocentric apparent azimuth/elevation"
+  },
+  "samples": [
+    { "objectId": "saturn", "body": "Saturn", "command": "699", "instant": "2026-10-26T18:00:00Z", "azimuth": 228.502372, "altitude": 72.785140, "distanceAu": 8.50911232023531 },
+    { "objectId": "jupiter", "body": "Jupiter", "command": "599", "instant": "2026-10-26T18:00:00Z", "azimuth": 65.979213, "altitude": -27.758245, "distanceAu": 5.57794778211512 }
+  ]
+}

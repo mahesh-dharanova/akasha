@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import * as Astronomy from 'astronomy-engine';
+
+const horizons = JSON.parse(await readFile(new URL('./data/jpl-horizons-2026-10-26.json', import.meta.url), 'utf8'));
 
 const observer = new Astronomy.Observer(12.9716, 77.5946, 920);
 const start = new Date('2026-10-26T18:00:00Z');
@@ -26,4 +29,13 @@ const nextDawn = Astronomy.SearchAltitude(Astronomy.Body.Sun, observer, 1, start
 const nextDusk = Astronomy.SearchAltitude(Astronomy.Body.Sun, observer, -1, start, 2, -6).date;
 assert.ok(nextDawn < nextDusk, 'Civil/nautical-style dawn should precede dusk in the next daily cycle');
 
-console.log('Astronomy checks passed: Polaris orientation, deterministic reference altitude, Saturn time movement, and twilight ordering.');
+for (const sample of horizons.samples) {
+  const body = Astronomy.Body[sample.objectId[0].toUpperCase() + sample.objectId.slice(1)];
+  const equator = Astronomy.Equator(body, new Date(sample.instant), observer, true, true);
+  const horizontal = Astronomy.Horizon(new Date(sample.instant), observer, equator.ra, equator.dec);
+  assert.ok(Math.abs(horizontal.azimuth - sample.azimuth) < 0.05, `${sample.body} azimuth should match JPL Horizons within 0.05°`);
+  assert.ok(Math.abs(horizontal.altitude - sample.altitude) < 0.05, `${sample.body} altitude should match JPL Horizons within 0.05°`);
+  assert.ok(Math.abs(equator.dist - sample.distanceAu) < 0.001, `${sample.body} distance should match JPL Horizons within 0.001 AU`);
+}
+
+console.log('Astronomy checks passed: Polaris orientation, deterministic reference altitude, Saturn time movement, twilight ordering, and JPL Horizons samples.');
