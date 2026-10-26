@@ -40,6 +40,34 @@ npm run preview   # serve the production build locally
 npm run check     # run TypeScript's no-emit check
 ```
 
+## Implemented in v0.1
+
+- Local observer controls for latitude, longitude, elevation, date/time, and common time zones.
+- SVG altitude/azimuth sky map with horizon, cardinal directions, altitude rings, constellation guide lines, zoom, pan, and object selection.
+- Calculated Sun, Moon, planet, and bright-star positions, including equatorial coordinates, horizontal coordinates, rise, transit, and set events where calculable.
+- Object tracker and science profile with catalogue classification, magnitude, distance metadata, observing guidance, and explicit visibility caveats.
+- Planner that filters out ordinary stars during daylight/twilight while still exposing above-horizon planets and the Moon as calculated targets.
+- Browser-local favourites, notes, observed status, observation time, and observer coordinates.
+
+## Deferred from v0.1
+
+- Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties.
+- Weather, cloud cover, atmospheric transparency, light-pollution, obstruction, and eyesight modelling.
+- Advanced constellation boundaries, photographic Milky Way rendering, and a full WebGL planetarium projection.
+- AI question answering, Android client, orientation sensors, and telescope/mount control.
+
+## Verification results
+
+Verified on 2026-10-26:
+
+- `npm run check` — passed.
+- `npm run build` — passed; Vite produced `dist/`.
+- Vite served the application at `http://127.0.0.1:5173/` and headless Chrome rendered the map, object tracker, planner, and journal without unexpected `NaN`, `undefined`, or `null` values.
+- Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
+- Astronomy invariant checks — Polaris altitude was `12.78°` for latitude `12.97°`; Saturn changed from `12.60°` to `72.79°` over six hours; rise/transit APIs returned valid events where applicable.
+
+The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). These checks validate application wiring and broad astronomical invariants; a future reference-data test suite should add JPL Horizons or another independently produced ephemeris sample set.
+
 ## Scientific and product limitations
 
 - v0.1 uses a curated starter catalogue rather than a complete deep-sky catalogue.

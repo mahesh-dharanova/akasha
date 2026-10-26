@@ -12,12 +12,12 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 ## Chunks
 
 1. [x] Project foundation and documentation — success condition: project structure, scope, architecture, setup, and limitations are documented.
-2. [ ] Calculation layer and starter catalogue — success condition: selected location/time produce reproducible horizontal coordinates, horizon status, twilight state, and rise/transit/set data for planets, the Sun, Moon, and curated stars.
-3. [ ] Interactive sky workspace — success condition: map responds to time/location changes, supports pan/zoom/select, shows horizon/cardinals, and displays the selected object's calculated position.
-4. [ ] Object profile and observing guidance — success condition: selected objects expose catalogue metadata, coordinates, brightness, classification, and honest visibility caveats.
-5. [ ] Tonight planner — success condition: ranked targets explain why they are recommended for the selected observing period and observer.
-6. [ ] Observation journal — success condition: favourites, notes, observed status, date, and location survive page reload using local persistence.
-7. [ ] Verification and handoff — success condition: production build passes, known-object checks are recorded, desktop/mobile layouts are inspected, and incomplete functionality is documented.
+2. [x] Calculation layer and starter catalogue — success condition: selected location/time produce reproducible horizontal coordinates, horizon status, twilight state, and rise/transit/set data for planets, the Sun, Moon, and curated stars.
+3. [x] Interactive sky workspace — success condition: map responds to time/location changes, supports pan/zoom/select, shows horizon/cardinals, and displays the selected object's calculated position.
+4. [x] Object profile and observing guidance — success condition: selected objects expose catalogue metadata, coordinates, brightness, classification, and honest visibility caveats.
+5. [x] Tonight planner — success condition: ranked targets explain why they are recommended for the selected observing period and observer.
+6. [x] Observation journal — success condition: favourites, notes, observed status, date, and location survive page reload using local persistence.
+7. [x] Verification and handoff — success condition: production build passes, known-object checks are recorded, desktop/mobile layouts are inspected, and incomplete functionality is documented.
 
 ## Deferred milestones
 
