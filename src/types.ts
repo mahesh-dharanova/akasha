@@ -56,7 +56,10 @@ export interface CalculatedObject extends CatalogueObject {
   rightAscension: number;
   declination: number;
   distanceAu: number | null;
+  solarSeparation: number | null;
   horizontal: HorizontalPosition;
+  geometricAltitude: number;
+  apparentAltitude: number;
   aboveHorizon: boolean;
   observingStatus: 'good-window' | 'twilight' | 'below-horizon';
   visibility: VisibilityAssessment;

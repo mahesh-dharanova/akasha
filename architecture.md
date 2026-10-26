@@ -31,6 +31,8 @@ The session state contains observer latitude/longitude, IANA time zone, observat
 
 - equatorial coordinates (right ascension and declination),
 - horizontal coordinates (altitude and azimuth),
+- geometric and refraction-adjusted apparent altitude,
+- angular separation from the Sun for Solar System targets,
 - angular distance from the zenith,
 - rise, transit, and set events when they can be calculated,
 - civil, nautical, and astronomical dusk/dawn windows,
@@ -71,6 +73,9 @@ The journal stores favourites and observations in `localStorage` behind a small 
 | Use explicit twilight crossings for observing windows | Civil, nautical, and astronomical twilight are useful, calculable boundaries and are clearer than a single day/night flag. | 2026-10-26 |
 | Keep visibility scoring transparent and local | Users can inspect why a recommendation changed, and no opaque model is allowed to make a scientific visibility claim. | 2026-10-26 |
 | Use selected OpenNGC data for v0.2 deep-sky expansion | OpenNGC provides J2000 positions, object types, magnitudes, sizes, and CC BY-SA 4.0 licensing suitable for a small attributed local catalogue. | 2026-10-26 |
+| Keep geometric and apparent altitude separate | The mathematical horizon is defined at geometric altitude 0°, while normal atmospheric refraction changes the apparent position near the horizon. | 2026-10-26 |
+| Treat solar proximity as a recommendation and safety boundary | A bright object can be high above the horizon while still being unsafe or impractical to observe near the Sun. | 2026-10-26 |
+| Present rise/transit/set as one observing window | Independent “next event” searches can produce dates from different daily cycles and confuse observers. | 2026-10-26 |
 
 ## Data sources and licensing
 

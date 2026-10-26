@@ -22,6 +22,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 9. [x] v0.2 visibility scoring — success condition: every supported object receives a transparent score and reasons using altitude, darkness, brightness, and difficulty without claiming guaranteed visibility.
 10. [x] v0.2 recommendation ranking — success condition: planner targets are ranked by the score and explain their practical observing conditions.
 11. [x] v0.2 licensed catalogue expansion — success condition: selected Messier/NGC targets are searchable, calculable, and attributed to OpenNGC CC BY-SA 4.0.
+12. [x] v0.2.1 accuracy pass — success condition: geometric/apparent altitude, solar-nearness warnings, planetary distance, coherent observing events, and orientation-guide wording are visible and verified.
 
 ## Deferred milestones
 

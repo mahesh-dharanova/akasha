@@ -13,6 +13,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Verification completed: type-check, production build, served-page smoke test, desktop browser interaction test, 390×844 mobile viewport check, and Polaris/Saturn astronomical invariant checks.
 - v0.2 implemented calculated civil/nautical/astronomical twilight windows, a transparent 0–100 visibility score, score-based recommendations, and selected OpenNGC-derived deep-sky targets with CC BY-SA 4.0 attribution.
 - v0.2 verification completed: production build, rendered twilight/deep-sky smoke test, OpenNGC attribution check, and catalogue-id search for `M31`.
+- v0.2.1 completed: geometric/apparent altitude separation, daylight score caps, solar-separation warnings, calculated planetary distance, coherent rise/transit/set windows, and “orientation guide” wording.
+- v0.2.1 verification completed: Mercury browser check showed `not recommended now` at `22/100`, `0.75 AU` distance, `18.0°` solar separation, and same-date rise/transit/set events.
 
 ## Next
 

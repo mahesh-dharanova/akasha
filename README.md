@@ -60,6 +60,15 @@ npm run check     # run TypeScript's no-emit check
 - Selected Messier/NGC deep-sky targets including Andromeda, Orion, Pleiades, Hercules, Ring, Lagoon, Eagle, Omega, Sombrero, and Whirlpool objects.
 - Search by catalogue identifier, including `M31`, `M42`, and `NGC 5194`.
 
+## Implemented in v0.2.1
+
+- Separate geometric altitude from refraction-adjusted apparent altitude.
+- Use geometric altitude for horizon status and visibility scoring.
+- Cap daylight recommendations and flag targets too close to the Sun.
+- Display calculated planetary distance and angular separation from the Sun.
+- Keep rise, transit, and set events within one coherent observing window.
+- Rename the map legend to “orientation guide” to distinguish it from official constellation data.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -79,6 +88,7 @@ Verified on 2026-10-26:
 - Astronomy invariant checks — Polaris altitude was `12.78°` for latitude `12.97°`; Saturn changed from `12.60°` to `72.79°` over six hours; rise/transit APIs returned valid events where applicable.
 - v0.2 browser smoke test — twilight rows, score summary, deep-sky entries, and OpenNGC attribution rendered without unexpected `NaN`, `undefined`, or `null` values.
 - v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
+- v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). These checks validate application wiring and broad astronomical invariants; a future reference-data test suite should add JPL Horizons or another independently produced ephemeris sample set.
 
@@ -87,6 +97,7 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 - v0.1 uses a curated starter catalogue rather than a complete deep-sky catalogue.
 - The sky map is an altitude/azimuth projection, not a photographic rendering or a full planetarium engine.
 - “Observable” means above the geometric horizon and outside bright twilight; it does not model clouds, seeing, transparency, light pollution, obstructions, or the observer's eyesight.
+- Planetary solar-nearness warnings are angular safety guidance, not a substitute for safe solar-observation practice; never use optics near the Sun without certified equipment.
 - Rise and set times are calculated for the selected location and date, with library/refraction defaults documented in the code.
 - Star catalogue properties are curated display metadata; missing values are shown as unavailable rather than inferred.
 

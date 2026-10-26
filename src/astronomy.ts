@@ -26,6 +26,47 @@ function safeEvent(event: Astronomy.AstroTime | null): Date | null {
   return event?.date ?? null;
 }
 
+function safeRiseSet(body: Astronomy.Body, observer: Astronomy.Observer, direction: 1 | -1, start: Date, limitDays: number): Date | null {
+  try {
+    return safeEvent(Astronomy.SearchRiseSet(body, observer, direction, start, limitDays));
+  } catch {
+    return null;
+  }
+}
+
+function safeTransit(body: Astronomy.Body, observer: Astronomy.Observer, start: Date, direction: 1 | -1): Date | null {
+  try {
+    return safeEvent(Astronomy.SearchHourAngle(body, observer, 0, start, direction).time);
+  } catch {
+    return null;
+  }
+}
+
+function chooseTransit(previous: Date | null, next: Date | null, rise: Date | null, set: Date | null): Date | null {
+  const candidates = [previous, next].filter((date): date is Date => date !== null && (rise === null || date >= rise) && (set === null || date <= set));
+  return candidates[0] ?? next ?? previous;
+}
+
+function calculateObservingEvents(body: Astronomy.Body, observer: Astronomy.Observer, instant: Date, aboveHorizon: boolean): { rise: Date | null; transit: Date | null; set: Date | null } {
+  const nextRise = safeRiseSet(body, observer, 1, instant, 2);
+  const previousRise = safeRiseSet(body, observer, 1, instant, -2);
+  const nextSet = safeRiseSet(body, observer, -1, instant, 2);
+  let rise = aboveHorizon ? previousRise ?? nextRise : nextRise;
+  let set = nextSet;
+
+  if (!aboveHorizon && rise) {
+    set = safeRiseSet(body, observer, -1, new Date(rise.getTime() + 60_000), 2) ?? set;
+  }
+  if (rise && set && set < rise) {
+    rise = nextRise ?? rise;
+    set = safeRiseSet(body, observer, -1, new Date(rise.getTime() + 60_000), 2);
+  }
+
+  const previousTransit = safeTransit(body, observer, instant, -1);
+  const nextTransit = safeTransit(body, observer, instant, 1);
+  return { rise, transit: chooseTransit(previousTransit, nextTransit, rise, set), set };
+}
+
 function searchTwilight(observer: Astronomy.Observer, instant: Date, direction: 1 | -1, altitude: number): Date | null {
   try {
     return safeEvent(Astronomy.SearchAltitude(Astronomy.Body.Sun, observer, direction, instant, 2, altitude));
@@ -48,31 +89,25 @@ function calculateTwilightWindows(observer: Astronomy.Observer, instant: Date): 
 function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition): CalculatedObject {
   const body = getBody(object);
   const equatorial = Astronomy.Equator(body, instant, observer, true, true);
-  const horizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec, 'normal');
-  let rise: Date | null = null;
-  let transit: Date | null = null;
-  let set: Date | null = null;
-
-  try {
-    rise = safeEvent(Astronomy.SearchRiseSet(body, observer, 1, instant, 1));
-    set = safeEvent(Astronomy.SearchRiseSet(body, observer, -1, instant, 1));
-    transit = safeEvent(Astronomy.SearchHourAngle(body, observer, 0, instant).time);
-  } catch {
-    // Some bodies may have no event in the search window at high latitudes.
-  }
+  const geometricHorizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec);
+  const apparentHorizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec, 'normal');
+  const aboveHorizon = geometricHorizontal.altitude >= 0;
+  const events = calculateObservingEvents(body, observer, instant, aboveHorizon);
+  const solarSeparation = object.kind === 'planet' || object.kind === 'moon' ? Astronomy.AngleFromSun(body, instant) : null;
 
   return {
     ...object,
     rightAscension: equatorial.ra,
     declination: equatorial.dec,
     distanceAu: Number.isFinite(equatorial.dist) ? equatorial.dist : null,
-    horizontal: { altitude: horizontal.altitude, azimuth: horizontal.azimuth },
-    aboveHorizon: horizontal.altitude >= 0,
-    observingStatus: horizontal.altitude < 0 ? 'below-horizon' : condition === 'night' ? 'good-window' : 'twilight',
-    visibility: assessVisibility(object, horizontal.altitude, condition),
-    rise,
-    transit,
-    set,
+    solarSeparation,
+    horizontal: { altitude: apparentHorizontal.altitude, azimuth: apparentHorizontal.azimuth },
+    geometricAltitude: geometricHorizontal.altitude,
+    apparentAltitude: apparentHorizontal.altitude,
+    aboveHorizon,
+    observingStatus: aboveHorizon ? condition === 'night' ? 'good-window' : 'twilight' : 'below-horizon',
+    visibility: assessVisibility(object, geometricHorizontal.altitude, condition, solarSeparation),
+    ...events,
   };
 }
 
@@ -82,7 +117,7 @@ export function calculateSky(instant: Date, settings: ObserverSettings): SkySnap
   if (!sun) throw new Error('Catalogue is missing the Sun.');
   const sunBody = getBody(sun);
   const sunEquatorial = Astronomy.Equator(sunBody, instant, observer, true, true);
-  const sunHorizontal = Astronomy.Horizon(instant, observer, sunEquatorial.ra, sunEquatorial.dec, 'normal');
+  const sunHorizontal = Astronomy.Horizon(instant, observer, sunEquatorial.ra, sunEquatorial.dec);
   const skyCondition = calculateSkyCondition(sunHorizontal.altitude);
   const twilightWindows = calculateTwilightWindows(observer, instant);
   const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, skyCondition));
