@@ -21,7 +21,7 @@ The application does not use a camera, image recognition, paid APIs, or an AI mo
 - Vite + TypeScript for a small, maintainable local web application.
 - `astronomy-engine` for Sun, Moon, planet, star, horizontal, equatorial, rise/set, and twilight calculations.
 - SVG for the interactive sky map so the geometry remains inspectable and responsive.
-- Browser `localStorage` for v0.1 journal persistence.
+- Browser `localStorage` for journal persistence, with a versioned JSON export/import format.
 
 ## Setup
 
@@ -41,6 +41,7 @@ npm run dev       # start the local development server
 npm run build     # type-check and create a production build
 npm run preview   # serve the production build locally
 npm run check     # run TypeScript's no-emit check
+npm run test:astronomy # run deterministic astronomy checks
 ```
 
 ## Implemented in v0.1
@@ -68,6 +69,11 @@ npm run check     # run TypeScript's no-emit check
 - Display calculated planetary distance and angular separation from the Sun.
 - Keep rise, transit, and set events within one coherent observing window.
 - Rename the map legend to “orientation guide” to distinguish it from official constellation data.
+
+## Implemented in v0.3.0
+
+- Journal export/import with a versioned `akasha-journal` JSON envelope and validation before import.
+- Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, and twilight ordering.
 
 ## Deferred from v0.1
 
@@ -109,4 +115,4 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 
 ## v0.3 direction
 
-Expand the licensed catalogue, add independent reference-data tests, improve tracking windows and journal export/import, and model weather/light pollution where reliable local or user-supplied data is available.
+Expand the licensed catalogue, add independently produced ephemeris comparison samples, improve tracking windows, and model weather/light pollution where reliable local or user-supplied data is available.

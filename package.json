@@ -1,12 +1,13 @@
 {
   "name": "akasha",
   "private": true,
-  "version": "0.2.1",
+  "version": "0.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "check": "tsc --noEmit",
+    "test:astronomy": "node tests/astronomy-check.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -23,9 +23,11 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 10. [x] v0.2 recommendation ranking — success condition: planner targets are ranked by the score and explain their practical observing conditions.
 11. [x] v0.2 licensed catalogue expansion — success condition: selected Messier/NGC targets are searchable, calculable, and attributed to OpenNGC CC BY-SA 4.0.
 12. [x] v0.2.1 accuracy pass — success condition: geometric/apparent altitude, solar-nearness warnings, planetary distance, coherent observing events, and orientation-guide wording are visible and verified.
+13. [x] v0.3 journal portability — success condition: users can export a versioned journal file and validate/import it into local storage.
+14. [x] v0.3 calculation checks — success condition: an executable offline check covers orientation, time movement, and twilight ordering invariants.
 
 ## Deferred milestones
 
-- v0.3: broader licensed deep-sky data, independent reference-data tests, object relationships, journal export/import, and an interactive learning path.
+- v0.3 remaining: broader licensed deep-sky data, independently produced ephemeris comparisons, object relationships, and an interactive learning path.
 - v0.4: optional Android client with location/orientation support.
 - v0.5: telescope integration through a suitable astronomy-control protocol after the calculation and safety model are mature.

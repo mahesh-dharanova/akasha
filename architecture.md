@@ -50,7 +50,7 @@ The planner ranks catalogue objects using a 0–100 visibility assessment. The s
 
 ### Journal
 
-The journal stores favourites and observations in `localStorage` behind a small repository interface. Records include object id, note, observed timestamp, and observer location. A future SQLite-backed desktop/server adapter can implement the same interface without changing the calculation layer or UI contracts.
+The journal stores favourites and observations in `localStorage` behind `src/journal.ts`. Records include object id, note, observed timestamp, and observer location. Export files use a versioned `akasha-journal` JSON envelope; imports are validated before local data is replaced. A future SQLite-backed desktop/server adapter can implement the same interface without changing the calculation layer or UI contracts.
 
 ## Data flow
 
@@ -58,7 +58,7 @@ The journal stores favourites and observations in `localStorage` behind a small 
 2. The state layer normalizes the input into an observation instant and observer coordinates.
 3. The calculation adapter recomputes the visible-object view model.
 4. The map, profile, planner, and tracker render from that model.
-5. Journal mutations are serialized locally and reloaded at startup.
+5. Journal mutations are serialized locally and reloaded at startup; explicit export/import moves the same validated state between browsers.
 
 ## Key decisions
 
