@@ -188,6 +188,36 @@ export const CATALOGUE: CatalogueObject[] = [
     classification: 'Edge-on spiral galaxy', description: 'A striking galaxy with a prominent dust lane and a bright central bulge.',
     guidance: 'Find it in Virgo near Spica; a telescope and dark sky are needed to see the dust lane.', color: '#e0c5a5',
   },
+  {
+    id: 'm3', name: 'M3 Globular Cluster', kind: 'deep-sky', catalogueId: 'M3 / NGC 5272', raJ2000: 13.70312, decJ2000: 28.37544, magnitude: 6.39, angularSizeArcmin: 16.2, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Globular cluster', description: 'A rich spherical cluster containing hundreds of thousands of old stars.',
+    guidance: 'Find it between Arcturus and Cor Caroli; binoculars reveal a compact glow and a telescope begins to resolve stars.', color: '#e8d2ff',
+  },
+  {
+    id: 'm6', name: 'M6 Butterfly Cluster', kind: 'deep-sky', catalogueId: 'M6 / NGC 6405', raJ2000: 17.67243, decJ2000: -32.25417, magnitude: 4.20, angularSizeArcmin: 15.6, difficulty: 'naked-eye', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A bright southern open cluster whose star pattern suggests a butterfly shape.',
+    guidance: 'Scan the Milky Way near the Scorpion’s tail with binoculars; it is easiest from a dark southern sky.', color: '#f5d19b',
+  },
+  {
+    id: 'm7', name: "Ptolemy's Cluster", kind: 'deep-sky', catalogueId: 'M7 / NGC 6475', raJ2000: 17.89755, decJ2000: -34.79283, magnitude: 3.30, angularSizeArcmin: 22.2, difficulty: 'naked-eye', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A large bright cluster near the stinger of Scorpius, visible as a loose stellar gathering.',
+    guidance: 'Look low in the southern sky near Scorpius; binoculars turn the broad naked-eye patch into many stars.', color: '#ffe0a8',
+  },
+  {
+    id: 'm27', name: 'Dumbbell Nebula', kind: 'deep-sky', catalogueId: 'M27 / NGC 6853', raJ2000: 19.99344, decJ2000: 22.72103, magnitude: 7.40, angularSizeArcmin: 6.7, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Planetary nebula', description: 'A glowing shell shed by a dying star, shaped like a faint dumbbell through a telescope.',
+    guidance: 'Use Gamma Sagittae and the stars of Vulpecula as a finder; a telescope and an O-III filter can reveal its shape.', color: '#9fdde0',
+  },
+  {
+    id: 'm81', name: "Bode's Galaxy", kind: 'deep-sky', catalogueId: 'M81 / NGC 3031', raJ2000: 9.92588, decJ2000: 69.06531, magnitude: 6.92, surfaceBrightness: 22.78, angularSizeArcmin: 21.63, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Spiral galaxy', description: 'A bright nearby spiral galaxy in Ursa Major, paired in the same field with M82.',
+    guidance: 'Use the bowl of the Big Dipper to find the pair; binoculars under a dark sky show a soft oval glow.', color: '#b4c6ff',
+  },
+  {
+    id: 'm82', name: 'Cigar Galaxy', kind: 'deep-sky', catalogueId: 'M82 / NGC 3034', raJ2000: 9.93131, decJ2000: 69.67939, magnitude: 8.30, surfaceBrightness: 22.22, angularSizeArcmin: 10.99, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Starburst galaxy', description: 'An edge-on galaxy with intense star formation, gravitationally interacting with M81.',
+    guidance: 'Find M81 first, then look for the narrow companion glow nearby; a telescope and dark sky help separate its shape.', color: '#aab9ed',
+  },
 ];
 
 export const DEFAULT_OBJECT_ID = 'vega';

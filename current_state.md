@@ -18,11 +18,12 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.0 journal export/import completed with a versioned JSON envelope and validation before local replacement.
 - v0.3.1 astronomy checks completed with `npm run test:astronomy`; deterministic Polaris, Saturn, twilight, and committed NASA/JPL Horizons Saturn/Jupiter reference checks pass.
 - v0.3.1 tracking completed with seven hourly calculated points and time-navigation controls for the selected object.
+- v0.3.2 completed: six additional OpenNGC targets were added, with a dedicated Deep sky filter and distinct catalogue symbols.
 
 ## Next
 
 - Add more independently produced ephemeris samples across dates, observer locations, and the Moon.
-- Expand the licensed catalogue and make rise/set tracking windows more explicit.
+- Add more licensed catalogue targets and make rise/set tracking windows more explicit.
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 

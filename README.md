@@ -76,6 +76,11 @@ npm run test:astronomy # run deterministic astronomy checks
 - Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons samples.
 - Seven-point hourly tracking for the selected object, with each point able to move the observation time and sky map.
 
+## Implemented in v0.3.2
+
+- Six additional OpenNGC targets: M3, M6, M7, M27, M81, and M82.
+- A dedicated Deep sky catalogue filter and distinct deep-sky catalogue symbols.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -116,4 +121,4 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 
 ## v0.3 direction
 
-Expand the licensed catalogue, add independently produced ephemeris comparison samples, improve tracking windows, and model weather/light pollution where reliable local or user-supplied data is available.
+Add more licensed catalogue targets, improve rise/set tracking windows, and model weather/light pollution where reliable local or user-supplied data is available.
