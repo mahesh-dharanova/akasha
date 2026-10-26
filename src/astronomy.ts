@@ -1,6 +1,7 @@
 import * as Astronomy from 'astronomy-engine';
 import { CATALOGUE } from './catalogue';
-import type { CalculatedObject, CatalogueObject, ObserverSettings, SkySnapshot } from './types';
+import { assessVisibility } from './visibility';
+import type { CalculatedObject, CatalogueObject, ObserverSettings, SkyCondition, SkySnapshot, TwilightWindows } from './types';
 
 const STAR_SLOT = Astronomy.Body.Star1;
 
@@ -13,8 +14,11 @@ function getBody(object: CatalogueObject): Astronomy.Body {
   return STAR_SLOT;
 }
 
-function calculateTwilight(sunAltitude: number): SkySnapshot['twilight'] {
-  if (sunAltitude >= -6) return sunAltitude >= 0 ? 'daylight' : 'astronomical-twilight';
+function calculateSkyCondition(sunAltitude: number): SkyCondition {
+  if (sunAltitude >= 0) return 'daylight';
+  if (sunAltitude >= -6) return 'civil-twilight';
+  if (sunAltitude >= -12) return 'nautical-twilight';
+  if (sunAltitude >= -18) return 'astronomical-twilight';
   return 'night';
 }
 
@@ -22,7 +26,26 @@ function safeEvent(event: Astronomy.AstroTime | null): Date | null {
   return event?.date ?? null;
 }
 
-function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, twilight: SkySnapshot['twilight']): CalculatedObject {
+function searchTwilight(observer: Astronomy.Observer, instant: Date, direction: 1 | -1, altitude: number): Date | null {
+  try {
+    return safeEvent(Astronomy.SearchAltitude(Astronomy.Body.Sun, observer, direction, instant, 2, altitude));
+  } catch {
+    return null;
+  }
+}
+
+function calculateTwilightWindows(observer: Astronomy.Observer, instant: Date): TwilightWindows {
+  return {
+    civilDawn: searchTwilight(observer, instant, 1, -6),
+    nauticalDawn: searchTwilight(observer, instant, 1, -12),
+    astronomicalDawn: searchTwilight(observer, instant, 1, -18),
+    astronomicalDusk: searchTwilight(observer, instant, -1, -18),
+    nauticalDusk: searchTwilight(observer, instant, -1, -12),
+    civilDusk: searchTwilight(observer, instant, -1, -6),
+  };
+}
+
+function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition): CalculatedObject {
   const body = getBody(object);
   const equatorial = Astronomy.Equator(body, instant, observer, true, true);
   const horizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec, 'normal');
@@ -45,7 +68,8 @@ function calculateObject(object: CatalogueObject, instant: Date, observer: Astro
     distanceAu: Number.isFinite(equatorial.dist) ? equatorial.dist : null,
     horizontal: { altitude: horizontal.altitude, azimuth: horizontal.azimuth },
     aboveHorizon: horizontal.altitude >= 0,
-    observingStatus: horizontal.altitude < 0 ? 'below-horizon' : twilight === 'night' ? 'good-window' : 'twilight',
+    observingStatus: horizontal.altitude < 0 ? 'below-horizon' : condition === 'night' ? 'good-window' : 'twilight',
+    visibility: assessVisibility(object, horizontal.altitude, condition),
     rise,
     transit,
     set,
@@ -59,9 +83,10 @@ export function calculateSky(instant: Date, settings: ObserverSettings): SkySnap
   const sunBody = getBody(sun);
   const sunEquatorial = Astronomy.Equator(sunBody, instant, observer, true, true);
   const sunHorizontal = Astronomy.Horizon(instant, observer, sunEquatorial.ra, sunEquatorial.dec, 'normal');
-  const twilight = calculateTwilight(sunHorizontal.altitude);
-  const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, twilight));
-  return { instant, observer: settings, sunAltitude: sunHorizontal.altitude, twilight, objects };
+  const skyCondition = calculateSkyCondition(sunHorizontal.altitude);
+  const twilightWindows = calculateTwilightWindows(observer, instant);
+  const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, skyCondition));
+  return { instant, observer: settings, sunAltitude: sunHorizontal.altitude, skyCondition, twilight: skyCondition, twilightWindows, objects };
 }
 
 export function compassDirection(azimuth: number): string {

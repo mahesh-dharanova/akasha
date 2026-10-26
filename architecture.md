@@ -33,18 +33,18 @@ The session state contains observer latitude/longitude, IANA time zone, observat
 - horizontal coordinates (altitude and azimuth),
 - angular distance from the zenith,
 - rise, transit, and set events when they can be calculated,
-- twilight context,
-- a deliberately limited visibility status.
+- civil, nautical, and astronomical dusk/dawn windows,
+- a deliberately limited visibility assessment.
 
 The application does not replace the library's ephemeris with hand-authored planet positions. Curated star coordinates are catalogue values used as inputs to the same observer-coordinate conversion.
 
 ### Catalogue
 
-The first catalogue is a typed, local starter dataset containing the Sun, Moon, planets, and a small selection of bright stars. Scientific fields are explicit and nullable. Each future catalogue addition must record its source and licence in code or an accompanying data note; missing values remain unavailable.
+The typed local catalogue contains the Sun, Moon, planets, bright stars, and selected Messier/NGC deep-sky targets. Scientific fields are explicit and nullable. The deep-sky additions use selected OpenNGC fields with CC BY-SA 4.0 attribution recorded on each entry and in the README. Each future catalogue addition must record its exact upstream source and licence; missing values remain unavailable.
 
 ### Planner
 
-The planner ranks catalogue objects using calculated altitude, twilight context, apparent magnitude, object type, and beginner suitability. It provides an explanation alongside each recommendation. It is guidance, not a guarantee of visibility: weather, light pollution, obstructions, optics, and eyesight are outside v0.1.
+The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, and observing difficulty. It provides score reasons alongside each recommendation. It is guidance, not a guarantee of visibility: weather, light pollution, obstructions, optics, and eyesight are outside v0.2.
 
 ### Journal
 
@@ -68,14 +68,18 @@ The journal stores favourites and observations in `localStorage` behind a small 
 | Keep the starter catalogue local and curated | v0.1 needs deterministic offline behavior and honest metadata before adding a large external catalogue. | 2026-10-26 |
 | Keep journal persistence behind an interface | Local storage meets the first milestone while preserving a migration path to SQLite or another durable local store. | 2026-10-26 |
 | Treat above-horizon as necessary, not sufficient, for visibility | Twilight and practical observing conditions materially affect what an observer can see. | 2026-10-26 |
+| Use explicit twilight crossings for observing windows | Civil, nautical, and astronomical twilight are useful, calculable boundaries and are clearer than a single day/night flag. | 2026-10-26 |
+| Keep visibility scoring transparent and local | Users can inspect why a recommendation changed, and no opaque model is allowed to make a scientific visibility claim. | 2026-10-26 |
+| Use selected OpenNGC data for v0.2 deep-sky expansion | OpenNGC provides J2000 positions, object types, magnitudes, sizes, and CC BY-SA 4.0 licensing suitable for a small attributed local catalogue. | 2026-10-26 |
 
 ## Data sources and licensing
 
 - Astronomical calculations: `astronomy-engine` package and its published documentation/licence, recorded in `package.json` and the installed package metadata.
 - Starter star coordinates and names: standard bright-star catalogue identifiers and values included as application data; expansion requires recording the exact upstream catalogue and licence.
+- Selected deep-sky coordinates, types, sizes, and visual magnitudes: [OpenNGC](https://github.com/mattiaverga/OpenNGC), CC BY-SA 4.0; each imported entry records this source in `src/catalogue.ts`.
 - Object explanations: concise application-authored descriptions in the local catalogue; they are not presented as live scientific measurements.
 
-Before v0.2, review and document the exact upstream sources for every non-calculated catalogue property, especially distances, spectral classifications, and deep-sky metadata.
+Before v0.3, review and document the exact upstream sources for every non-calculated catalogue property, especially distances, spectral classifications, and deep-sky metadata.
 
 ## Future boundaries
 

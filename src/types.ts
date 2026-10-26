@@ -1,6 +1,24 @@
 import type { Body } from 'astronomy-engine';
 
-export type ObjectKind = 'star' | 'planet' | 'moon' | 'sun';
+export type ObjectKind = 'star' | 'planet' | 'moon' | 'sun' | 'deep-sky';
+export type ObservingDifficulty = 'naked-eye' | 'binocular' | 'telescope';
+export type SkyCondition = 'daylight' | 'civil-twilight' | 'nautical-twilight' | 'astronomical-twilight' | 'night';
+
+export interface TwilightWindows {
+  civilDawn: Date | null;
+  nauticalDawn: Date | null;
+  astronomicalDawn: Date | null;
+  astronomicalDusk: Date | null;
+  nauticalDusk: Date | null;
+  civilDusk: Date | null;
+}
+
+export interface VisibilityAssessment {
+  score: number;
+  band: 'excellent' | 'good' | 'challenging' | 'not-recommended';
+  label: string;
+  reasons: string[];
+}
 
 export interface CatalogueObject {
   id: string;
@@ -10,6 +28,11 @@ export interface CatalogueObject {
   raJ2000?: number;
   decJ2000?: number;
   distanceLightYears?: number;
+  angularSizeArcmin?: number;
+  surfaceBrightness?: number;
+  difficulty?: ObservingDifficulty;
+  catalogueId?: string;
+  source?: string;
   magnitude: number | null;
   classification: string;
   description: string;
@@ -36,6 +59,7 @@ export interface CalculatedObject extends CatalogueObject {
   horizontal: HorizontalPosition;
   aboveHorizon: boolean;
   observingStatus: 'good-window' | 'twilight' | 'below-horizon';
+  visibility: VisibilityAssessment;
   rise: Date | null;
   transit: Date | null;
   set: Date | null;
@@ -45,7 +69,10 @@ export interface SkySnapshot {
   instant: Date;
   observer: ObserverSettings;
   sunAltitude: number;
-  twilight: 'night' | 'astronomical-twilight' | 'daylight';
+  skyCondition: SkyCondition;
+  /** Backward-compatible display alias used by the v0.1 shell. */
+  twilight: SkyCondition;
+  twilightWindows: TwilightWindows;
   objects: CalculatedObject[];
 }
 

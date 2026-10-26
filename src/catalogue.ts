@@ -126,6 +126,68 @@ export const CATALOGUE: CatalogueObject[] = [
     classification: 'A-type main-sequence star', description: 'A bright solitary star in Piscis Austrinus with a debris disk.',
     guidance: 'Look for a single bright star low in the southern sky during autumn evenings.', color: '#e3ecff',
   },
+  // Coordinates, visual magnitudes, types, and surface brightness values below are selected from OpenNGC.
+  // Source: https://github.com/mattiaverga/OpenNGC · CC BY-SA 4.0.
+  {
+    id: 'm31', name: 'Andromeda Galaxy', kind: 'deep-sky', catalogueId: 'M31 / NGC 0224', raJ2000: 0.71232, decJ2000: 41.26906, magnitude: 3.44, surfaceBrightness: 23.63, angularSizeArcmin: 177.83, difficulty: 'naked-eye', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Spiral galaxy', description: 'The nearest major galaxy to the Milky Way and a vast neighbouring stellar system.',
+    guidance: 'Under a dark sky, look for a soft elongated glow near the Great Square of Pegasus; binoculars make it easier.', color: '#c2c8ff',
+  },
+  {
+    id: 'm42', name: 'Orion Nebula', kind: 'deep-sky', catalogueId: 'M42 / NGC 1976', raJ2000: 5.58791, decJ2000: -5.38967, magnitude: 4.0, angularSizeArcmin: 90, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission nebula and open cluster', description: 'A stellar nursery in Orion’s sword, illuminated by young massive stars.',
+    guidance: 'Find Orion’s Belt and follow it to the sword. Binoculars show the glowing cloud; a telescope reveals structure.', color: '#bdcfff',
+  },
+  {
+    id: 'm13', name: 'Hercules Cluster', kind: 'deep-sky', catalogueId: 'M13 / NGC 6205', raJ2000: 16.6949, decJ2000: 36.46131, magnitude: 5.8, angularSizeArcmin: 16.5, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Globular cluster', description: 'A dense spherical swarm of hundreds of thousands of old stars in Hercules.',
+    guidance: 'Use the keystone of Hercules as a guide. Binoculars show a misty patch; telescopes begin to resolve stars.', color: '#d9c8ff',
+  },
+  {
+    id: 'm45', name: 'Pleiades', kind: 'deep-sky', catalogueId: 'M45 / Mel 022', raJ2000: 3.79128, decJ2000: 24.10528, magnitude: 1.2, angularSizeArcmin: 150, difficulty: 'naked-eye', source: 'OpenNGC addendum · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A young nearby cluster whose brightest members form the familiar Seven Sisters.',
+    guidance: 'Look for a small bluish group in Taurus. Binoculars reveal dozens of stars and delicate surrounding haze.', color: '#cfe2ff',
+  },
+  {
+    id: 'm51', name: 'Whirlpool Galaxy', kind: 'deep-sky', catalogueId: 'M51 / NGC 5194', raJ2000: 13.49798, decJ2000: 47.19517, magnitude: 8.36, surfaceBrightness: 22.9, angularSizeArcmin: 13.71, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Interacting spiral galaxy', description: 'A grand-design spiral galaxy interacting with a smaller companion galaxy.',
+    guidance: 'Use the end stars of the Big Dipper’s handle as a guide. A dark sky and telescope are needed for the spiral structure.', color: '#aab8ff',
+  },
+  {
+    id: 'm57', name: 'Ring Nebula', kind: 'deep-sky', catalogueId: 'M57 / NGC 6720', raJ2000: 18.89306, decJ2000: 33.02858, magnitude: 8.8, angularSizeArcmin: 1.27, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Planetary nebula', description: 'A glowing shell expelled by a dying star in the constellation Lyra.',
+    guidance: 'Locate it between Beta and Gamma Lyrae. It is small but distinctive through a telescope.', color: '#a5dddf',
+  },
+  {
+    id: 'm4', name: 'Butterfly Cluster', kind: 'deep-sky', catalogueId: 'M4 / NGC 6121', raJ2000: 16.39317, decJ2000: -26.52553, magnitude: 5.4, angularSizeArcmin: 28.2, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Globular cluster', description: 'A close globular cluster near Antares, with a prominent central bar of stars.',
+    guidance: 'Use Antares as a locator and scan just west with binoculars or a small telescope.', color: '#f0c69a',
+  },
+  {
+    id: 'omega-centauri', name: 'Omega Centauri', kind: 'deep-sky', catalogueId: 'NGC 5139', raJ2000: 13.44608, decJ2000: -47.47686, magnitude: 5.33, angularSizeArcmin: 27, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Globular cluster', description: 'The largest and brightest globular cluster visible from Earth, rich with old stars.',
+    guidance: 'Best from southern latitudes or a low southern horizon; binoculars show a bright granular glow.', color: '#ffe2ad',
+  },
+  {
+    id: 'm8', name: 'Lagoon Nebula', kind: 'deep-sky', catalogueId: 'M8 / NGC 6523', raJ2000: 18.06146, decJ2000: -24.38017, magnitude: 5.8, angularSizeArcmin: 45, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission nebula', description: 'A bright star-forming region in Sagittarius with dark lanes crossing its glow.',
+    guidance: 'Scan the Sagittarius star clouds with binoculars; a nebula filter can improve contrast.', color: '#d6b3ff',
+  },
+  {
+    id: 'm16', name: 'Eagle Nebula', kind: 'deep-sky', catalogueId: 'M16 / NGC 6611', raJ2000: 18.31338, decJ2000: -13.80722, magnitude: 6.0, angularSizeArcmin: 120, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission nebula and open cluster', description: 'A young cluster embedded in a star-forming cloud, famous for the Pillars of Creation.',
+    guidance: 'Look in the Milky Way of Serpens; binoculars show the cluster and a hazy surrounding patch.', color: '#cbbcff',
+  },
+  {
+    id: 'm17', name: 'Omega Nebula', kind: 'deep-sky', catalogueId: 'M17 / NGC 6618', raJ2000: 18.34642, decJ2000: -16.17153, magnitude: 7.0, angularSizeArcmin: 12.6, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission nebula', description: 'A bright curved emission nebula in Sagittarius, also known as the Swan Nebula.',
+    guidance: 'Use a low-power telescope or binoculars under a dark sky; a nebula filter can reveal its shape.', color: '#b8d4ff',
+  },
+  {
+    id: 'm104', name: 'Sombrero Galaxy', kind: 'deep-sky', catalogueId: 'M104 / NGC 4594', raJ2000: 12.66651, decJ2000: -11.62306, magnitude: 8.59, surfaceBrightness: 22.26, angularSizeArcmin: 8.45, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Edge-on spiral galaxy', description: 'A striking galaxy with a prominent dust lane and a bright central bulge.',
+    guidance: 'Find it in Virgo near Spica; a telescope and dark sky are needed to see the dust lane.', color: '#e0c5a5',
+  },
 ];
 
 export const DEFAULT_OBJECT_ID = 'vega';

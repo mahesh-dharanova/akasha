@@ -2,7 +2,7 @@
 
 AKASHA is a local-first personal astronomy observatory for understanding and observing the real night sky. It calculates celestial positions from an observer's location and observation time, then turns those results into a practical sky map, object profile, observing planner, and journal.
 
-## v0.1 scope
+## v0.2 scope
 
 - Interactive, low-glare sky map with stars, major constellations, planets, horizon, and cardinal directions.
 - Location, date, time, and time-zone aware observation controls.
@@ -10,6 +10,9 @@ AKASHA is a local-first personal astronomy observatory for understanding and obs
 - Object profiles with coordinates, magnitude, observing guidance, and horizon/twilight caveats.
 - A beginner-focused "tonight" planner.
 - Local favourites, observation notes, and observed status using browser `localStorage`.
+- Calculated civil, nautical, and astronomical twilight windows.
+- A transparent 0–100 visibility score using altitude, sky darkness, catalogue brightness, surface brightness where available, and observing difficulty.
+- A selected OpenNGC-derived deep-sky catalogue expansion with source and licence attribution.
 
 The application does not use a camera, image recognition, paid APIs, or an AI model for astronomical calculations. AI explanations may be added later, but the calculated sky remains independent and reproducible.
 
@@ -49,9 +52,17 @@ npm run check     # run TypeScript's no-emit check
 - Planner that filters out ordinary stars during daylight/twilight while still exposing above-horizon planets and the Moon as calculated targets.
 - Browser-local favourites, notes, observed status, observation time, and observer coordinates.
 
+## Implemented in v0.2
+
+- Twilight window panel with the next civil, nautical, and astronomical dusk/dawn crossings for the selected observer.
+- Object and planner visibility scores with human-readable reasons instead of an unqualified “visible” claim.
+- Recommendation ranking based on the score, with practical difficulty and observing-condition explanations.
+- Selected Messier/NGC deep-sky targets including Andromeda, Orion, Pleiades, Hercules, Ring, Lagoon, Eagle, Omega, Sombrero, and Whirlpool objects.
+- Search by catalogue identifier, including `M31`, `M42`, and `NGC 5194`.
+
 ## Deferred from v0.1
 
-- Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties.
+- Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
 - Weather, cloud cover, atmospheric transparency, light-pollution, obstruction, and eyesight modelling.
 - Advanced constellation boundaries, photographic Milky Way rendering, and a full WebGL planetarium projection.
 - AI question answering, Android client, orientation sensors, and telescope/mount control.
@@ -66,6 +77,8 @@ Verified on 2026-10-26:
 - Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
 - Mobile viewport test — at `390×844`, the sky map and journal remained present with no horizontal overflow.
 - Astronomy invariant checks — Polaris altitude was `12.78°` for latitude `12.97°`; Saturn changed from `12.60°` to `72.79°` over six hours; rise/transit APIs returned valid events where applicable.
+- v0.2 browser smoke test — twilight rows, score summary, deep-sky entries, and OpenNGC attribution rendered without unexpected `NaN`, `undefined`, or `null` values.
+- v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). These checks validate application wiring and broad astronomical invariants; a future reference-data test suite should add JPL Horizons or another independently produced ephemeris sample set.
 
@@ -83,6 +96,6 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 - [architecture.md](architecture.md) — component boundaries, data flow, and scientific decisions.
 - [current_state.md](current_state.md) — the verified handoff point for the next agent.
 
-## v0.2 direction
+## v0.3 direction
 
-Improve twilight and visibility scoring, add a larger licensed object catalogue, make tracking windows more explicit, add import/export for the journal, and introduce tests against trusted reference values before considering telescope-control work.
+Expand the licensed catalogue, add independent reference-data tests, improve tracking windows and journal export/import, and model weather/light pollution where reliable local or user-supplied data is available.
