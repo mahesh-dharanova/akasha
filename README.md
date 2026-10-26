@@ -73,7 +73,7 @@ npm run test:astronomy # run deterministic astronomy checks
 ## Implemented in v0.3.1
 
 - Journal export/import with a versioned `akasha-journal` JSON envelope and validation before import.
-- Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons samples.
+- Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, twilight ordering, committed NASA/JPL Horizons samples, and Bengaluru/London/Cape Town observer-frame invariants.
 - Seven-point hourly tracking for the selected object, with each point able to move the observation time and sky map.
 
 ## Implemented in v0.3.2
@@ -86,6 +86,11 @@ npm run test:astronomy # run deterministic astronomy checks
 - Observing-window timeline with rise, transit, set, civil twilight, astronomical twilight, and current-time markers.
 - Dark-sky bands and clickable event markers that move the shared observation time.
 - Moon JPL Horizons comparison deferred because repeated API requests returned a server-side `LTKERNL`/`IP_ADDR` error; no reference values were invented.
+
+## Implemented in v0.3.4
+
+- Observer-frame validation for Bengaluru, London, and Cape Town using Polaris latitude and Saturn same-UTC location invariants.
+- Existing JPL samples remain the external ephemeris reference while additional Horizons queries are unavailable.
 
 ## Deferred from v0.1
 
@@ -104,7 +109,7 @@ Verified on 2026-10-26:
 - Vite served the application at `http://127.0.0.1:5173/` and headless Chrome rendered the map, object tracker, planner, and journal without unexpected `NaN`, `undefined`, or `null` values.
 - Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
 - Mobile viewport test — at `390×844`, the sky map and journal remained present with no horizontal overflow.
-- Astronomy invariant checks — Polaris altitude, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons Saturn/Jupiter samples passed.
+- Astronomy invariant checks — Polaris altitude, Saturn's apparent/orbital movement distinction, twilight ordering, committed NASA/JPL Horizons Saturn/Jupiter samples, and multi-location observer-frame checks passed.
 - v0.2 browser smoke test — twilight rows, score summary, deep-sky entries, and OpenNGC attribution rendered without unexpected `NaN`, `undefined`, or `null` values.
 - v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
 - v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.

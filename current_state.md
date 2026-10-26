@@ -20,12 +20,14 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.1 tracking completed with seven hourly calculated points and time-navigation controls for the selected object.
 - v0.3.2 completed: six additional OpenNGC targets were added, with a dedicated Deep sky filter and distinct catalogue symbols.
 - v0.3.3 completed: observing-window timeline now combines object rise/transit/set events with twilight markers, dark-sky bands, and clickable time navigation.
+- v0.3.4 location validation completed for Bengaluru, London, and Cape Town using Polaris latitude invariants and same-UTC Saturn frame differences.
 
 ## Next
 
 - Add more independently produced ephemeris samples across dates, observer locations, and the Moon.
 - Add more licensed catalogue targets and make rise/set tracking windows more explicit.
 - Retry a Moon JPL Horizons reference sample when the service-side `LTKERNL`/`IP_ADDR` failure is resolved.
+- Add London/Cape Town JPL samples when the same Horizons service-side failure is resolved.
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 

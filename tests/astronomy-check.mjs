@@ -7,6 +7,12 @@ const horizons = JSON.parse(await readFile(new URL('./data/jpl-horizons-2026-10-
 const observer = new Astronomy.Observer(12.9716, 77.5946, 920);
 const start = new Date('2026-10-26T18:00:00Z');
 
+const observerCases = [
+  { name: 'Bengaluru', observer: new Astronomy.Observer(12.9716, 77.5946, 920) },
+  { name: 'London', observer: new Astronomy.Observer(51.5072, -0.1276, 11) },
+  { name: 'Cape Town', observer: new Astronomy.Observer(-33.9249, 18.4241, 15) },
+];
+
 // Polaris is close to the north celestial pole, so its altitude should be close to latitude.
 Astronomy.DefineStar(Astronomy.Body.Star1, 2.5303, 89.2641, 433);
 const polaris = Astronomy.Equator(Astronomy.Body.Star1, start, observer, true, true);
@@ -38,4 +44,18 @@ for (const sample of horizons.samples) {
   assert.ok(Math.abs(equator.dist - sample.distanceAu) < 0.001, `${sample.body} distance should match JPL Horizons within 0.001 AU`);
 }
 
-console.log('Astronomy checks passed: Polaris orientation, deterministic reference altitude, Saturn time movement, twilight ordering, and JPL Horizons samples.');
+// Location-frame invariants: Polaris altitude follows latitude, and the same UTC sky differs by longitude.
+const polarisPositions = observerCases.map(({ name, observer: location }) => {
+  const equator = Astronomy.Equator(Astronomy.Body.Star1, start, location, true, true);
+  const horizontal = Astronomy.Horizon(start, location, equator.ra, equator.dec);
+  const saturn = Astronomy.Equator(Astronomy.Body.Saturn, start, location, true, true);
+  const saturnHorizontal = Astronomy.Horizon(start, location, saturn.ra, saturn.dec);
+  return { name, latitude: location.latitude, polaris: horizontal, saturn: saturnHorizontal };
+});
+for (const position of polarisPositions) {
+  assert.ok(Math.abs(position.polaris.altitude - position.latitude) < 0.7, `${position.name} Polaris altitude should follow latitude`);
+  assert.ok(position.polaris.azimuth < 2 || position.polaris.azimuth > 358, `${position.name} Polaris should remain near north`);
+}
+assert.ok(Math.abs(polarisPositions[1].saturn.altitude - polarisPositions[2].saturn.altitude) > 10, 'Different observer locations should produce different Saturn altitudes');
+
+console.log('Astronomy checks passed: Polaris orientation, deterministic reference altitude, Saturn time movement, twilight ordering, JPL Horizons samples, and multi-location invariants.');

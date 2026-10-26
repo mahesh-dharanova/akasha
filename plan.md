@@ -28,6 +28,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 15. [x] v0.3.1 ephemeris comparison and tracking — success condition: committed JPL Horizons samples pass local comparison checks and the selected object exposes an hourly, time-navigable track.
 16. [x] v0.3.2 catalogue discovery — success condition: additional OpenNGC targets are calculable, searchable, attributed, and filterable as deep-sky objects.
 17. [x] v0.3.3 observing windows — success condition: rise/transit/set and twilight crossings appear on a dark-sky-aware, time-navigable timeline.
+18. [x] v0.3.4 multi-location validation — success condition: observer-frame invariants pass for Bengaluru, London, and Cape Town while external JPL samples remain committed and reproducible.
 
 ## Deferred milestones
 
