@@ -87,6 +87,7 @@ The journal stores favourites and observations in `localStorage` behind `src/jou
 - Starter star coordinates and names: standard bright-star catalogue identifiers and values included as application data; expansion requires recording the exact upstream catalogue and licence.
 - Selected deep-sky coordinates, types, sizes, and visual magnitudes: [OpenNGC](https://github.com/mattiaverga/OpenNGC), CC BY-SA 4.0; each imported entry records this source in `src/catalogue.ts`.
 - Object explanations: concise application-authored descriptions in the local catalogue; they are not presented as live scientific measurements.
+- Complete source and licence ledger: [data-provenance.md](data-provenance.md).
 
 Before v0.3, review and document the exact upstream sources for every non-calculated catalogue property, especially distances, spectral classifications, and deep-sky metadata.
 

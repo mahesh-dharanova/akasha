@@ -117,6 +117,7 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 
 - [plan.md](plan.md) — milestone roadmap and chunk success conditions.
 - [architecture.md](architecture.md) — component boundaries, data flow, and scientific decisions.
+- [data-provenance.md](data-provenance.md) — source, licence, attribution, and handling ledger for catalogue and reference data.
 - [current_state.md](current_state.md) — the verified handoff point for the next agent.
 
 ## v0.3 direction
