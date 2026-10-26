@@ -16,12 +16,13 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.2.1 completed: geometric/apparent altitude separation, daylight score caps, solar-separation warnings, calculated planetary distance, coherent rise/transit/set windows, and “orientation guide” wording.
 - v0.2.1 verification completed: Mercury browser check showed `not recommended now` at `22/100`, `0.75 AU` distance, `18.0°` solar separation, and same-date rise/transit/set events.
 - v0.3.0 journal export/import completed with a versioned JSON envelope and validation before local replacement.
-- v0.3.0 astronomy checks completed with `npm run test:astronomy`; deterministic Polaris, Saturn, twilight, and committed NASA/JPL Horizons Saturn/Jupiter reference checks pass.
+- v0.3.1 astronomy checks completed with `npm run test:astronomy`; deterministic Polaris, Saturn, twilight, and committed NASA/JPL Horizons Saturn/Jupiter reference checks pass.
+- v0.3.1 tracking completed with seven hourly calculated points and time-navigation controls for the selected object.
 
 ## Next
 
 - Add more independently produced ephemeris samples across dates, observer locations, and the Moon.
-- Expand the licensed catalogue and make tracking windows more explicit.
+- Expand the licensed catalogue and make rise/set tracking windows more explicit.
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 

@@ -48,6 +48,10 @@ The typed local catalogue contains the Sun, Moon, planets, bright stars, and sel
 
 The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, and observing difficulty. It provides score reasons alongside each recommendation. It is guidance, not a guarantee of visibility: weather, light pollution, obstructions, optics, and eyesight are outside v0.2.
 
+### Tracking
+
+The selected object tracker recalculates seven hourly snapshots from the current observation instant and observer settings. Each row is a navigation control that changes the shared observation instant, so the map, profile, planner, and event window update together. The timeline is an explicit calculated sample, not a claim about actual visibility.
+
 ### Journal
 
 The journal stores favourites and observations in `localStorage` behind `src/journal.ts`. Records include object id, note, observed timestamp, and observer location. Export files use a versioned `akasha-journal` JSON envelope; imports are validated before local data is replaced. A future SQLite-backed desktop/server adapter can implement the same interface without changing the calculation layer or UI contracts.

@@ -25,6 +25,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 12. [x] v0.2.1 accuracy pass — success condition: geometric/apparent altitude, solar-nearness warnings, planetary distance, coherent observing events, and orientation-guide wording are visible and verified.
 13. [x] v0.3 journal portability — success condition: users can export a versioned journal file and validate/import it into local storage.
 14. [x] v0.3 calculation checks — success condition: an executable offline check covers orientation, time movement, and twilight ordering invariants.
+15. [x] v0.3.1 ephemeris comparison and tracking — success condition: committed JPL Horizons samples pass local comparison checks and the selected object exposes an hourly, time-navigable track.
 
 ## Deferred milestones
 

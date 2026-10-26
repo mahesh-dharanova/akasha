@@ -70,10 +70,11 @@ npm run test:astronomy # run deterministic astronomy checks
 - Keep rise, transit, and set events within one coherent observing window.
 - Rename the map legend to “orientation guide” to distinguish it from official constellation data.
 
-## Implemented in v0.3.0
+## Implemented in v0.3.1
 
 - Journal export/import with a versioned `akasha-journal` JSON envelope and validation before import.
 - Executable astronomy checks for Polaris orientation, deterministic reference output, Saturn's apparent/orbital movement distinction, twilight ordering, and committed NASA/JPL Horizons samples.
+- Seven-point hourly tracking for the selected object, with each point able to move the observation time and sky map.
 
 ## Deferred from v0.1
 
