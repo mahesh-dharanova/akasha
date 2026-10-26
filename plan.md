@@ -29,6 +29,19 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 
 ## Deferred milestones
 
-- v0.3 remaining: broader licensed deep-sky data, independently produced ephemeris comparisons, object relationships, and an interactive learning path.
+- v0.3 remaining: broader licensed deep-sky data, more independently produced ephemeris comparisons, object relationships, and an interactive learning path.
 - v0.4: optional Android client with location/orientation support.
 - v0.5: telescope integration through a suitable astronomy-control protocol after the calculation and safety model are mature.
+
+## Deferred brainstorming
+
+### Multiple observer frames
+
+The current AKASHA viewpoint is an observer standing on Earth: the local horizon surrounds the observer, and the zenith is directly overhead. If we later want to track Earth as a celestial object, the observer must be somewhere else—such as the Moon, a spacecraft, or another planet.
+
+Possible future concepts:
+
+- Earth viewed from the Moon or a spacecraft: altitude, azimuth, distance, phase, and apparent size.
+- Earth rotation viewed from outside Earth, including the changing visible hemisphere.
+- Tracking a location on Earth as a rotating surface point rather than as a sky object.
+- A selectable observer frame while keeping local horizon and zenith definitions explicit.
