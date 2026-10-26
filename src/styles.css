@@ -114,6 +114,21 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .tracking-row span, .tracking-row small { font-size: 9px; white-space: nowrap; }
 .tracking-row small { color: var(--muted); overflow: hidden; text-overflow: ellipsis; }
 .tracking-row strong { color: var(--cyan); font-size: 11px; }
+.observing-timeline { border-bottom: 1px solid var(--border); padding: 12px 0; }
+.timeline-axis { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 4px; color: var(--muted); font-size: 9px; }
+.timeline-bar { height: 56px; position: relative; margin: 0 5px; border-top: 1px solid #344664; border-bottom: 1px solid #344664; background: rgba(131,144,170,.05); }
+.timeline-night-band { position: absolute; top: 0; bottom: 0; background: rgba(101,213,160,.12); border-inline: 1px solid rgba(101,213,160,.2); }
+.timeline-current { position: absolute; top: -5px; bottom: -5px; width: 1px; background: var(--cyan); z-index: 2; }
+.timeline-current i { display: block; width: 7px; height: 7px; margin-left: -3px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px var(--cyan); }
+.timeline-current small { position: absolute; top: 8px; left: 4px; color: var(--cyan); font-size: 8px; }
+.timeline-marker { position: absolute; top: 22px; transform: translateX(-50%); display: grid; justify-items: center; width: max-content; max-width: 74px; padding: 0; border: 0; color: var(--muted-strong); background: transparent; font-size: 8px; z-index: 3; }
+.timeline-marker::before { content: ''; width: 7px; height: 7px; margin-bottom: 3px; border: 1px solid currentColor; border-radius: 50%; background: var(--panel-raised); }
+.timeline-marker span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.timeline-marker:hover { color: #fff; }
+.timeline-object-event { color: var(--amber); }
+.timeline-twilight-event { color: #aeb9ff; }
+.timeline-dark-event { color: var(--green); }
+.timeline-note { margin-top: 8px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .copy-block { display: grid; gap: 7px; padding-top: 14px; }
 .copy-block p { color: var(--muted-strong); font-size: 12px; line-height: 1.55; }
 .source-note { color: #9caae1 !important; font-size: 10px !important; }

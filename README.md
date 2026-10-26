@@ -81,6 +81,12 @@ npm run test:astronomy # run deterministic astronomy checks
 - Six additional OpenNGC targets: M3, M6, M7, M27, M81, and M82.
 - A dedicated Deep sky catalogue filter and distinct deep-sky catalogue symbols.
 
+## Implemented in v0.3.3
+
+- Observing-window timeline with rise, transit, set, civil twilight, astronomical twilight, and current-time markers.
+- Dark-sky bands and clickable event markers that move the shared observation time.
+- Moon JPL Horizons comparison deferred because repeated API requests returned a server-side `LTKERNL`/`IP_ADDR` error; no reference values were invented.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -94,6 +100,7 @@ Verified on 2026-10-26:
 
 - `npm run check` — passed.
 - `npm run build` — passed; Vite produced `dist/`.
+- v0.3.3 browser smoke test — observing timeline, dark-sky bands, seven event markers, and clickable event controls rendered without browser errors.
 - Vite served the application at `http://127.0.0.1:5173/` and headless Chrome rendered the map, object tracker, planner, and journal without unexpected `NaN`, `undefined`, or `null` values.
 - Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
 - Mobile viewport test — at `390×844`, the sky map and journal remained present with no horizontal overflow.

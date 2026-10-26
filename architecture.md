@@ -50,7 +50,7 @@ The planner ranks catalogue objects using a 0–100 visibility assessment. The s
 
 ### Tracking
 
-The selected object tracker recalculates seven hourly snapshots from the current observation instant and observer settings. Each row is a navigation control that changes the shared observation instant, so the map, profile, planner, and event window update together. The timeline is an explicit calculated sample, not a claim about actual visibility.
+The selected object tracker recalculates seven hourly snapshots from the current observation instant and observer settings. Each row is a navigation control that changes the shared observation instant, so the map, profile, planner, and event window update together. The observing-window timeline adds rise, transit, set, twilight crossings, and dark-sky bands to the same shared time model. These are explicit calculated samples, not claims about actual visibility.
 
 ### Journal
 
