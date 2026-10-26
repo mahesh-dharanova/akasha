@@ -10,7 +10,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Initial documentation created: README, plan, and architecture.
 - Calculation layer implemented for the Sun, Moon, planets, and curated bright stars, including horizontal/equatorial coordinates, twilight state, rise, transit, and set events.
 - Responsive sky workspace implemented with time stepping/animation, observer presets, timezone controls, SVG pan/zoom/select, catalogue filtering, object guidance, planner, favourites, and journal notes.
-- Verification completed: type-check, production build, served-page smoke test, browser interaction test, and Polaris/Saturn astronomical invariant checks.
+- Verification completed: type-check, production build, served-page smoke test, desktop browser interaction test, 390×844 mobile viewport check, and Polaris/Saturn astronomical invariant checks.
 
 ## Next
 

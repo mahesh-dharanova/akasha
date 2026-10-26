@@ -64,6 +64,7 @@ Verified on 2026-10-26:
 - `npm run build` — passed; Vite produced `dist/`.
 - Vite served the application at `http://127.0.0.1:5173/` and headless Chrome rendered the map, object tracker, planner, and journal without unexpected `NaN`, `undefined`, or `null` values.
 - Browser interaction test — selecting Saturn worked; changing the observation time changed the displayed altitude from `−75.4°` to `78.0°`.
+- Mobile viewport test — at `390×844`, the sky map and journal remained present with no horizontal overflow.
 - Astronomy invariant checks — Polaris altitude was `12.78°` for latitude `12.97°`; Saturn changed from `12.60°` to `72.79°` over six hours; rise/transit APIs returned valid events where applicable.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). These checks validate application wiring and broad astronomical invariants; a future reference-data test suite should add JPL Horizons or another independently produced ephemeris sample set.
