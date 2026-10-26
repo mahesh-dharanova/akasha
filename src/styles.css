@@ -140,6 +140,10 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .twilight-row span { display: grid; gap: 2px; color: #e6ecfa; font-size: 11px; }
 .twilight-row small { color: var(--muted); font-size: 9px; text-transform: uppercase; letter-spacing: .08em; }
 textarea { display: block; width: 100%; min-height: 78px; resize: vertical; margin: 14px 0 10px; padding: 10px; font-size: 12px; line-height: 1.45; }
+.journal-heading { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.journal-tools { display: flex; gap: 6px; }
+.journal-tools .button { padding: 7px 9px; font-size: 10px; }
+.journal-message { margin: 10px 0; color: var(--green); font-size: 11px; }
 .journal-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .checkbox-label { display: flex; grid-template-columns: auto 1fr; align-items: center; gap: 7px; font-size: 11px; }
 .checkbox-label input { accent-color: var(--cyan); }

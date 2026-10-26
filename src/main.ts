@@ -1,6 +1,7 @@
 import './styles.css';
 import { CATALOGUE, DEFAULT_OBJECT_ID, getObject } from './catalogue';
 import { calculateSky, compassDirection, formatDeclination, formatRightAscension } from './astronomy';
+import { loadJournal, parseJournalFile, saveJournal, serializeJournal } from './journal';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -13,7 +14,6 @@ const DEFAULT_OBSERVER: ObserverSettings = {
   timeZone: detectedTimeZone,
 };
 
-const JOURNAL_KEY = 'akasha-journal-v1';
 const app = document.querySelector<HTMLDivElement>('#app') ?? (() => {
   throw new Error('AKASHA app root is missing.');
 })();
@@ -30,6 +30,7 @@ const state: {
   playing: boolean;
   timer: number | null;
   journal: JournalState;
+  journalMessage: string;
   snapshot: SkySnapshot;
 } = {
   instant: new Date(),
@@ -43,21 +44,9 @@ const state: {
   playing: false,
   timer: null,
   journal: loadJournal(),
+  journalMessage: '',
   snapshot: calculateSky(new Date(), DEFAULT_OBSERVER),
 };
-
-function loadJournal(): JournalState {
-  try {
-    const parsed = JSON.parse(localStorage.getItem(JOURNAL_KEY) ?? '{}') as Partial<JournalState>;
-    return { favourites: parsed.favourites ?? [], entries: parsed.entries ?? [] };
-  } catch {
-    return { favourites: [], entries: [] };
-  }
-}
-
-function saveJournal(): void {
-  localStorage.setItem(JOURNAL_KEY, JSON.stringify(state.journal));
-}
 
 function escapeHtml(value: string): string {
   return value.replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[character] ?? character);
@@ -198,7 +187,7 @@ function renderJournal(): string {
   const object = selectedObject();
   const entry = state.journal.entries.find((item) => item.objectId === object.id);
   const entries = state.journal.entries.slice().reverse().slice(0, 3);
-  return `<section class="panel journal-panel"><div class="panel-kicker">OBSERVATION JOURNAL</div><h2>Make this sky yours</h2><p class="panel-intro">Save a note for ${escapeHtml(object.name)}. It stays in this browser.</p><textarea id="journal-note" placeholder="What did you notice?">${escapeHtml(entry?.note ?? '')}</textarea><div class="journal-actions"><label class="checkbox-label"><input type="checkbox" id="journal-observed" ${entry ? 'checked' : ''} /> Mark observed</label><button class="button button-primary" data-action="save-note">Save note</button></div>${entries.length ? `<div class="journal-list">${entries.map((item) => `<button class="journal-entry" data-select-object="${item.objectId}"><strong>${escapeHtml(getObject(item.objectId).name)}</strong><span>${escapeHtml(item.note || 'Observed without a note')}</span></button>`).join('')}</div>` : '<p class="empty-state">Your observing history will appear here.</p>'}</section>`;
+  return `<section class="panel journal-panel"><div class="journal-heading"><div><div class="panel-kicker">OBSERVATION JOURNAL</div><h2>Make this sky yours</h2></div><div class="journal-tools"><button class="button button-quiet" data-action="export-journal">Export</button><button class="button button-quiet" data-action="import-journal">Import</button><input id="journal-file" type="file" accept="application/json" hidden /></div></div><p class="panel-intro">Save a note for ${escapeHtml(object.name)}. It stays in this browser unless you export it.</p>${state.journalMessage ? `<p class="journal-message" role="status">${escapeHtml(state.journalMessage)}</p>` : ''}<textarea id="journal-note" placeholder="What did you notice?">${escapeHtml(entry?.note ?? '')}</textarea><div class="journal-actions"><label class="checkbox-label"><input type="checkbox" id="journal-observed" ${entry ? 'checked' : ''} /> Mark observed</label><button class="button button-primary" data-action="save-note">Save note</button></div>${entries.length ? `<div class="journal-list">${entries.map((item) => `<button class="journal-entry" data-select-object="${item.objectId}"><strong>${escapeHtml(getObject(item.objectId).name)}</strong><span>${escapeHtml(item.note || 'Observed without a note')}</span></button>`).join('')}</div>` : '<p class="empty-state">Your observing history will appear here.</p>'}</section>`;
 }
 
 function render(): void {
@@ -282,7 +271,7 @@ function bindEvents(): void {
     const index = state.journal.favourites.indexOf(state.selectedId);
     if (index >= 0) state.journal.favourites.splice(index, 1);
     else state.journal.favourites.push(state.selectedId);
-    saveJournal();
+    saveJournal(state.journal);
     render();
   });
   app.querySelector<HTMLButtonElement>('[data-action="save-note"]')?.addEventListener('click', () => {
@@ -299,7 +288,32 @@ function bindEvents(): void {
     } else if (existing) {
       state.journal.entries = state.journal.entries.filter((entry) => entry.id !== existing.id);
     }
-    saveJournal();
+    saveJournal(state.journal);
+    render();
+  });
+  app.querySelector<HTMLButtonElement>('[data-action="export-journal"]')?.addEventListener('click', () => {
+    const blob = new Blob([serializeJournal(state.journal)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'akasha-journal.json';
+    link.click();
+    URL.revokeObjectURL(url);
+    state.journalMessage = 'Journal exported as akasha-journal.json.';
+    render();
+  });
+  const journalFile = app.querySelector<HTMLInputElement>('#journal-file');
+  app.querySelector<HTMLButtonElement>('[data-action="import-journal"]')?.addEventListener('click', () => journalFile?.click());
+  journalFile?.addEventListener('change', async () => {
+    const file = journalFile.files?.[0];
+    if (!file) return;
+    try {
+      state.journal = parseJournalFile(await file.text());
+      saveJournal(state.journal);
+      state.journalMessage = 'Journal imported and saved in this browser.';
+    } catch (error) {
+      state.journalMessage = error instanceof Error ? error.message : 'The journal could not be imported.';
+    }
     render();
   });
 }
