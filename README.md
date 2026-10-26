@@ -97,6 +97,12 @@ npm run test:astronomy # run deterministic astronomy checks
 - Local observing-condition controls for Bortle light pollution, cloud cover, transparency, and horizon obstruction.
 - Visibility scoring now includes those conditions and explains their effect without changing calculated astronomical positions.
 
+## Implemented in v0.3.6
+
+- Observer setup persistence for location, elevation, timezone, and local observing conditions.
+- Stored settings are range-checked and timezone-validated before use.
+- Added a reset action to restore the default observer setup.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.

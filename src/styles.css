@@ -47,6 +47,7 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .preset-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 12px; color: var(--muted); font-size: 11px; }
 .preset-row button, .map-footer button { border: 0; color: var(--muted-strong); background: transparent; padding: 3px 7px; font-size: 11px; }
 .preset-row button:hover, .map-footer button:hover { color: var(--cyan); }
+.reset-observer-button { margin-left: auto; color: var(--amber) !important; }
 .time-row { display: flex; gap: 8px; margin-top: 10px; }
 #observation-time { flex: 1; }
 .time-actions { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 7px; margin-top: 8px; }

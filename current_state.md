@@ -22,6 +22,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.3 completed: observing-window timeline now combines object rise/transit/set events with twilight markers, dark-sky bands, and clickable time navigation.
 - v0.3.4 location validation completed for Bengaluru, London, and Cape Town using Polaris latitude invariants and same-UTC Saturn frame differences.
 - v0.3.5 completed: local Bortle, cloud-cover, transparency, and horizon-obstruction inputs now affect visibility guidance transparently.
+- v0.3.6 completed: observer location, timezone, elevation, and local observing conditions persist in validated browser storage with a reset action.
 
 ## Next
 
@@ -30,6 +31,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Retry a Moon JPL Horizons reference sample when the service-side `LTKERNL`/`IP_ADDR` failure is resolved.
 - Add London/Cape Town JPL samples when the same Horizons service-side failure is resolved.
 - Consider optional weather/light-pollution integrations only after choosing reliable, clearly licensed data sources.
+- Keep observer settings local; do not turn persistence into a cloud account requirement.
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 

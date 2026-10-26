@@ -23,7 +23,7 @@ Vite serves a responsive single-page application. The layout is organized around
 
 ### Observation state
 
-The session state contains observer latitude/longitude, IANA time zone, observation instant, selected object, map view, and local journal state. The instant is stored as an ISO value; display formatting is derived from it so time-zone conversions do not drift.
+The session state contains observer latitude/longitude, elevation, IANA time zone, local observing conditions, observation instant, selected object, map view, and local journal state. Observer settings persist through `src/settings.ts` in browser `localStorage`; numeric ranges and IANA timezone values are validated before use. The instant is stored as an ISO value; display formatting is derived from it so time-zone conversions do not drift.
 
 ### Calculation layer
 
@@ -62,7 +62,7 @@ The journal stores favourites and observations in `localStorage` behind `src/jou
 2. The state layer normalizes the input into an observation instant and observer coordinates.
 3. The calculation adapter recomputes the visible-object view model.
 4. The map, profile, planner, and tracker render from that model.
-5. Journal mutations are serialized locally and reloaded at startup; explicit export/import moves the same validated state between browsers.
+5. Observer settings and journal mutations are serialized locally and reloaded at startup; explicit journal export/import moves the same validated journal state between browsers.
 
 ## Key decisions
 
