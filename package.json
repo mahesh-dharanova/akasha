@@ -1,7 +1,7 @@
 {
   "name": "akasha",
   "private": true,
-  "version": "0.3.11",
+  "version": "0.3.12",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,6 +11,7 @@
     "test:visibility": "node --experimental-strip-types tests/visibility-check.mjs",
     "test:catalogue": "node --experimental-strip-types tests/catalogue-check.mjs",
     "test:windows": "node tests/observing-window-check.cjs",
+    "test:planner": "node tests/planner-check.cjs",
     "preview": "vite preview"
   },
   "dependencies": {

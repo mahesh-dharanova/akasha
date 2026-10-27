@@ -28,6 +28,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.9 completed: a compact local audio dock provides play, pause, stop, volume, a generated AKASHA ambient default, and user-selected local track playback without bundling audio files.
 - v0.3.10 completed: user-selected audio can be saved and restored through browser IndexedDB, with an explicit Forget action; no audio asset enters Git or network requests.
 - v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
+- v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.
 
 ## Next
 
@@ -42,6 +43,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 - Consider a local playlist only if browser storage limits and file-permission behavior remain explicit.
 - Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
+- Review recommendation wording with real observing sessions before adding more ranking factors.
 
 ## Open questions / blockers
 

@@ -173,6 +173,7 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .catalogue-item span:nth-child(2), .planner-item span:nth-child(2) { display: grid; gap: 3px; min-width: 0; }
 .catalogue-item strong, .planner-item strong { font-size: 12px; }
 .catalogue-item small, .planner-item small { color: var(--muted); font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.planner-item .planner-primary { color: var(--cyan); font-weight: 700; }
 .catalogue-alt { margin-left: auto; color: var(--muted); font-size: 10px; }
 .lower-grid { grid-template-columns: 1fr 1fr; margin-top: 18px; }
 .planner-badge { align-self: start; border: 1px solid rgba(101,213,160,.32); border-radius: 99px; padding: 5px 9px; color: var(--green); font-size: 10px; }
