@@ -7,11 +7,13 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 | [Astronomy Engine](https://github.com/cosinekitty/astronomy) | MIT; npm package `astronomy-engine` | Sun, Moon, planet ephemerides; observer coordinates; refraction; rise, transit, set, and twilight calculations | Runtime dependency recorded in `package.json`. Positions are calculated locally; no ephemeris data is copied into the repository. |
 | [OpenNGC](https://github.com/mattiaverga/OpenNGC) and its [NGC database](https://raw.githubusercontent.com/mattiaverga/OpenNGC/master/database_files/NGC.csv) | CC BY-SA 4.0 | Selected Messier/NGC identifiers, J2000 coordinates, object types, visual magnitudes, surface brightness, and angular sizes | Each deep-sky entry has `source: 'OpenNGC · CC BY-SA 4.0'` in `src/catalogue.ts`. Keep the source and licence visible in future catalogue additions. |
 | [OpenNGC addendum](https://raw.githubusercontent.com/mattiaverga/OpenNGC/master/database_files/addendum.csv) | CC BY-SA 4.0 | Pleiades/addendum catalogue record | The M45 entry identifies `OpenNGC addendum · CC BY-SA 4.0`. |
-| [NASA/JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html) | Generated reference output; no runtime dependency | Topocentric apparent azimuth/elevation and range samples for Saturn and Jupiter | Samples are retained only as regression fixtures in `tests/data/`, with query settings, source URLs, date, observer location, and airless-refraction setting. |
+| [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api) ([documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html)) | Generated reference output; no runtime dependency | Topocentric apparent azimuth/elevation and range samples for Moon, Saturn, and Jupiter | Samples are retained only as regression fixtures in `tests/data/`, with API signature `1.2`, query settings, source URL, UTC date, observer location, and airless-refraction setting. |
 
 The v0.3.8 catalogue expansion uses OpenNGC records for M35/NGC 2168, M44/NGC 2632, M37/NGC 2099, M11/NGC 6705, M46/NGC 2437, and M47/NGC 2422. Their coordinates, visual magnitudes, and angular sizes remain source fields; names, descriptions, and finder guidance are application-authored.
 
 The v0.3.14 catalogue expansion uses OpenNGC records for M1/NGC 1952, M20/NGC 6514, M78/NGC 2068, M97/NGC 3587, M101/NGC 5457, and NGC 2070/C 103. Their identifiers, J2000 coordinates, V magnitudes, angular sizes, and M101 surface brightness remain source fields; names, descriptions, classifications, colours, and finder guidance are application-authored.
+
+The v0.3.15 ephemeris expansion adds Moon references for Bengaluru on 2026-10-26 and 2026-11-02, Moon and Saturn references for London on 2026-10-26, and Moon and Saturn references for Cape Town on 2026-10-26. These are generated outputs, not copied catalogue data, and remain test fixtures only.
 
 ## Application-authored data
 

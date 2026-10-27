@@ -90,12 +90,12 @@ npm run test:youtube   # validate YouTube URL parsing
 
 - Observing-window timeline with rise, transit, set, civil twilight, astronomical twilight, and current-time markers.
 - Dark-sky bands and clickable event markers that move the shared observation time.
-- Moon JPL Horizons comparison deferred because repeated API requests returned a server-side `LTKERNL`/`IP_ADDR` error; no reference values were invented.
+- Moon JPL Horizons comparison was initially deferred during an endpoint transition; v0.3.15 now includes successfully retrieved Moon references from the current API endpoint.
 
 ## Implemented in v0.3.4
 
 - Observer-frame validation for Bengaluru, London, and Cape Town using Polaris latitude and Saturn same-UTC location invariants.
-- Existing JPL samples remain the external ephemeris reference while additional Horizons queries are unavailable.
+- Existing and v0.3.15 JPL samples remain external regression references; they are not a live runtime dependency.
 
 ## Implemented in v0.3.5
 
@@ -152,6 +152,12 @@ npm run test:youtube   # validate YouTube URL parsing
 - Expanded the catalogue across supernova remnants, emission/reflection nebulae, planetary nebulae, spiral galaxies, and southern-sky targets.
 - Kept catalogue identifiers, J2000 coordinates, V magnitudes, angular sizes, and available surface brightness values explicit and regression-tested.
 
+## Implemented in v0.3.15
+
+- Expanded the offline ephemeris regression fixture with Moon samples across two dates and Moon/Saturn samples for London and Cape Town.
+- Recorded the current NASA/JPL Horizons API endpoint, signature version, observer coordinates, UTC time scale, and airless topocentric settings for each reference.
+- Kept these samples as tests only; the running application remains a local calculation with no NASA network dependency.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -175,8 +181,9 @@ Verified on 2026-10-26:
 - v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
 - v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.
 - v0.3.14 catalogue check — twelve selected OpenNGC targets passed finite-coordinate, metadata, attribution, and unique-identifier checks; production build passed.
+- v0.3.15 ephemeris check — eight committed Horizons samples passed local azimuth, altitude, and distance comparisons, including Moon date movement and London/Cape Town observer frames.
 
-The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html) with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
+The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api), following its [official documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html), with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
 
 ## Scientific and product limitations
 
