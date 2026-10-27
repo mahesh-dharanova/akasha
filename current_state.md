@@ -24,11 +24,12 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.5 completed: local Bortle, cloud-cover, transparency, and horizon-obstruction inputs now affect visibility guidance transparently.
 - v0.3.6 completed: observer location, timezone, elevation, and local observing conditions persist in validated browser storage with a reset action.
 - v0.3.7 completed: selected objects now expose the weighted visibility factors, low-horizon penalty, and daylight/twilight cap; visibility regression checks cover factor weights and condition impact.
+- v0.3.8 completed: six additional OpenNGC open clusters (M35, M44, M37, M11, M46, and M47) are searchable, calculable, attributed, and covered by catalogue checks.
 
 ## Next
 
 - Add more independently produced ephemeris samples across dates, observer locations, and the Moon.
-- Add more licensed catalogue targets and make rise/set tracking windows more explicit.
+- Add more licensed catalogue targets after reviewing seasonal and southern-sky coverage; avoid broad ingestion until the metadata boundary is settled.
 - Retry a Moon JPL Horizons reference sample when the service-side `LTKERNL`/`IP_ADDR` failure is resolved.
 - Add London/Cape Town JPL samples when the same Horizons service-side failure is resolved.
 - Expand visibility validation with reference observations only if a defensible labelled dataset becomes available; the current score remains explanatory guidance.

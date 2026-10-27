@@ -218,6 +218,36 @@ export const CATALOGUE: CatalogueObject[] = [
     classification: 'Starburst galaxy', description: 'An edge-on galaxy with intense star formation, gravitationally interacting with M81.',
     guidance: 'Find M81 first, then look for the narrow companion glow nearby; a telescope and dark sky help separate its shape.', color: '#aab9ed',
   },
+  {
+    id: 'm35', name: 'M35 Open Cluster', kind: 'deep-sky', catalogueId: 'M35 / NGC 2168', raJ2000: 6.15141, decJ2000: 24.33864, magnitude: 5.60, angularSizeArcmin: 24, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A broad, bright open cluster at the feet of Gemini, with many stars visible in a low-power field.',
+    guidance: 'Find Gemini’s bright twins and sweep toward their feet; binoculars reveal a rich spray of stars.', color: '#d7e4ff',
+  },
+  {
+    id: 'm44', name: 'Beehive Cluster', kind: 'deep-sky', catalogueId: 'M44 / NGC 2632', raJ2000: 8.67283, decJ2000: 19.67206, magnitude: 3.10, angularSizeArcmin: 108.6, difficulty: 'naked-eye', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A large nearby cluster in Cancer, also known as Praesepe, appearing as a hazy patch to dark-adapted eyes.',
+    guidance: 'Look between Gemini and Leo for a soft naked-eye glow; binoculars resolve it into a wide field of stars.', color: '#ffe2ae',
+  },
+  {
+    id: 'm37', name: 'M37 Star Cluster', kind: 'deep-sky', catalogueId: 'M37 / NGC 2099', raJ2000: 5.87176, decJ2000: 32.55300, magnitude: 5.60, angularSizeArcmin: 11.4, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A compact, rich open cluster in Auriga containing a dense field of comparatively faint stars.',
+    guidance: 'Use Capella and Auriga as landmarks, then scan with binoculars; a telescope shows the cluster’s layered star field.', color: '#dce5ff',
+  },
+  {
+    id: 'm11', name: 'Wild Duck Cluster', kind: 'deep-sky', catalogueId: 'M11 / NGC 6705', raJ2000: 18.85166, decJ2000: -6.27003, magnitude: 5.80, angularSizeArcmin: 9, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A dense Milky Way cluster in Scutum whose compact shape resembles a flight of wild ducks.',
+    guidance: 'Scan the star clouds near Scutum with binoculars; a telescope turns the compact glow into many stars.', color: '#e9d2a8',
+  },
+  {
+    id: 'm46', name: 'M46 Star Cluster', kind: 'deep-sky', catalogueId: 'M46 / NGC 2437', raJ2000: 7.69634, decJ2000: -14.81000, magnitude: 6.10, angularSizeArcmin: 21, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A rich southern open cluster in Puppis, especially rewarding in binoculars or a wide-field telescope.',
+    guidance: 'Look in Puppis near the bright southern winter star fields; binoculars show a broad granular patch.', color: '#d9e5ff',
+  },
+  {
+    id: 'm47', name: 'M47 Star Cluster', kind: 'deep-sky', catalogueId: 'M47 / NGC 2422', raJ2000: 7.60973, decJ2000: -14.48261, magnitude: 4.40, angularSizeArcmin: 19.8, difficulty: 'naked-eye', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Open star cluster', description: 'A bright, loose southern cluster in Puppis with several prominent stars visible in a small field.',
+    guidance: 'Use Sirius as a starting point and sweep southeast; binoculars make the cluster’s contrasting stars obvious.', color: '#ffe6b4',
+  },
 ];
 
 export const DEFAULT_OBJECT_ID = 'vega';

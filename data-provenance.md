@@ -9,6 +9,8 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 | [OpenNGC addendum](https://raw.githubusercontent.com/mattiaverga/OpenNGC/master/database_files/addendum.csv) | CC BY-SA 4.0 | Pleiades/addendum catalogue record | The M45 entry identifies `OpenNGC addendum · CC BY-SA 4.0`. |
 | [NASA/JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html) | Generated reference output; no runtime dependency | Topocentric apparent azimuth/elevation and range samples for Saturn and Jupiter | Samples are retained only as regression fixtures in `tests/data/`, with query settings, source URLs, date, observer location, and airless-refraction setting. |
 
+The v0.3.8 catalogue expansion uses OpenNGC records for M35/NGC 2168, M44/NGC 2632, M37/NGC 2099, M11/NGC 6705, M46/NGC 2437, and M47/NGC 2422. Their coordinates, visual magnitudes, and angular sizes remain source fields; names, descriptions, and finder guidance are application-authored.
+
 ## Application-authored data
 
 - Bright-star names, coordinates, distances, magnitudes, classifications, descriptions, and finder guidance are currently curated application data in `src/catalogue.ts`. They are not claimed to be a copied database. Exact upstream provenance for these fields remains an open review item; future edits must record a citable source and licence before broader expansion.

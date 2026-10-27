@@ -43,6 +43,7 @@ npm run preview   # serve the production build locally
 npm run check     # run TypeScript's no-emit check
 npm run test:astronomy # run deterministic astronomy checks
 npm run test:visibility # run visibility-score regression checks
+npm run test:catalogue # validate licensed catalogue metadata
 ```
 
 ## Implemented in v0.1
@@ -108,6 +109,11 @@ npm run test:visibility # run visibility-score regression checks
 
 - Added an expandable visibility-score breakdown showing altitude, darkness, catalogue brightness, observing difficulty, local conditions, obstruction penalty, and daylight/twilight caps.
 - Added executable visibility checks for factor weights, cloud impact, low-horizon obstruction, and daylight limits.
+
+## Implemented in v0.3.8
+
+- Added six OpenNGC-attributed open clusters: M35, M44, M37, M11, M46, and M47.
+- Added catalogue regression checks for identifiers, coordinates, magnitudes, angular sizes, attribution, and uniqueness.
 
 ## Deferred from v0.1
 
