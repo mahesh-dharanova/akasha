@@ -30,6 +30,19 @@ h2 { font-size: 18px; letter-spacing: -.015em; }
 h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted-strong); }
 .topbar-status { margin-left: auto; color: var(--muted); font-size: 12px; display: flex; align-items: center; gap: 8px; }
 .live-dot { width: 7px; height: 7px; background: var(--green); border-radius: 99px; box-shadow: 0 0 12px var(--green); }
+.audio-dock { position: fixed; right: 18px; bottom: 18px; z-index: 10; display: flex; align-items: center; gap: 11px; max-width: min(520px, calc(100vw - 28px)); padding: 9px 11px; border: 1px solid rgba(112,216,255,.22); border-radius: 12px; background: rgba(9, 14, 27, .94); box-shadow: 0 12px 32px rgba(0,0,0,.35); backdrop-filter: blur(14px); }
+.audio-info { display: grid; gap: 2px; min-width: 110px; max-width: 150px; }
+.audio-kicker { color: var(--amber); font-size: 8px; font-weight: 800; letter-spacing: .14em; }
+.audio-info strong { overflow: hidden; color: var(--muted-strong); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.audio-info small { overflow: hidden; color: var(--red); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+.audio-actions { display: flex; align-items: center; gap: 5px; }
+.audio-button, .audio-load, .audio-ambient { height: 25px; border: 1px solid var(--border); border-radius: 6px; color: var(--muted-strong); background: rgba(17,24,42,.9); font-size: 10px; }
+.audio-button { width: 25px; padding: 0; }
+.audio-button:hover, .audio-load:hover, .audio-ambient:hover { border-color: var(--cyan); color: var(--cyan); }
+.audio-play { color: var(--cyan); }
+.audio-load, .audio-ambient { padding: 0 7px; }
+.audio-volume { display: flex; align-items: center; gap: 4px; padding: 0 4px; color: var(--muted); font-size: 12px; }
+.audio-volume input { width: 58px; padding: 0; accent-color: var(--cyan); }
 .app-shell { width: min(1600px, 100%); margin: 0 auto; padding: 22px clamp(14px, 3vw, 46px) 28px; }
 .panel { border: 1px solid var(--border); border-radius: 14px; background: linear-gradient(145deg, rgba(17, 24, 42, .96), rgba(9, 13, 25, .98)); box-shadow: 0 16px 40px rgba(0,0,0,.18); }
 .control-panel { display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; padding: 18px 20px; margin-bottom: 18px; }
@@ -193,4 +206,4 @@ textarea { display: block; width: 100%; min-height: 78px; resize: vertical; marg
 .empty-state { color: var(--muted); font-size: 12px; padding: 15px 0; }
 .app-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; color: #65738d; font-size: 10px; }
 @media (max-width: 1080px) { .control-panel { grid-template-columns: 1fr; } .workspace { grid-template-columns: 1fr; } .side-column { grid-template-columns: 1fr 1fr; align-items: start; } }
-@media (max-width: 700px) { .topbar { min-height: 62px; padding: 12px 15px; } .topbar-status { display: none; } .app-shell { padding: 12px 10px 20px; } .control-panel, .object-panel, .catalogue-panel, .planner-panel, .journal-panel { padding: 14px; } .control-row, .conditions-row { grid-template-columns: 1fr 1fr; } .sky-stage { min-height: 390px; padding: 6px; } .map-heading { padding: 15px 14px 8px; } .map-status { display: none; } .side-column, .lower-grid { grid-template-columns: 1fr; gap: 12px; } .planner-list { grid-template-columns: 1fr; padding: 4px 14px 10px; } .planner-twilight { margin-inline: -2px; } .app-footer { display: grid; } .map-footer { padding-inline: 14px; gap: 8px; } .map-footer button { margin-left: 0; } }
+@media (max-width: 700px) { .topbar { min-height: 62px; padding: 12px 15px; } .topbar-status { display: none; } .audio-dock { right: 10px; bottom: 10px; left: 10px; justify-content: space-between; gap: 7px; } .audio-info { min-width: 70px; max-width: 105px; } .audio-volume input { width: 42px; } .audio-load, .audio-ambient { padding-inline: 5px; } .app-shell { padding: 12px 10px 76px; } .control-panel, .object-panel, .catalogue-panel, .planner-panel, .journal-panel { padding: 14px; } .control-row, .conditions-row { grid-template-columns: 1fr 1fr; } .sky-stage { min-height: 390px; padding: 6px; } .map-heading { padding: 15px 14px 8px; } .map-status { display: none; } .side-column, .lower-grid { grid-template-columns: 1fr; gap: 12px; } .planner-list { grid-template-columns: 1fr; padding: 4px 14px 10px; } .planner-twilight { margin-inline: -2px; } .app-footer { display: grid; } .map-footer { padding-inline: 14px; gap: 8px; } .map-footer button { margin-left: 0; } }

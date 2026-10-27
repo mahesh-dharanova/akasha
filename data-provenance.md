@@ -17,6 +17,7 @@ The v0.3.8 catalogue expansion uses OpenNGC records for M35/NGC 2168, M44/NGC 26
 - Object explanations and observing guidance are written for AKASHA. They are explanatory text, not measurements.
 - Constellation lines are a small application-authored orientation guide connecting selected catalogue stars. They are not official constellation boundaries.
 - The seeded background stars are decorative procedural points and carry no astronomical catalogue meaning.
+- The default AKASHA ambient soundscape is generated procedurally in `src/audio.ts`; no recording is bundled. User-selected audio files remain local browser data and are not part of the repository.
 - Journal entries and exported journal files are user-created data. They are stored locally and are not transmitted to a service.
 
 ## Dependency licences

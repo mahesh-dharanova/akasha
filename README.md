@@ -115,6 +115,11 @@ npm run test:catalogue # validate licensed catalogue metadata
 - Added six OpenNGC-attributed open clusters: M35, M44, M37, M11, M46, and M47.
 - Added catalogue regression checks for identifiers, coordinates, magnitudes, angular sizes, attribution, and uniqueness.
 
+## Implemented in v0.3.9
+
+- Added a compact local ambient-audio dock with play, pause, stop, volume, and track selection controls.
+- Added an original Web Audio-generated AKASHA ambient default; personal audio files are selected locally and are not bundled or uploaded.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.

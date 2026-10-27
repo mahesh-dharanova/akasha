@@ -33,6 +33,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 20. [x] v0.3.6 observer setup persistence — success condition: validated observer and condition settings survive reload locally and can be reset to defaults.
 21. [x] v0.3.7 visibility explanation — success condition: the selected-object panel exposes the weighted score factors, penalties, and caps, with executable regression checks for condition impact.
 22. [x] v0.3.8 licensed catalogue expansion — success condition: six additional OpenNGC open clusters are searchable, calculable, attributed, and covered by metadata checks.
+23. [x] v0.3.9 local ambient audio — success condition: a compact player can play/pause/stop the generated ambient default or a user-selected local audio file without adding audio assets to the repository.
 
 ## Deferred milestones
 
