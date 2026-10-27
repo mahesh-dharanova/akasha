@@ -169,6 +169,10 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .timeline-dark-event { color: var(--green); }
 .timeline-note { margin-top: 8px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .related-objects { display: grid; gap: 8px; padding: 13px 0 12px; border-bottom: 1px solid var(--border); }
+.learning-lesson { display: grid; gap: 7px; padding: 10px; border: 1px solid rgba(186,155,255,.22); border-radius: 9px; background: rgba(186,155,255,.055); }
+.learning-lesson h3 { color: var(--purple); font-size: 11px; }
+.learning-lesson p { color: var(--muted-strong); font-size: 10px; line-height: 1.45; }
+.learning-lesson ol { display: grid; gap: 5px; margin: 0; padding-left: 21px; color: var(--muted); font-size: 10px; line-height: 1.4; }
 .related-intro { color: var(--muted); font-size: 10px; line-height: 1.4; }
 .related-list { display: grid; gap: 5px; }
 .related-item { display: flex; align-items: start; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 9px; border: 1px solid rgba(112,216,255,.12); border-radius: 8px; color: inherit; background: rgba(112,216,255,.035); text-align: left; }

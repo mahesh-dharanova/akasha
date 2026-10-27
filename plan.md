@@ -41,6 +41,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 28. [x] v0.3.14 licensed catalogue expansion — success condition: six additional OpenNGC targets broaden object types and seasonal/southern-sky coverage, retain source fields and attribution, and pass metadata/identifier regression checks.
 29. [x] v0.3.15 ephemeris reference expansion — success condition: the offline astronomy regression fixture records the current Horizons endpoint/signature, Moon samples across dates and locations, and additional Saturn observer samples that match local calculations.
 30. [x] v0.3.16 object relationships and learning links — success condition: selected objects expose explicitly labelled, reciprocal observing connections that navigate to related catalogue targets and pass relationship integrity checks.
+31. [x] v0.3.17 guided learning connections — success condition: each relationship group provides a deterministic three-step observing lesson that is shown with the related-target navigation and passes lesson integrity checks.
 
 ## Deferred milestones
 

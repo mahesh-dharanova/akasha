@@ -33,6 +33,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.14 catalogue chunk completed: Crab, Trifid, M78, Owl, Pinwheel, and Tarantula targets were added from OpenNGC fields with CC BY-SA 4.0 attribution and regression coverage.
 - v0.3.15 ephemeris chunk completed: the Horizons fixture now uses the current endpoint/signature and covers Moon samples across two dates plus London/Cape Town Moon and Saturn observer frames.
 - v0.3.16 relationship chunk completed: selected objects now expose 14 reciprocal, explicitly labelled observing connections, including physical pairs, same-region links, and comparison links.
+- v0.3.17 learning chunk completed: relationship groups now show application-authored three-step observing lessons that guide identification, comparison, and scientific noticing.
 
 ## Next
 

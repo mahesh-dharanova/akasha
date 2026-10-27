@@ -6,7 +6,7 @@ import { calculateSky, compassDirection, formatDeclination, formatRightAscension
 import { loadJournal, parseJournalFile, saveJournal, serializeJournal } from './journal';
 import { loadObserverSettings, saveObserverSettings } from './settings';
 import { observingWindowLabel, plannerRank } from './planner';
-import { OBJECT_RELATIONSHIPS } from './relationships';
+import { LEARNING_LESSONS, OBJECT_RELATIONSHIPS } from './relationships';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -257,7 +257,9 @@ function renderMap(): string {
 function renderRelatedObjects(object: CalculatedObject): string {
   const relationships = OBJECT_RELATIONSHIPS[object.id] ?? [];
   if (!relationships.length) return '';
-  return `<section class="related-objects"><div class="panel-kicker">EXPLORE CONNECTIONS</div><p class="related-intro">Application-authored observing links, not automatic physical-association claims.</p><div class="related-list">${relationships.map((relationship) => { const target = getObject(relationship.targetId); return `<button class="related-item" data-select-object="${target.id}"><span><strong>${escapeHtml(target.name)}</strong><small>${escapeHtml(relationship.label)}</small><em>${escapeHtml(relationship.explanation)}</em></span><span class="related-arrow">→</span></button>`; }).join('')}</div></section>`;
+  const lesson = LEARNING_LESSONS[relationships[0].lessonId];
+  const lessonMarkup = lesson ? `<div class="learning-lesson"><div class="panel-kicker">LEARN THIS CONNECTION</div><h3>${escapeHtml(lesson.title)}</h3><p>${escapeHtml(lesson.summary)}</p><ol>${lesson.steps.map((step) => `<li>${escapeHtml(step)}</li>`).join('')}</ol></div>` : '';
+  return `<section class="related-objects">${lessonMarkup}<div class="panel-kicker">EXPLORE CONNECTIONS</div><p class="related-intro">Application-authored observing links, not automatic physical-association claims.</p><div class="related-list">${relationships.map((relationship) => { const target = getObject(relationship.targetId); return `<button class="related-item" data-select-object="${target.id}"><span><strong>${escapeHtml(target.name)}</strong><small>${escapeHtml(relationship.label)}</small><em>${escapeHtml(relationship.explanation)}</em></span><span class="related-arrow">→</span></button>`; }).join('')}</div></section>`;
 }
 
 function renderObjectPanel(): string {
