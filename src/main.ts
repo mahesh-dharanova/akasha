@@ -129,6 +129,18 @@ function renderVisibilityBreakdown(object: CalculatedObject): string {
   return `<details class="visibility-breakdown"><summary>Why this score?</summary><div class="visibility-factors">${factors}</div><p class="visibility-formula">${breakdown.uncappedScore} calculated before limits${cap} ${penalty}</p></details>`;
 }
 
+function observingWindowLabel(object: CalculatedObject): string {
+  const minutes = object.observingWindow.durationMinutes;
+  if (minutes <= 0) return 'No dark-sky overlap';
+  const hours = Math.floor(minutes / 60);
+  const remainder = minutes % 60;
+  return hours > 0 ? `${hours}h ${remainder}m dark-sky window` : `${remainder}m dark-sky window`;
+}
+
+function plannerRank(object: CalculatedObject): number {
+  return object.visibility.score + Math.min(object.observingWindow.durationMinutes / 360, 1) * 15;
+}
+
 function conditionLabel(condition: SkyCondition): string {
   return { daylight: 'daylight', 'civil-twilight': 'civil twilight', 'nautical-twilight': 'nautical twilight', 'astronomical-twilight': 'astronomical twilight', night: 'dark sky' }[condition];
 }
@@ -231,16 +243,16 @@ function renderObjectPanel(): string {
   const favourite = state.journal.favourites.includes(object.id);
   const solarSeparation = object.solarSeparation === null ? 'Not applicable' : `${object.solarSeparation.toFixed(1)}°`;
   const source = object.source ? `<p class="source-note">Catalogue: ${escapeHtml(object.source)}${object.catalogueId ? ` · ${escapeHtml(object.catalogueId)}` : ''}</p>` : '';
-  return `<section class="panel object-panel"><div class="panel-kicker">OBJECT TRACKER</div><div class="object-title-row"><div><h2>${escapeHtml(object.name)}</h2><p>${escapeHtml(object.classification)}</p></div><button class="icon-button ${favourite ? 'is-favourite' : ''}" data-action="toggle-favourite" aria-label="${favourite ? 'Remove from' : 'Add to'} favourites">${favourite ? '★' : '☆'}</button></div><div class="status-pill ${statusClass(object)}">${statusLabel(object)}</div><div class="visibility-summary"><div class="visibility-score"><strong>${object.visibility.score}</strong><span>/ 100<br />visibility</span></div><div><strong>${object.visibility.reasons[0]}</strong><p>${object.visibility.reasons.slice(1, 3).join(' · ')}</p></div></div><p class="conditions-summary">Manual conditions: ${conditionsSummary()}</p>${renderVisibilityBreakdown(object)}<div class="metric-grid"><div><span>Apparent altitude</span><strong>${object.apparentAltitude.toFixed(1)}°</strong></div><div><span>Geometric altitude</span><strong>${object.geometricAltitude.toFixed(1)}°</strong></div><div><span>Direction</span><strong>${compassDirection(object.horizontal.azimuth)} ${object.horizontal.azimuth.toFixed(1)}°</strong></div><div><span>Right ascension</span><strong>${formatRightAscension(object.rightAscension)}</strong></div><div><span>Declination</span><strong>${formatDeclination(object.declination)}</strong></div><div><span>Magnitude</span><strong>${object.magnitude?.toFixed(2) ?? 'Unavailable'}</strong></div><div><span>Distance</span><strong>${formatDistance(object)}</strong></div><div><span>Sun separation</span><strong>${solarSeparation}</strong></div></div><div class="event-caption">Next coherent observing window</div><div class="event-grid"><div><span>Rise</span><strong>${displayTime(object.rise)}</strong></div><div><span>Transit</span><strong>${displayTime(object.transit)}</strong></div><div><span>Set</span><strong>${displayTime(object.set)}</strong></div></div>${renderObservingTimeline(object)}${renderTracking(object.id)}<div class="copy-block"><h3>About ${escapeHtml(object.name)}</h3><p>${escapeHtml(object.description)}</p><h3>How to find it</h3><p>${escapeHtml(object.guidance)}</p>${source}<p class="science-note">The score combines geometric altitude, solar twilight, light pollution, cloud cover, transparency, horizon obstruction, catalogue brightness, and observing difficulty. It does not model local weather automatically, optics, or eyesight.</p></div></section>`;
+  return `<section class="panel object-panel"><div class="panel-kicker">OBJECT TRACKER</div><div class="object-title-row"><div><h2>${escapeHtml(object.name)}</h2><p>${escapeHtml(object.classification)}</p></div><button class="icon-button ${favourite ? 'is-favourite' : ''}" data-action="toggle-favourite" aria-label="${favourite ? 'Remove from' : 'Add to'} favourites">${favourite ? '★' : '☆'}</button></div><div class="status-pill ${statusClass(object)}">${statusLabel(object)}</div><div class="visibility-summary"><div class="visibility-score"><strong>${object.visibility.score}</strong><span>/ 100<br />visibility</span></div><div><strong>${object.visibility.reasons[0]}</strong><p>${object.visibility.reasons.slice(1, 3).join(' · ')}</p></div></div><p class="conditions-summary">Manual conditions: ${conditionsSummary()}</p>${renderVisibilityBreakdown(object)}<div class="metric-grid"><div><span>Apparent altitude</span><strong>${object.apparentAltitude.toFixed(1)}°</strong></div><div><span>Geometric altitude</span><strong>${object.geometricAltitude.toFixed(1)}°</strong></div><div><span>Direction</span><strong>${compassDirection(object.horizontal.azimuth)} ${object.horizontal.azimuth.toFixed(1)}°</strong></div><div><span>Right ascension</span><strong>${formatRightAscension(object.rightAscension)}</strong></div><div><span>Declination</span><strong>${formatDeclination(object.declination)}</strong></div><div><span>Magnitude</span><strong>${object.magnitude?.toFixed(2) ?? 'Unavailable'}</strong></div><div><span>Distance</span><strong>${formatDistance(object)}</strong></div><div><span>Sun separation</span><strong>${solarSeparation}</strong></div></div><div class="event-caption">Next coherent observing window</div><div class="event-grid"><div><span>Rise</span><strong>${displayTime(object.rise)}</strong></div><div><span>Transit</span><strong>${displayTime(object.transit)}</strong></div><div><span>Set</span><strong>${displayTime(object.set)}</strong></div></div><p class="window-summary">Dark-sky overlap: ${observingWindowLabel(object)}</p>${renderObservingTimeline(object)}${renderTracking(object.id)}<div class="copy-block"><h3>About ${escapeHtml(object.name)}</h3><p>${escapeHtml(object.description)}</p><h3>How to find it</h3><p>${escapeHtml(object.guidance)}</p>${source}<p class="science-note">The score combines geometric altitude, solar twilight, light pollution, cloud cover, transparency, horizon obstruction, catalogue brightness, and observing difficulty. It does not model local weather automatically, optics, or eyesight.</p></div></section>`;
 }
 
 function recommendedObjects(): CalculatedObject[] {
-  return state.snapshot.objects.filter((object) => object.kind !== 'sun' && object.aboveHorizon && object.visibility.score >= 25).sort((a, b) => b.visibility.score - a.visibility.score).slice(0, 5);
+  return state.snapshot.objects.filter((object) => object.kind !== 'sun' && object.aboveHorizon && object.visibility.score >= 25).sort((a, b) => plannerRank(b) - plannerRank(a)).slice(0, 5);
 }
 
 function renderPlanner(): string {
   const targets = recommendedObjects();
-  const targetMarkup = targets.length ? targets.map((object) => `<button class="planner-item" data-select-object="${object.id}"><span class="planner-dot" style="background:${object.color}"></span><span><strong>${escapeHtml(object.name)}</strong><small>${object.visibility.score}/100 · ${escapeHtml(object.visibility.label)} · ${object.difficulty ?? 'naked-eye'}</small><small>${escapeHtml(object.visibility.reasons.slice(0, 2).join(' · '))}</small></span><span class="planner-arrow">→</span></button>`).join('') : '<p class="empty-state">No starter targets meet the current altitude and darkness threshold.</p>';
+  const targetMarkup = targets.length ? targets.map((object) => `<button class="planner-item" data-select-object="${object.id}"><span class="planner-dot" style="background:${object.color}"></span><span><strong>${escapeHtml(object.name)}</strong><small>${object.visibility.score}/100 · ${escapeHtml(object.visibility.label)} · ${object.difficulty ?? 'naked-eye'}</small><small>${escapeHtml(observingWindowLabel(object))} · ${escapeHtml(object.visibility.reasons.slice(0, 2).join(' · '))}</small></span><span class="planner-arrow">→</span></button>`).join('') : '<p class="empty-state">No starter targets meet the current altitude and darkness threshold.</p>';
   return `${targetMarkup}<div class="planner-twilight">${renderTwilightPanel()}</div>`;
 }
 
@@ -273,7 +285,7 @@ function render(): void {
   if (planetOption) planetOption.textContent = 'Planets';
   if (catalogueFilter && !catalogueFilter.querySelector('option[value="moon"]')) catalogueFilter.insertAdjacentHTML('beforeend', `<option value="moon" ${state.filter === 'moon' ? 'selected' : ''}>Moon</option>`);
   const versionLabel = app.querySelector<HTMLElement>('.app-footer span');
-  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.10 · positions calculated locally with Astronomy Engine';
+  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.11 · positions calculated locally with Astronomy Engine';
   bindEvents();
   updateMapInteractions();
   updateLegendLabel();

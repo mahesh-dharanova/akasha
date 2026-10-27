@@ -1,7 +1,7 @@
 import * as Astronomy from 'astronomy-engine';
 import { CATALOGUE } from './catalogue';
 import { assessVisibility } from './visibility';
-import type { CalculatedObject, CatalogueObject, ObserverSettings, SkyCondition, SkySnapshot, TwilightWindows } from './types';
+import type { CalculatedObject, CatalogueObject, ObserverSettings, ObservingWindow, SkyCondition, SkySnapshot, TwilightWindows } from './types';
 
 const STAR_SLOT = Astronomy.Body.Star1;
 
@@ -75,6 +75,16 @@ function searchTwilight(observer: Astronomy.Observer, instant: Date, direction: 
   }
 }
 
+function searchPreviousTwilight(observer: Astronomy.Observer, instant: Date, altitude: number): Date | null {
+  let crossing = searchTwilight(observer, new Date(instant.getTime() - 48 * 60 * 60_000), -1, altitude);
+  let previous: Date | null = null;
+  for (let index = 0; index < 4 && crossing; index += 1) {
+    if (crossing < instant) previous = crossing;
+    crossing = searchTwilight(observer, new Date(crossing.getTime() + 60_000), -1, altitude);
+  }
+  return previous;
+}
+
 function calculateTwilightWindows(observer: Astronomy.Observer, instant: Date): TwilightWindows {
   return {
     civilDawn: searchTwilight(observer, instant, 1, -6),
@@ -86,7 +96,25 @@ function calculateTwilightWindows(observer: Astronomy.Observer, instant: Date): 
   };
 }
 
-function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition, settings: ObserverSettings): CalculatedObject {
+export function calculateDarkSkyWindow(object: Pick<CalculatedObject, 'rise' | 'set'>, twilightWindows: TwilightWindows, instant: Date): ObservingWindow {
+  const dusk = twilightWindows.astronomicalDusk;
+  const dawn = twilightWindows.astronomicalDawn;
+  if (!dusk || !dawn || dawn <= dusk) return { start: null, end: null, durationMinutes: 0 };
+  const start = object.rise && object.rise > dusk ? object.rise : dusk;
+  const end = object.set && object.set < dawn ? object.set : dawn;
+  const nextStart = start > instant ? start : instant;
+  if (end <= nextStart) return { start: null, end: null, durationMinutes: 0 };
+  return { start: nextStart, end, durationMinutes: Math.round((end.getTime() - nextStart.getTime()) / 60_000) };
+}
+
+function calculateDarkSkyBounds(observer: Astronomy.Observer, instant: Date, twilightWindows: TwilightWindows): { start: Date | null; end: Date | null } {
+  const end = twilightWindows.astronomicalDawn;
+  let start = twilightWindows.astronomicalDusk;
+  if (start && end && end <= start) start = searchPreviousTwilight(observer, instant, -18);
+  return { start, end };
+}
+
+function calculateObject(object: CatalogueObject, instant: Date, observer: Astronomy.Observer, condition: SkyCondition, settings: ObserverSettings): Omit<CalculatedObject, 'observingWindow'> {
   const body = getBody(object);
   const equatorial = Astronomy.Equator(body, instant, observer, true, true);
   const geometricHorizontal = Astronomy.Horizon(instant, observer, equatorial.ra, equatorial.dec);
@@ -120,7 +148,11 @@ export function calculateSky(instant: Date, settings: ObserverSettings): SkySnap
   const sunHorizontal = Astronomy.Horizon(instant, observer, sunEquatorial.ra, sunEquatorial.dec);
   const skyCondition = calculateSkyCondition(sunHorizontal.altitude);
   const twilightWindows = calculateTwilightWindows(observer, instant);
-  const objects = CATALOGUE.map((object) => calculateObject(object, instant, observer, skyCondition, settings));
+  const darkSkyBounds = calculateDarkSkyBounds(observer, instant, twilightWindows);
+  const objects = CATALOGUE.map((object) => {
+    const calculated = calculateObject(object, instant, observer, skyCondition, settings);
+    return { ...calculated, observingWindow: calculateDarkSkyWindow(calculated, { ...twilightWindows, astronomicalDusk: darkSkyBounds.start, astronomicalDawn: darkSkyBounds.end }, instant) };
+  });
   return { instant, observer: settings, sunAltitude: sunHorizontal.altitude, skyCondition, twilight: skyCondition, twilightWindows, objects };
 }
 

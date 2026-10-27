@@ -71,6 +71,12 @@ export interface HorizontalPosition {
   azimuth: number;
 }
 
+export interface ObservingWindow {
+  start: Date | null;
+  end: Date | null;
+  durationMinutes: number;
+}
+
 export interface CalculatedObject extends CatalogueObject {
   rightAscension: number;
   declination: number;
@@ -82,6 +88,7 @@ export interface CalculatedObject extends CatalogueObject {
   aboveHorizon: boolean;
   observingStatus: 'good-window' | 'twilight' | 'below-horizon';
   visibility: VisibilityAssessment;
+  observingWindow: ObservingWindow;
   rise: Date | null;
   transit: Date | null;
   set: Date | null;

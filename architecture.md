@@ -46,9 +46,9 @@ The typed local catalogue contains the Sun, Moon, planets, bright stars, and sel
 
 ### Planner
 
-The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, observing difficulty, and explicit user-supplied observing conditions: Bortle light pollution, cloud cover, transparency, and horizon obstruction. It provides score reasons alongside each recommendation. These inputs affect guidance only; they never alter astronomical positions. It remains guidance, not a guarantee of visibility, and does not automatically retrieve weather.
+The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, observing difficulty, and explicit user-supplied observing conditions: Bortle light pollution, cloud cover, transparency, and horizon obstruction. It provides score reasons alongside each recommendation. These inputs affect guidance only; they never alter astronomical positions. It remains guidance, not a guarantee of visibility, and does not automatically retrieve weather. A secondary planner adjustment favors objects with more remaining overlap between their above-horizon interval and astronomical night.
 
-The selected-object panel exposes the same score as a breakdown: each positive factor reports its normalized value, percentage weight, and weighted contribution; low-altitude horizon obstruction is shown as a penalty; daylight and civil-twilight limits are shown as caps. This presentation is generated from the calculation result, so the UI does not maintain a second scoring formula.
+The selected-object panel exposes the same score as a breakdown: each positive factor reports its normalized value, percentage weight, and weighted contribution; low-altitude horizon obstruction is shown as a penalty; daylight and civil-twilight limits are shown as caps. It also shows the remaining dark-sky overlap calculated from the target's rise/set events and astronomical dusk/dawn. This presentation is generated from the calculation result, so the UI does not maintain a second scoring formula.
 
 ### Tracking
 

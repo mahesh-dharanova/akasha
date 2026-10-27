@@ -44,6 +44,7 @@ npm run check     # run TypeScript's no-emit check
 npm run test:astronomy # run deterministic astronomy checks
 npm run test:visibility # run visibility-score regression checks
 npm run test:catalogue # validate licensed catalogue metadata
+npm run test:windows   # validate dark-sky observing windows
 ```
 
 ## Implemented in v0.1
@@ -124,6 +125,12 @@ npm run test:catalogue # validate licensed catalogue metadata
 
 - Added optional local audio persistence through browser IndexedDB.
 - Saved tracks can be restored after reload or removed with the Forget control; the audio file remains outside the repository and is never uploaded.
+
+## Implemented in v0.3.11
+
+- Added calculation-backed dark-sky overlap windows for every supported object.
+- Planner ranking now gives modest priority to targets with more usable dark time remaining, while retaining the visibility score as the primary guidance signal.
+- Selected-object details show the remaining dark-sky overlap and the window regression checks cover Bengaluru, London, and Cape Town.
 
 ## Deferred from v0.1
 

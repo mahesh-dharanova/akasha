@@ -27,6 +27,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.8 completed: six additional OpenNGC open clusters (M35, M44, M37, M11, M46, and M47) are searchable, calculable, attributed, and covered by catalogue checks.
 - v0.3.9 completed: a compact local audio dock provides play, pause, stop, volume, a generated AKASHA ambient default, and user-selected local track playback without bundling audio files.
 - v0.3.10 completed: user-selected audio can be saved and restored through browser IndexedDB, with an explicit Forget action; no audio asset enters Git or network requests.
+- v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
 
 ## Next
 
@@ -40,6 +41,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
 - Keep telescope integration deferred until the domain model and safety boundaries are mature.
 - Consider a local playlist only if browser storage limits and file-permission behavior remain explicit.
+- Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
 
 ## Open questions / blockers
 

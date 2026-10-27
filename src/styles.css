@@ -138,6 +138,7 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .event-caption { color: var(--muted); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding-top: 12px; }
 .event-grid div { display: grid; gap: 5px; }
 .event-grid strong { font-size: 10px; color: var(--muted-strong); line-height: 1.3; }
+.window-summary { margin: 8px 0 0; color: var(--green); font-size: 10px; }
 .tracking-block { border-bottom: 1px solid var(--border); padding-bottom: 12px; }
 .tracking-list { display: grid; grid-template-columns: repeat(7, minmax(56px, 1fr)); gap: 4px; margin-top: 8px; overflow-x: auto; }
 .tracking-row { display: grid; gap: 4px; min-width: 56px; padding: 7px 4px; border: 1px solid transparent; border-radius: 7px; color: var(--muted-strong); background: rgba(112,216,255,.035); text-align: center; }
