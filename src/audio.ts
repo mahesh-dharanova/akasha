@@ -1,11 +1,14 @@
+import { clearYouTubePlayer, extractYouTubeVideoId, forgetYouTubeUrl, loadSavedYouTubeUrl, pauseYouTube, playYouTube, saveYouTubeUrl, setYouTubeUrl, setYouTubeVolume, stopYouTube } from './youtube';
 export type AudioStatus = 'stopped' | 'playing' | 'paused';
 
 export interface AudioState {
-  mode: 'ambient' | 'local';
+  mode: 'ambient' | 'local' | 'youtube';
   status: AudioStatus;
   label: string;
   volume: number;
   savedTrackAvailable: boolean;
+  youtubeUrl: string | null;
+  savedYouTubeAvailable: boolean;
 }
 
 type AudioListener = (state: AudioState) => void;
@@ -14,7 +17,8 @@ type StoredTrack = { id: 'last'; name: string; type: string; blob: Blob };
 const AUDIO_DB_NAME = 'akasha-audio-v1';
 const AUDIO_STORE_NAME = 'tracks';
 
-let state: AudioState = { mode: 'ambient', status: 'stopped', label: 'AKASHA ambient', volume: 0.35, savedTrackAvailable: false };
+const savedYouTubeUrl = loadSavedYouTubeUrl();
+let state: AudioState = { mode: savedYouTubeUrl ? 'youtube' : 'ambient', status: 'stopped', label: savedYouTubeUrl ? 'YouTube track' : 'AKASHA ambient', volume: 0.35, savedTrackAvailable: false, youtubeUrl: savedYouTubeUrl, savedYouTubeAvailable: Boolean(savedYouTubeUrl) };
 let localAudio: HTMLAudioElement | null = null;
 let localUrl: string | null = null;
 let localBlob: Blob | null = null;
@@ -73,7 +77,6 @@ function notify(): void {
 
 function updateStatus(status: AudioStatus): void {
   state = { ...state, status };
-  notify();
 }
 
 function stopAmbientNodes(): void {
@@ -127,7 +130,7 @@ function assignLocalAudio(blob: Blob, label: string, savedTrackAvailable: boolea
   localAudio.loop = true;
   localAudio.volume = state.volume;
   localAudio.addEventListener('ended', () => updateStatus('stopped'));
-  state = { ...state, mode: 'local', status: 'stopped', label, savedTrackAvailable };
+  state = { ...state, mode: 'local', status: 'stopped', label, savedTrackAvailable, youtubeUrl: null };
 }
 
 export function getAudioState(): AudioState {
@@ -143,12 +146,42 @@ export function setAudioVolume(volume: number): void {
   state = { ...state, volume: Math.max(0, Math.min(1, volume)) };
   if (localAudio) localAudio.volume = state.volume;
   if (masterGain) masterGain.gain.value = state.volume * 0.18;
-  notify();
+  if (state.mode === 'youtube') setYouTubeVolume(state.volume);
 }
 
 export function loadLocalAudio(file: File): void {
   if (!file.type.startsWith('audio/')) throw new Error('Choose an audio file such as MP3, WAV, or OGG.');
+  clearYouTubePlayer();
   assignLocalAudio(file, file.name, false);
+  notify();
+}
+
+export function loadYouTubeAudio(url: string): void {
+  const parsedVideoId = extractYouTubeVideoId(url);
+  if (!parsedVideoId) throw new Error('Paste a valid YouTube video link.');
+  stopAmbientNodes();
+  localAudio?.pause();
+  clearYouTubePlayer();
+  setYouTubeUrl(url);
+  state = { ...state, mode: 'youtube', status: 'stopped', label: `YouTube · ${parsedVideoId}`, youtubeUrl: url.trim(), savedYouTubeAvailable: state.savedYouTubeAvailable && state.youtubeUrl === url.trim() };
+  notify();
+}
+
+export function saveCurrentYouTube(): void {
+  if (state.mode !== 'youtube' || !state.youtubeUrl) throw new Error('Load a YouTube video before saving it.');
+  saveYouTubeUrl(state.youtubeUrl);
+  state = { ...state, savedYouTubeAvailable: true };
+  notify();
+}
+
+export function forgetSavedYouTube(): void {
+  forgetYouTubeUrl();
+  if (state.mode === 'youtube') {
+    clearYouTubePlayer();
+    state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA ambient', youtubeUrl: null, savedYouTubeAvailable: false };
+  } else {
+    state = { ...state, youtubeUrl: null, savedYouTubeAvailable: false };
+  }
   notify();
 }
 
@@ -178,12 +211,18 @@ export function useAmbient(): void {
   if (localUrl) URL.revokeObjectURL(localUrl);
   localUrl = null;
   localBlob = null;
+  clearYouTubePlayer();
   stopAmbientNodes();
-  state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA ambient' };
+  state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA ambient', youtubeUrl: null };
   notify();
 }
 
 export async function playAudio(): Promise<void> {
+  if (state.mode === 'youtube') {
+    playYouTube();
+    updateStatus('playing');
+    return;
+  }
   if (state.mode === 'local') {
     if (!localAudio) throw new Error('Choose a local track before playing.');
     await localAudio.play();
@@ -196,13 +235,15 @@ export async function playAudio(): Promise<void> {
 }
 
 export async function pauseAudio(): Promise<void> {
-  if (state.mode === 'local') localAudio?.pause();
+  if (state.mode === 'youtube') pauseYouTube();
+  else if (state.mode === 'local') localAudio?.pause();
   else if (audioContext) await audioContext.suspend();
   if (state.status === 'playing') updateStatus('paused');
 }
 
 export async function stopAudio(): Promise<void> {
-  if (state.mode === 'local') {
+  if (state.mode === 'youtube') stopYouTube();
+  else if (state.mode === 'local') {
     localAudio?.pause();
     if (localAudio) localAudio.currentTime = 0;
   } else {

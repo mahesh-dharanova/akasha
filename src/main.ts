@@ -1,5 +1,6 @@
 import './styles.css';
-import { forgetSavedAudio, getAudioState, loadLocalAudio, onAudioChange, pauseAudio, playAudio, restoreSavedAudio, saveCurrentAudio, setAudioVolume, stopAudio, useAmbient } from './audio';
+import { forgetSavedAudio, forgetSavedYouTube, getAudioState, loadLocalAudio, loadYouTubeAudio, onAudioChange, pauseAudio, playAudio, restoreSavedAudio, saveCurrentAudio, saveCurrentYouTube, setAudioVolume, stopAudio, useAmbient } from './audio';
+import { mountYouTubePlayer } from './youtube';
 import { CATALOGUE, DEFAULT_OBJECT_ID, getObject } from './catalogue';
 import { calculateSky, compassDirection, formatDeclination, formatRightAscension } from './astronomy';
 import { loadJournal, parseJournalFile, saveJournal, serializeJournal } from './journal';
@@ -26,6 +27,9 @@ const initialObserver = loadObserverSettings(DEFAULT_OBSERVER);
 const app = document.querySelector<HTMLDivElement>('#app') ?? (() => {
   throw new Error('AKASHA app root is missing.');
 })();
+const audioHost = document.createElement('div');
+audioHost.id = 'audio-host';
+document.body.appendChild(audioHost);
 
 const state: {
   instant: Date;
@@ -118,7 +122,27 @@ function renderAudioPlayer(): string {
   const audio = getAudioState();
   const playLabel = audio.status === 'playing' ? 'Playing' : audio.status === 'paused' ? 'Resume' : 'Play';
   const saveLabel = audio.savedTrackAvailable ? 'Forget' : 'Save';
-  return `<section class="audio-dock" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-save" data-action="audio-save" title="${audio.savedTrackAvailable ? 'Remove the saved local track' : 'Save this track in this browser'}">${saveLabel}</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div></section>`;
+  const youtubeSaveLabel = audio.savedYouTubeAvailable ? 'Forget link' : 'Save link';
+  const youtubePlayer = audio.mode === 'youtube' ? '<div class="youtube-player" id="youtube-player" aria-label="YouTube video player"></div><small class="youtube-note">YouTube playback uses the official player and an internet connection.</small>' : '';
+  return `<section class="audio-dock ${audio.mode === 'youtube' ? 'audio-dock-youtube' : ''}" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-save" data-action="audio-save" title="${audio.savedTrackAvailable ? 'Remove the saved local track' : 'Save this track in this browser'}">${saveLabel}</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div><div class="youtube-input"><input id="youtube-url" type="url" placeholder="Paste YouTube link" value="${escapeHtml(audio.youtubeUrl ?? '')}" /><button class="audio-load" data-action="youtube-load">Use YouTube</button><button class="audio-save" data-action="youtube-save">${youtubeSaveLabel}</button></div>${youtubePlayer}</section>`;
+}
+
+function renderAudioDock(): void {
+  audioHost.innerHTML = renderAudioPlayer();
+  bindAudioEvents();
+  if (getAudioState().mode !== 'youtube') return;
+  const youtubePlayer = audioHost.querySelector<HTMLElement>('#youtube-player');
+  if (!youtubePlayer) return;
+  void mountYouTubePlayer(youtubePlayer).catch((error: unknown) => {
+    state.audioMessage = error instanceof Error ? error.message : 'The YouTube player could not be loaded.';
+    const audioInfo = audioHost.querySelector<HTMLElement>('.audio-info');
+    let message = audioInfo?.querySelector<HTMLElement>('small');
+    if (!message && audioInfo) {
+      message = document.createElement('small');
+      audioInfo.appendChild(message);
+    }
+    if (message) message.textContent = state.audioMessage;
+  });
 }
 
 function renderVisibilityBreakdown(object: CalculatedObject): string {
@@ -268,13 +292,13 @@ function render(): void {
     const query = state.query.toLowerCase();
     return (state.filter === 'all' || item.kind === state.filter) && (item.name.toLowerCase().includes(query) || item.catalogueId?.toLowerCase().includes(query));
   });
-  app.innerHTML = `${renderAudioPlayer()}<header class="topbar"><div class="brand-mark">✦</div><div><div class="eyebrow">PERSONAL ASTRONOMY OBSERVATORY</div><h1>AKASHA</h1></div><div class="topbar-status"><span class="live-dot"></span> local calculation · ${escapeHtml(state.observer.timeZone)}</div></header><main class="app-shell"><section class="control-panel panel"><div class="control-group location-controls"><div class="panel-kicker">OBSERVER</div><div class="control-row"><label>Latitude<input id="latitude" type="number" min="-90" max="90" step="0.0001" value="${state.observer.latitude}" /></label><label>Longitude<input id="longitude" type="number" min="-180" max="180" step="0.0001" value="${state.observer.longitude}" /></label><label>Elevation <span class="unit">m</span><input id="elevation" type="number" min="-500" max="9000" step="1" value="${state.observer.elevation}" /></label><label>Time zone<select id="timezone">${TIME_ZONES.map((zone) => `<option value="${zone}" ${zone === state.observer.timeZone ? 'selected' : ''}>${zone}</option>`).join('')}</select></label></div><div class="preset-row"><span>Presets</span><button data-preset="12.9716,77.5946,920">Bengaluru</button><button data-preset="51.5072,-0.1276,11">London</button><button data-preset="40.7128,-74.006,10">New York</button><button data-preset="-33.9249,18.4241,15">Cape Town</button><button class="reset-observer-button" data-action="reset-observer">Reset setup</button></div><div class="conditions-row"><label>Light pollution<select id="light-pollution">${BORTLE_LABELS.map((label, index) => `<option value="${index + 1}" ${state.observer.lightPollution === index + 1 ? 'selected' : ''}>Bortle ${index + 1} · ${label}</option>`).join('')}</select></label><label>Cloud cover <output>${state.observer.cloudCover}%</output><input id="cloud-cover" type="range" min="0" max="100" step="5" value="${state.observer.cloudCover}" /></label><label>Transparency <output>${state.observer.transparency}%</output><input id="transparency" type="range" min="0" max="100" step="5" value="${state.observer.transparency}" /></label><label>Horizon obstruction <output>${state.observer.horizonObstruction}%</output><input id="horizon-obstruction" type="range" min="0" max="100" step="5" value="${state.observer.horizonObstruction}" /></label></div><p class="conditions-note">Manual observing conditions · ${conditionsSummary()} · saved locally in this browser · these adjust guidance, not astronomical positions.</p></div><div class="control-group time-controls"><div class="panel-kicker">OBSERVATION TIME</div><div class="time-row"><input id="observation-time" type="datetime-local" value="${inputValue}" /><button class="button button-quiet" data-action="now">Now</button></div><div class="time-actions"><button class="button button-quiet" data-step="-60">− 1 h</button><button class="button button-primary play-button" data-action="toggle-play">${state.playing ? 'Ⅱ Pause' : '▶ Play'}</button><button class="button button-quiet" data-step="60">+ 1 h</button></div><div class="time-readout">${formatDateTime(state.instant)} · ${state.snapshot.twilight.replace('-', ' ')}</div></div></section><section class="workspace"><section class="panel map-panel"><div class="map-heading"><div><div class="panel-kicker">THE SKY ABOVE YOU</div><h2>${formatDateTime(state.instant)}</h2><p>Zenith at centre · horizon at edge · drag to pan · scroll to zoom</p></div><div class="map-status"><strong>${state.snapshot.objects.filter((item) => item.aboveHorizon).length}</strong><span>starter objects<br />above horizon</span></div></div><div class="sky-stage">${renderMap()}<div class="map-scale"><span>30°</span><span>60°</span><span>horizon</span></div></div><div class="map-footer"><span><i class="legend-line legend-horizon"></i> horizon</span><span><i class="legend-line legend-constellation"></i> constellation guide</span><span><i class="legend-dot"></i> calculated object</span><button data-action="reset-map">Reset view</button></div></section><aside class="side-column">${renderObjectPanel()}<section class="panel catalogue-panel"><div class="panel-kicker">OBJECT CATALOGUE</div><div class="catalogue-tools"><input id="catalogue-search" type="search" placeholder="Search objects" value="${escapeHtml(state.query)}" /><select id="catalogue-filter"><option value="all" ${state.filter === 'all' ? 'selected' : ''}>All types</option><option value="star" ${state.filter === 'star' ? 'selected' : ''}>Stars</option><option value="planet" ${state.filter === 'planet' ? 'selected' : ''}>Moon</option><option value="deep-sky" ${state.filter === 'deep-sky' ? 'selected' : ''}>Deep sky</option></select></div><div class="catalogue-list">${filterObjects.map((item) => `<button class="catalogue-item ${item.id === state.selectedId ? 'is-selected' : ''}" data-select-object="${item.id}"><span class="catalogue-symbol" style="color:${item.color}">${item.kind === 'star' ? '✦' : item.kind === 'moon' ? '◐' : item.kind === 'deep-sky' ? '◇' : '●'}</span><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.classification)}</small></span><span class="catalogue-alt">${state.snapshot.objects.find((calculated) => calculated.id === item.id)?.horizontal.altitude.toFixed(0)}°</span></button>`).join('')}</div></section></aside></section><section class="lower-grid"><section class="panel planner-panel"><div class="panel-kicker">TONIGHT'S OBSERVATION PLANNER</div><div class="section-heading"><div><h2>Start with what is ready</h2><p>Ranked from the local calculation for ${escapeHtml(state.observer.timeZone)}.</p></div><span class="planner-badge">${state.snapshot.twilight === 'night' ? 'dark sky' : state.snapshot.twilight}</span></div><div class="planner-list">${renderPlanner()}</div></section>${renderJournal()}</section><footer class="app-footer"><span>AKASHA v0.3.9 · positions calculated locally with Astronomy Engine</span><span>Geometric horizon and twilight are not a promise of visibility.</span></footer></main>`;
+  app.innerHTML = `<header class="topbar"><div class="brand-mark">✦</div><div><div class="eyebrow">PERSONAL ASTRONOMY OBSERVATORY</div><h1>AKASHA</h1></div><div class="topbar-status"><span class="live-dot"></span> local calculation · ${escapeHtml(state.observer.timeZone)}</div></header><main class="app-shell"><section class="control-panel panel"><div class="control-group location-controls"><div class="panel-kicker">OBSERVER</div><div class="control-row"><label>Latitude<input id="latitude" type="number" min="-90" max="90" step="0.0001" value="${state.observer.latitude}" /></label><label>Longitude<input id="longitude" type="number" min="-180" max="180" step="0.0001" value="${state.observer.longitude}" /></label><label>Elevation <span class="unit">m</span><input id="elevation" type="number" min="-500" max="9000" step="1" value="${state.observer.elevation}" /></label><label>Time zone<select id="timezone">${TIME_ZONES.map((zone) => `<option value="${zone}" ${zone === state.observer.timeZone ? 'selected' : ''}>${zone}</option>`).join('')}</select></label></div><div class="preset-row"><span>Presets</span><button data-preset="12.9716,77.5946,920">Bengaluru</button><button data-preset="51.5072,-0.1276,11">London</button><button data-preset="40.7128,-74.006,10">New York</button><button data-preset="-33.9249,18.4241,15">Cape Town</button><button class="reset-observer-button" data-action="reset-observer">Reset setup</button></div><div class="conditions-row"><label>Light pollution<select id="light-pollution">${BORTLE_LABELS.map((label, index) => `<option value="${index + 1}" ${state.observer.lightPollution === index + 1 ? 'selected' : ''}>Bortle ${index + 1} · ${label}</option>`).join('')}</select></label><label>Cloud cover <output>${state.observer.cloudCover}%</output><input id="cloud-cover" type="range" min="0" max="100" step="5" value="${state.observer.cloudCover}" /></label><label>Transparency <output>${state.observer.transparency}%</output><input id="transparency" type="range" min="0" max="100" step="5" value="${state.observer.transparency}" /></label><label>Horizon obstruction <output>${state.observer.horizonObstruction}%</output><input id="horizon-obstruction" type="range" min="0" max="100" step="5" value="${state.observer.horizonObstruction}" /></label></div><p class="conditions-note">Manual observing conditions · ${conditionsSummary()} · saved locally in this browser · these adjust guidance, not astronomical positions.</p></div><div class="control-group time-controls"><div class="panel-kicker">OBSERVATION TIME</div><div class="time-row"><input id="observation-time" type="datetime-local" value="${inputValue}" /><button class="button button-quiet" data-action="now">Now</button></div><div class="time-actions"><button class="button button-quiet" data-step="-60">− 1 h</button><button class="button button-primary play-button" data-action="toggle-play">${state.playing ? 'Ⅱ Pause' : '▶ Play'}</button><button class="button button-quiet" data-step="60">+ 1 h</button></div><div class="time-readout">${formatDateTime(state.instant)} · ${state.snapshot.twilight.replace('-', ' ')}</div></div></section><section class="workspace"><section class="panel map-panel"><div class="map-heading"><div><div class="panel-kicker">THE SKY ABOVE YOU</div><h2>${formatDateTime(state.instant)}</h2><p>Zenith at centre · horizon at edge · drag to pan · scroll to zoom</p></div><div class="map-status"><strong>${state.snapshot.objects.filter((item) => item.aboveHorizon).length}</strong><span>starter objects<br />above horizon</span></div></div><div class="sky-stage">${renderMap()}<div class="map-scale"><span>30°</span><span>60°</span><span>horizon</span></div></div><div class="map-footer"><span><i class="legend-line legend-horizon"></i> horizon</span><span><i class="legend-line legend-constellation"></i> constellation guide</span><span><i class="legend-dot"></i> calculated object</span><button data-action="reset-map">Reset view</button></div></section><aside class="side-column">${renderObjectPanel()}<section class="panel catalogue-panel"><div class="panel-kicker">OBJECT CATALOGUE</div><div class="catalogue-tools"><input id="catalogue-search" type="search" placeholder="Search objects" value="${escapeHtml(state.query)}" /><select id="catalogue-filter"><option value="all" ${state.filter === 'all' ? 'selected' : ''}>All types</option><option value="star" ${state.filter === 'star' ? 'selected' : ''}>Stars</option><option value="planet" ${state.filter === 'planet' ? 'selected' : ''}>Moon</option><option value="deep-sky" ${state.filter === 'deep-sky' ? 'selected' : ''}>Deep sky</option></select></div><div class="catalogue-list">${filterObjects.map((item) => `<button class="catalogue-item ${item.id === state.selectedId ? 'is-selected' : ''}" data-select-object="${item.id}"><span class="catalogue-symbol" style="color:${item.color}">${item.kind === 'star' ? '✦' : item.kind === 'moon' ? '◐' : item.kind === 'deep-sky' ? '◇' : '●'}</span><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.classification)}</small></span><span class="catalogue-alt">${state.snapshot.objects.find((calculated) => calculated.id === item.id)?.horizontal.altitude.toFixed(0)}°</span></button>`).join('')}</div></section></aside></section><section class="lower-grid"><section class="panel planner-panel"><div class="panel-kicker">TONIGHT'S OBSERVATION PLANNER</div><div class="section-heading"><div><h2>Start with what is ready</h2><p>Ranked from the local calculation for ${escapeHtml(state.observer.timeZone)}.</p></div><span class="planner-badge">${state.snapshot.twilight === 'night' ? 'dark sky' : state.snapshot.twilight}</span></div><div class="planner-list">${renderPlanner()}</div></section>${renderJournal()}</section><footer class="app-footer"><span>AKASHA v0.3.9 · positions calculated locally with Astronomy Engine</span><span>Geometric horizon and twilight are not a promise of visibility.</span></footer></main>`;
   const catalogueFilter = app.querySelector<HTMLSelectElement>('#catalogue-filter');
   const planetOption = catalogueFilter?.querySelector<HTMLOptionElement>('option[value="planet"]');
   if (planetOption) planetOption.textContent = 'Planets';
   if (catalogueFilter && !catalogueFilter.querySelector('option[value="moon"]')) catalogueFilter.insertAdjacentHTML('beforeend', `<option value="moon" ${state.filter === 'moon' ? 'selected' : ''}>Moon</option>`);
   const versionLabel = app.querySelector<HTMLElement>('.app-footer span');
-  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.12 · positions calculated locally with Astronomy Engine';
+  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.13 · positions calculated locally with Astronomy Engine';
   bindEvents();
   updateMapInteractions();
   updateLegendLabel();
@@ -284,6 +308,70 @@ function rerender(): void {
   saveObserverSettings(state.observer);
   updateSnapshot();
   render();
+}
+
+function bindAudioEvents(): void {
+  const audioFile = audioHost.querySelector<HTMLInputElement>('#audio-file');
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-load"]')?.addEventListener('click', () => audioFile?.click());
+  audioFile?.addEventListener('change', () => {
+    const file = audioFile.files?.[0];
+    if (!file) return;
+    try {
+      state.audioMessage = '';
+      loadLocalAudio(file);
+    } catch (error) {
+      state.audioMessage = error instanceof Error ? error.message : 'The audio file could not be loaded.';
+      renderAudioDock();
+    }
+  });
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-play"]')?.addEventListener('click', () => {
+    state.audioMessage = '';
+    void playAudio().catch((error: unknown) => {
+      state.audioMessage = error instanceof Error ? error.message : 'Audio playback could not start.';
+      renderAudioDock();
+    });
+  });
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-pause"]')?.addEventListener('click', () => {
+    void pauseAudio().catch(() => {
+      state.audioMessage = 'Audio could not be paused.';
+      renderAudioDock();
+    });
+  });
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-stop"]')?.addEventListener('click', () => {
+    void stopAudio().catch(() => {
+      state.audioMessage = 'Audio could not be stopped.';
+      renderAudioDock();
+    });
+  });
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-ambient"]')?.addEventListener('click', () => useAmbient());
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-save"]')?.addEventListener('click', () => {
+    const operation = getAudioState().savedTrackAvailable ? forgetSavedAudio() : saveCurrentAudio();
+    void operation.catch((error: unknown) => {
+      state.audioMessage = error instanceof Error ? error.message : 'The audio track could not be saved locally.';
+      renderAudioDock();
+    });
+  });
+  audioHost.querySelector<HTMLInputElement>('#audio-volume')?.addEventListener('input', (event) => setAudioVolume(Number((event.target as HTMLInputElement).value)));
+  const youtubeUrl = audioHost.querySelector<HTMLInputElement>('#youtube-url');
+  audioHost.querySelector<HTMLButtonElement>('[data-action="youtube-load"]')?.addEventListener('click', () => {
+    try {
+      state.audioMessage = '';
+      loadYouTubeAudio(youtubeUrl?.value ?? '');
+    } catch (error) {
+      state.audioMessage = error instanceof Error ? error.message : 'The YouTube link could not be loaded.';
+      renderAudioDock();
+    }
+  });
+  audioHost.querySelector<HTMLButtonElement>('[data-action="youtube-save"]')?.addEventListener('click', () => {
+    try {
+      if (getAudioState().savedYouTubeAvailable) forgetSavedYouTube();
+      else saveCurrentYouTube();
+      state.audioMessage = '';
+    } catch (error) {
+      state.audioMessage = error instanceof Error ? error.message : 'The YouTube link could not be saved locally.';
+      renderAudioDock();
+    }
+  });
 }
 
 function bindEvents(): void {
@@ -357,48 +445,6 @@ function bindEvents(): void {
     state.filter = (event.target as HTMLSelectElement).value as typeof state.filter;
     render();
   });
-  const audioFile = app.querySelector<HTMLInputElement>('#audio-file');
-  app.querySelector<HTMLButtonElement>('[data-action="audio-load"]')?.addEventListener('click', () => audioFile?.click());
-  audioFile?.addEventListener('change', () => {
-    const file = audioFile.files?.[0];
-    if (!file) return;
-    try {
-      loadLocalAudio(file);
-      state.audioMessage = '';
-      render();
-    } catch (error) {
-      state.audioMessage = error instanceof Error ? error.message : 'The audio file could not be loaded.';
-      render();
-    }
-  });
-  app.querySelector<HTMLButtonElement>('[data-action="audio-play"]')?.addEventListener('click', () => {
-    state.audioMessage = '';
-    void playAudio().catch((error: unknown) => {
-      state.audioMessage = error instanceof Error ? error.message : 'Audio playback could not start.';
-      render();
-    });
-  });
-  app.querySelector<HTMLButtonElement>('[data-action="audio-pause"]')?.addEventListener('click', () => {
-    void pauseAudio().catch(() => {
-      state.audioMessage = 'Audio could not be paused.';
-      render();
-    });
-  });
-  app.querySelector<HTMLButtonElement>('[data-action="audio-stop"]')?.addEventListener('click', () => {
-    void stopAudio().catch(() => {
-      state.audioMessage = 'Audio could not be stopped.';
-      render();
-    });
-  });
-  app.querySelector<HTMLButtonElement>('[data-action="audio-ambient"]')?.addEventListener('click', () => useAmbient());
-  app.querySelector<HTMLButtonElement>('[data-action="audio-save"]')?.addEventListener('click', () => {
-    const operation = getAudioState().savedTrackAvailable ? forgetSavedAudio() : saveCurrentAudio();
-    void operation.catch((error: unknown) => {
-      state.audioMessage = error instanceof Error ? error.message : 'The audio track could not be saved locally.';
-      render();
-    });
-  });
-  app.querySelector<HTMLInputElement>('#audio-volume')?.addEventListener('input', (event) => setAudioVolume(Number((event.target as HTMLInputElement).value)));
   app.querySelector<HTMLButtonElement>('[data-action="now"]')?.addEventListener('click', () => {
     state.instant = new Date();
     rerender();
@@ -513,9 +559,10 @@ function updateLegendLabel(): void {
   legend.replaceChildren(swatch, document.createTextNode(' orientation guide'));
 }
 
-onAudioChange(() => render());
+onAudioChange(() => renderAudioDock());
 void restoreSavedAudio().catch((error: unknown) => {
   state.audioMessage = error instanceof Error ? error.message : 'Saved audio could not be restored.';
-  render();
+  renderAudioDock();
 });
 render();
+renderAudioDock();

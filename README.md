@@ -46,6 +46,7 @@ npm run test:visibility # run visibility-score regression checks
 npm run test:catalogue # validate licensed catalogue metadata
 npm run test:windows   # validate dark-sky observing windows
 npm run test:planner   # validate planner labels and ranking
+npm run test:youtube   # validate YouTube URL parsing
 ```
 
 ## Implemented in v0.1
@@ -138,6 +139,12 @@ npm run test:planner   # validate planner labels and ranking
 - Planner cards now lead with readable window guidance such as “Best now,” “Good for 2h,” “Short window,” or “Later tonight.”
 - Planner cards show the window guidance, visibility score, observing difficulty, and score reasons together.
 - The ranking and label behavior has dedicated regression checks.
+
+## Implemented in v0.3.13
+
+- Added YouTube video-link input to the compact audio dock.
+- YouTube links play through the official embedded IFrame player with the existing play, pause, stop, and volume controls.
+- YouTube URLs can be saved locally and restored without storing video data; playback requires an internet connection and remains subject to YouTube availability and player behavior.
 
 ## Deferred from v0.1
 

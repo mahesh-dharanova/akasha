@@ -62,6 +62,8 @@ The journal stores favourites and observations in `localStorage` behind `src/jou
 
 `src/audio.ts` owns the optional local audio experience. The default soundscape is synthesized in the browser with Web Audio; user-selected audio files are stored as Blobs in a versioned IndexedDB store when the user chooses Save, then played through temporary object URLs. They are never uploaded or committed. Audio state remains outside the astronomy snapshot so playback does not affect calculations, time controls, or journal data.
 
+YouTube links are handled by `src/youtube.ts`. The module validates common YouTube URL forms, stores only the URL in browser `localStorage` when requested, and mounts the official YouTube IFrame Player API in a 220×200 player surface. AKASHA does not download, extract, proxy, or persist YouTube media; playback therefore requires network access and follows YouTube's player availability and browser policies.
+
 ## Data flow
 
 1. The observer changes time, date, or location.

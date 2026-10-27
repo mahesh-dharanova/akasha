@@ -37,6 +37,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 24. [x] v0.3.10 local audio persistence — success condition: a user-selected track can be saved to browser IndexedDB, restored after reload, and forgotten without network or repository storage.
 25. [x] v0.3.11 observing-window-aware planner — success condition: each object exposes remaining astronomical-night overlap, planner ranking accounts for usable dark time, and multi-location window checks pass.
 26. [x] v0.3.12 planner explanations — success condition: planner cards combine readable window guidance, visibility score, difficulty, and reasons, with tested label and ranking behavior.
+27. [x] v0.3.13 YouTube player links — success condition: supported YouTube URLs are validated, played through the official embedded player, optionally saved locally, and covered by parser checks without extracting audio.
 
 ## Deferred milestones
 

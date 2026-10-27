@@ -29,6 +29,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.10 completed: user-selected audio can be saved and restored through browser IndexedDB, with an explicit Forget action; no audio asset enters Git or network requests.
 - v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
 - v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.
+- v0.3.13 completed: the audio dock accepts supported YouTube links, uses the official embedded player, and can save/restore the URL locally without downloading or extracting video audio.
 
 ## Next
 
@@ -44,6 +45,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Consider a local playlist only if browser storage limits and file-permission behavior remain explicit.
 - Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
 - Review recommendation wording with real observing sessions before adding more ranking factors.
+- YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player; local audio and generated ambient remain offline fallbacks.
 
 ## Open questions / blockers
 
