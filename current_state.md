@@ -49,6 +49,6 @@ Updated after each built and verified chunk. Git history contains the detailed c
 
 ## Open questions / blockers
 
-- `origin` is configured as the private GitHub repository; this working tree currently has five local commits ahead of `origin/main`.
+- `origin` is configured as the private GitHub repository; this working tree is clean and synced with `origin/main`.
 - The starter and OpenNGC-derived catalogue entries need continued source review before broader expansion.
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
