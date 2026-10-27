@@ -8,6 +8,12 @@ const expected = [
   ['m11', 'M11 / NGC 6705'],
   ['m46', 'M46 / NGC 2437'],
   ['m47', 'M47 / NGC 2422'],
+  ['m1', 'M1 / NGC 1952'],
+  ['m20', 'M20 / NGC 6514'],
+  ['m78', 'M78 / NGC 2068'],
+  ['m97', 'M97 / NGC 3587'],
+  ['m101', 'M101 / NGC 5457'],
+  ['ngc2070', 'NGC 2070 / C 103'],
 ];
 
 for (const [id, catalogueId] of expected) {
@@ -24,4 +30,4 @@ for (const [id, catalogueId] of expected) {
 const catalogueIds = CATALOGUE.map((object) => object.catalogueId).filter(Boolean);
 assert.equal(new Set(catalogueIds).size, catalogueIds.length, 'catalogue identifiers should be unique');
 
-console.log('Catalogue checks passed: six OpenNGC clusters, metadata, attribution, and identifier uniqueness.');
+console.log('Catalogue checks passed: twelve OpenNGC targets, metadata, attribution, and identifier uniqueness.');

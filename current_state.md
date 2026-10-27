@@ -30,6 +30,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
 - v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.
 - v0.3.13 completed: the audio dock accepts supported YouTube links, uses the official embedded player, can save/restore the URL locally without downloading or extracting video audio, uses a wider bottom-left layout for the link controls, and can be minimized without destroying the player.
+- v0.3.14 catalogue chunk completed: Crab, Trifid, M78, Owl, Pinwheel, and Tarantula targets were added from OpenNGC fields with CC BY-SA 4.0 attribution and regression coverage.
 
 ## Next
 

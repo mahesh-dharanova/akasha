@@ -248,6 +248,36 @@ export const CATALOGUE: CatalogueObject[] = [
     classification: 'Open star cluster', description: 'A bright, loose southern cluster in Puppis with several prominent stars visible in a small field.',
     guidance: 'Use Sirius as a starting point and sweep southeast; binoculars make the cluster’s contrasting stars obvious.', color: '#ffe6b4',
   },
+  {
+    id: 'm1', name: 'Crab Nebula', kind: 'deep-sky', catalogueId: 'M1 / NGC 1952', raJ2000: 5.57555, decJ2000: 22.01447, magnitude: 8.40, angularSizeArcmin: 8, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Supernova remnant', description: 'The expanding debris of a stellar explosion recorded by observers in 1054, powered by a rapidly rotating neutron star.',
+    guidance: 'Find Taurus and use Zeta Tauri as a finder; a telescope and dark sky are needed for this small, faint patch.', color: '#c7d5ff',
+  },
+  {
+    id: 'm20', name: 'Trifid Nebula', kind: 'deep-sky', catalogueId: 'M20 / NGC 6514', raJ2000: 18.04503, decJ2000: -22.97189, magnitude: 8.50, angularSizeArcmin: 28, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission and reflection nebula', description: 'A bright star-forming cloud in Sagittarius divided by dark dust lanes into three prominent lobes.',
+    guidance: 'Scan the Sagittarius Milky Way near the Lagoon Nebula; binoculars show the glow and a telescope reveals the dark divisions.', color: '#d5b6ff',
+  },
+  {
+    id: 'm78', name: 'M78 Reflection Nebula', kind: 'deep-sky', catalogueId: 'M78 / NGC 2068', raJ2000: 5.77939, decJ2000: 0.07931, magnitude: 8.00, angularSizeArcmin: 4.5, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Reflection nebula', description: 'A cloud of dust reflecting the light of young stars in Orion, with a compact pair of bright knots.',
+    guidance: 'Look northeast of Orion’s Belt with a telescope under a dark sky; averted vision helps reveal the faint reflection glow.', color: '#b9d4ff',
+  },
+  {
+    id: 'm97', name: 'Owl Nebula', kind: 'deep-sky', catalogueId: 'M97 / NGC 3587', raJ2000: 11.24659, decJ2000: 55.01903, magnitude: 9.90, angularSizeArcmin: 3.58, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Planetary nebula', description: 'A faint shell of gas expelled by a dying star in Ursa Major, named for the pair of dark eyes visible in larger telescopes.',
+    guidance: 'Use the bowl of the Big Dipper as a guide; a telescope and dark sky are needed to separate its small disk from the background.', color: '#a9e0df',
+  },
+  {
+    id: 'm101', name: 'Pinwheel Galaxy', kind: 'deep-sky', catalogueId: 'M101 / NGC 5457', raJ2000: 14.05348, decJ2000: 54.34894, magnitude: 7.90, surfaceBrightness: 23.97, angularSizeArcmin: 23.99, difficulty: 'telescope', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Face-on spiral galaxy', description: 'A large, asymmetric spiral galaxy whose low surface brightness makes its extended arms challenging to see.',
+    guidance: 'Hop from the handle of the Big Dipper; use a dark sky, a wide-field telescope, and averted vision for the diffuse disk.', color: '#aebeff',
+  },
+  {
+    id: 'ngc2070', name: 'Tarantula Nebula', kind: 'deep-sky', catalogueId: 'NGC 2070 / C 103', raJ2000: 5.64510, decJ2000: -69.10089, magnitude: 7.25, angularSizeArcmin: 16, difficulty: 'binocular', source: 'OpenNGC · CC BY-SA 4.0',
+    classification: 'Emission nebula and star-forming region', description: 'A huge stellar nursery in the Large Magellanic Cloud and one of the most active star-forming regions near the Milky Way.',
+    guidance: 'Best from southern latitudes; scan the Large Magellanic Cloud with binoculars for a bright, structured patch.', color: '#f2c1ff',
+  },
 ];
 
 export const DEFAULT_OBJECT_ID = 'vega';
