@@ -19,7 +19,7 @@ The v0.3.15 ephemeris expansion adds Moon references for Bengaluru on 2026-10-26
 
 - Bright-star names, coordinates, distances, magnitudes, classifications, descriptions, and finder guidance are currently curated application data in `src/catalogue.ts`. They are not claimed to be a copied database. Exact upstream provenance for these fields remains an open review item; future edits must record a citable source and licence before broader expansion.
 - Object explanations and observing guidance are written for AKASHA. They are explanatory text, not measurements.
-- Object relationships in `src/relationships.ts` are application-authored observing and learning links. Their labels explicitly distinguish physical pairs from same-region and comparison links; they are not copied catalogue associations.
+- Object relationships and three-step lessons in `src/relationships.ts` are application-authored observing and learning links. Their labels explicitly distinguish physical pairs from same-region and comparison links; they are not copied catalogue associations or calibrated scientific conclusions.
 - Constellation lines are a small application-authored orientation guide connecting selected catalogue stars. They are not official constellation boundaries.
 - The seeded background stars are decorative procedural points and carry no astronomical catalogue meaning.
 - The default AKASHA ambient soundscape is generated procedurally in `src/audio.ts`; no recording is bundled. User-selected audio files remain local browser IndexedDB data and are not part of the repository or a network request.

@@ -165,6 +165,11 @@ npm run test:relationships # validate reciprocal object links
 - Labels distinguish physical pairs, shared observing regions, and comparison targets instead of implying that every visual connection is a physical association.
 - Relationship integrity is covered by reciprocal-link regression checks.
 
+## Implemented in v0.3.17
+
+- Added a guided lesson to each relationship group with three short observing steps: identify the region, compare the targets, and notice the scientific distinction.
+- Lessons are deterministic, local, and application-authored; they do not alter calculated positions or claim calibrated visibility.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -190,6 +195,7 @@ Verified on 2026-10-26:
 - v0.3.14 catalogue check — twelve selected OpenNGC targets passed finite-coordinate, metadata, attribution, and unique-identifier checks; production build passed.
 - v0.3.15 ephemeris check — eight committed Horizons samples passed local azimuth, altitude, and distance comparisons, including Moon date movement and London/Cape Town observer frames.
 - v0.3.16 relationship check — 14 reciprocal object connections passed catalogue-target, uniqueness, and relationship-kind checks.
+- v0.3.17 learning check — all relationship groups passed three-step lesson coverage and reciprocal-link validation.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api), following its [official documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html), with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
 

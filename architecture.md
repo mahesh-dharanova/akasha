@@ -44,7 +44,7 @@ The application does not replace the library's ephemeris with hand-authored plan
 
 The typed local catalogue contains the Sun, Moon, planets, bright stars, and selected Messier/NGC deep-sky targets. Scientific fields are explicit and nullable. The deep-sky additions use selected OpenNGC fields with CC BY-SA 4.0 attribution recorded on each entry, in the README, and in the provenance ledger. The UI can filter deep-sky objects separately from stars and planets. Each future catalogue addition must record its exact upstream source and licence; missing values remain unavailable.
 
-`src/relationships.ts` owns the first learning-layer connections between catalogue entries. These are application-authored observing links with explicit kinds: physical pair, same observing region, or comparison. The UI renders them as navigation cards in the selected-object panel, while reciprocal-link checks prevent dangling or one-sided relationships. They are not a replacement for a scientific object-association database.
+`src/relationships.ts` owns the first learning-layer connections between catalogue entries. These are application-authored observing links with explicit kinds: physical pair, same observing region, or comparison. Each relationship group points to a deterministic three-step lesson shown above the navigation cards in the selected-object panel. Reciprocal-link and lesson checks prevent dangling links or incomplete learning content. They are not a replacement for a scientific object-association database.
 
 ### Planner
 

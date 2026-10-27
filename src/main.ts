@@ -309,7 +309,7 @@ function render(): void {
   if (planetOption) planetOption.textContent = 'Planets';
   if (catalogueFilter && !catalogueFilter.querySelector('option[value="moon"]')) catalogueFilter.insertAdjacentHTML('beforeend', `<option value="moon" ${state.filter === 'moon' ? 'selected' : ''}>Moon</option>`);
   const versionLabel = app.querySelector<HTMLElement>('.app-footer span');
-  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.16 · positions calculated locally with Astronomy Engine';
+  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.17 · positions calculated locally with Astronomy Engine';
   bindEvents();
   updateMapInteractions();
   updateLegendLabel();
