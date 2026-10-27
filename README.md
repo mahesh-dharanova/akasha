@@ -47,6 +47,7 @@ npm run test:catalogue # validate licensed catalogue metadata
 npm run test:windows   # validate dark-sky observing windows
 npm run test:planner   # validate planner labels and ranking
 npm run test:youtube   # validate YouTube URL parsing
+npm run test:relationships # validate reciprocal object links
 ```
 
 ## Implemented in v0.1
@@ -158,6 +159,12 @@ npm run test:youtube   # validate YouTube URL parsing
 - Recorded the current NASA/JPL Horizons API endpoint, signature version, observer coordinates, UTC time scale, and airless topocentric settings for each reference.
 - Kept these samples as tests only; the running application remains a local calculation with no NASA network dependency.
 
+## Implemented in v0.3.16
+
+- Added an initial learning layer with clickable relationships between selected catalogue objects.
+- Labels distinguish physical pairs, shared observing regions, and comparison targets instead of implying that every visual connection is a physical association.
+- Relationship integrity is covered by reciprocal-link regression checks.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -182,6 +189,7 @@ Verified on 2026-10-26:
 - v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.
 - v0.3.14 catalogue check — twelve selected OpenNGC targets passed finite-coordinate, metadata, attribution, and unique-identifier checks; production build passed.
 - v0.3.15 ephemeris check — eight committed Horizons samples passed local azimuth, altitude, and distance comparisons, including Moon date movement and London/Cape Town observer frames.
+- v0.3.16 relationship check — 14 reciprocal object connections passed catalogue-target, uniqueness, and relationship-kind checks.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api), following its [official documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html), with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
 
