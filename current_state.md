@@ -32,6 +32,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.13 completed: the audio dock accepts supported YouTube links, uses the official embedded player, can save/restore the URL locally without downloading or extracting video audio, uses a wider bottom-left layout for the link controls, and can be minimized without destroying the player.
 - v0.3.14 catalogue chunk completed: Crab, Trifid, M78, Owl, Pinwheel, and Tarantula targets were added from OpenNGC fields with CC BY-SA 4.0 attribution and regression coverage.
 - v0.3.15 ephemeris chunk completed: the Horizons fixture now uses the current endpoint/signature and covers Moon samples across two dates plus London/Cape Town Moon and Saturn observer frames.
+- v0.3.16 relationship chunk completed: selected objects now expose 14 reciprocal, explicitly labelled observing connections, including physical pairs, same-region links, and comparison links.
 
 ## Next
 

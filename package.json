@@ -1,7 +1,7 @@
 {
   "name": "akasha",
   "private": true,
-  "version": "0.3.15",
+  "version": "0.3.16",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,7 @@
     "test:windows": "node tests/observing-window-check.cjs",
     "test:planner": "node tests/planner-check.cjs",
     "test:youtube": "node tests/youtube-check.cjs",
+    "test:relationships": "node tests/relationships-check.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

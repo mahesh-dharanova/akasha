@@ -168,6 +168,16 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .timeline-twilight-event { color: #aeb9ff; }
 .timeline-dark-event { color: var(--green); }
 .timeline-note { margin-top: 8px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+.related-objects { display: grid; gap: 8px; padding: 13px 0 12px; border-bottom: 1px solid var(--border); }
+.related-intro { color: var(--muted); font-size: 10px; line-height: 1.4; }
+.related-list { display: grid; gap: 5px; }
+.related-item { display: flex; align-items: start; justify-content: space-between; gap: 8px; width: 100%; padding: 8px 9px; border: 1px solid rgba(112,216,255,.12); border-radius: 8px; color: inherit; background: rgba(112,216,255,.035); text-align: left; }
+.related-item:hover { border-color: var(--cyan); background: rgba(112,216,255,.08); }
+.related-item span:first-child { display: grid; gap: 3px; min-width: 0; }
+.related-item strong { color: var(--muted-strong); font-size: 11px; }
+.related-item small { color: var(--amber); font-size: 9px; }
+.related-item em { color: var(--muted); font-size: 9px; font-style: normal; line-height: 1.35; }
+.related-arrow { color: var(--cyan); font-size: 16px; line-height: 1; }
 .copy-block { display: grid; gap: 7px; padding-top: 14px; }
 .copy-block p { color: var(--muted-strong); font-size: 12px; line-height: 1.55; }
 .source-note { color: #9caae1 !important; font-size: 10px !important; }
