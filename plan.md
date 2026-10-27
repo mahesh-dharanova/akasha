@@ -39,6 +39,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 26. [x] v0.3.12 planner explanations — success condition: planner cards combine readable window guidance, visibility score, difficulty, and reasons, with tested label and ranking behavior.
 27. [x] v0.3.13 YouTube player links — success condition: supported YouTube URLs are validated, played through the official embedded player, optionally saved locally, and covered by parser checks without extracting audio.
 28. [x] v0.3.14 licensed catalogue expansion — success condition: six additional OpenNGC targets broaden object types and seasonal/southern-sky coverage, retain source fields and attribution, and pass metadata/identifier regression checks.
+29. [x] v0.3.15 ephemeris reference expansion — success condition: the offline astronomy regression fixture records the current Horizons endpoint/signature, Moon samples across dates and locations, and additional Saturn observer samples that match local calculations.
 
 ## Deferred milestones
 

@@ -31,13 +31,13 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.
 - v0.3.13 completed: the audio dock accepts supported YouTube links, uses the official embedded player, can save/restore the URL locally without downloading or extracting video audio, uses a wider bottom-left layout for the link controls, and can be minimized without destroying the player.
 - v0.3.14 catalogue chunk completed: Crab, Trifid, M78, Owl, Pinwheel, and Tarantula targets were added from OpenNGC fields with CC BY-SA 4.0 attribution and regression coverage.
+- v0.3.15 ephemeris chunk completed: the Horizons fixture now uses the current endpoint/signature and covers Moon samples across two dates plus London/Cape Town Moon and Saturn observer frames.
 
 ## Next
 
 - Add more independently produced ephemeris samples across dates, observer locations, and the Moon.
 - Add more licensed catalogue targets after reviewing seasonal and southern-sky coverage; avoid broad ingestion until the metadata boundary is settled.
-- Retry a Moon JPL Horizons reference sample when the service-side `LTKERNL`/`IP_ADDR` failure is resolved.
-- Add London/Cape Town JPL samples when the same Horizons service-side failure is resolved.
+- Keep future Horizons fixtures pinned to the recorded endpoint, API signature, observer settings, and retrieval date.
 - Expand visibility validation with reference observations only if a defensible labelled dataset becomes available; the current score remains explanatory guidance.
 - Consider optional weather/light-pollution integrations only after choosing reliable, clearly licensed data sources.
 - Keep observer settings local; do not turn persistence into a cloud account requirement.

@@ -1,8 +1,9 @@
 {
   "source": "NASA/JPL Horizons API",
-  "sourceUrl": "https://ssd-api.jpl.nasa.gov/api/horizons.api",
+  "sourceUrl": "https://ssd.jpl.nasa.gov/api/horizons.api",
   "documentationUrl": "https://ssd-api.jpl.nasa.gov/doc/horizons.html",
-  "retrievedAt": "2026-10-26",
+  "retrievedAt": "2026-10-27",
+  "apiSignatureVersion": "1.2",
   "settings": {
     "observer": { "latitude": 12.9716, "longitude": 77.5946, "elevationKm": 0.92 },
     "timeScale": "UTC",
@@ -10,7 +11,13 @@
     "coordinateType": "topocentric apparent azimuth/elevation"
   },
   "samples": [
-    { "objectId": "saturn", "body": "Saturn", "command": "699", "instant": "2026-10-26T18:00:00Z", "azimuth": 228.502372, "altitude": 72.785140, "distanceAu": 8.50911232023531 },
-    { "objectId": "jupiter", "body": "Jupiter", "command": "599", "instant": "2026-10-26T18:00:00Z", "azimuth": 65.979213, "altitude": -27.758245, "distanceAu": 5.57794778211512 }
+    { "objectId": "saturn", "body": "Saturn", "command": "699", "instant": "2026-10-26T18:00:00Z", "azimuth": 228.502374, "altitude": 72.785140, "distanceAu": 8.50911232023540 },
+    { "objectId": "jupiter", "body": "Jupiter", "command": "599", "instant": "2026-10-26T18:00:00Z", "azimuth": 65.979213, "altitude": -27.758245, "distanceAu": 5.57794778211512 },
+    { "objectId": "moon", "body": "Moon", "command": "301", "instant": "2026-10-26T18:00:00Z", "observer": { "name": "Bengaluru", "latitude": 12.9716, "longitude": 77.5946, "elevationKm": 0.92 }, "azimuth": 61.898233, "altitude": 74.412161, "distanceAu": 0.00241284202515 },
+    { "objectId": "moon", "body": "Moon", "command": "301", "instant": "2026-11-02T18:00:00Z", "observer": { "name": "Bengaluru", "latitude": 12.9716, "longitude": 77.5946, "elevationKm": 0.92 }, "azimuth": 68.990164, "altitude": -20.613607, "distanceAu": 0.00252554034601 },
+    { "objectId": "moon", "body": "Moon", "command": "301", "instant": "2026-10-26T18:00:00Z", "observer": { "name": "London", "latitude": 51.5072, "longitude": -0.1276, "elevationKm": 0.011 }, "azimuth": 75.873018, "altitude": 13.113936, "distanceAu": 0.00244395577493 },
+    { "objectId": "saturn", "body": "Saturn", "command": "699", "instant": "2026-10-26T18:00:00Z", "observer": { "name": "London", "latitude": 51.5072, "longitude": -0.1276, "elevationKm": 0.011 }, "azimuth": 109.311045, "altitude": 16.384981, "distanceAu": 8.50914100821858 },
+    { "objectId": "moon", "body": "Moon", "command": "301", "instant": "2026-10-26T18:00:00Z", "observer": { "name": "Cape Town", "latitude": -33.9249, "longitude": 18.4241, "elevationKm": 0.015 }, "azimuth": 64.559195, "altitude": 0.909736, "distanceAu": 0.00245282114639 },
+    { "objectId": "saturn", "body": "Saturn", "command": "699", "instant": "2026-10-26T18:00:00Z", "observer": { "name": "Cape Town", "latitude": -33.9249, "longitude": 18.4241, "elevationKm": 0.015 }, "azimuth": 60.796418, "altitude": 34.019069, "distanceAu": 8.50912917086955 }
   ]
 }
