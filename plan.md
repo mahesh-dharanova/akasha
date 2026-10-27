@@ -42,12 +42,23 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 29. [x] v0.3.15 ephemeris reference expansion — success condition: the offline astronomy regression fixture records the current Horizons endpoint/signature, Moon samples across dates and locations, and additional Saturn observer samples that match local calculations.
 30. [x] v0.3.16 object relationships and learning links — success condition: selected objects expose explicitly labelled, reciprocal observing connections that navigate to related catalogue targets and pass relationship integrity checks.
 31. [x] v0.3.17 guided learning connections — success condition: each relationship group provides a deterministic three-step observing lesson that is shown with the related-target navigation and passes lesson integrity checks.
+32. [ ] v0.4 custom observer targeting — success condition: a validated observer context accepts a location name or latitude/longitude, keeps elevation and IANA time zone explicit, and clearly explains that a time zone alone cannot define a sky location.
+33. [ ] v0.4 modular dashboard views — success condition: sky, aerial objects, weather, astronomical events, and future Space POV views can be opened as separate modules while sharing one validated observer/time context.
+34. [ ] v0.4 aerial-object layer — success condition: timestamped, source-labelled adapters can display aircraft, helicopters, rockets, and satellites without confusing their data quality or coordinate systems with astronomical catalogue objects.
+35. [ ] v0.4 atmospheric layer — success condition: optional cloud and precipitation overlays can show provider time, coverage, freshness, and uncertainty without changing deterministic astronomical positions or claiming observing visibility from weather alone.
+36. [ ] v0.4 astronomical-event layer — success condition: eclipses, asteroid close approaches, and meteor/meteoroid events are presented with calculated or sourced event details; recovered meteorites are kept as a separate historical or field-data category rather than live sky targets.
+37. [ ] v0.4 Space POV foundation — success condition: an explicit observer-frame model can show Earth as a celestial body from a defined external observer while keeping Earth-POV altitude/azimuth, local horizon, and zenith semantics separate.
+38. [ ] Phase 2 web deployment — success condition: the local-first web client can be deployed as a responsive static application, with any live-data proxy/cache boundary documented and no provider secrets exposed in the browser.
+39. [ ] Phase 3 Android client — success condition: a native client reuses the calculation/domain contracts, keeps location permission optional and explicit, and supports a responsive observing workflow before adding orientation sensors.
+40. [ ] Future telescope integration — success condition: a separately permissioned astronomy-control adapter handles mount limits, coordinate epoch, connection state, and user confirmation without coupling hardware control to the sky map.
 
 ## Deferred milestones
 
-- v0.3 remaining: broader licensed deep-sky data, more independently produced ephemeris comparisons, object relationships, and an interactive learning path.
-- v0.4: optional Android client with location/orientation support.
-- v0.5: telescope integration through a suitable astronomy-control protocol after the calculation and safety model are mature.
+- v0.3 remaining: broader licensed deep-sky data and more independently produced ephemeris comparisons.
+- v0.4: richer web observatory modules: custom locations, aerial objects, atmospheric overlays, event tracking, and the first explicit Space POV model.
+- Phase 2: optional cloud deployment of the responsive web client; this must not turn local calculation or journal storage into a mandatory service.
+- Phase 3: Android client with optional location/orientation support after the web/domain contracts are stable.
+- Future: telescope integration through a suitable astronomy-control protocol after the calculation and safety model are mature.
 
 ## Deferred brainstorming
 
@@ -61,3 +72,11 @@ Possible future concepts:
 - Earth rotation viewed from outside Earth, including the changing visible hemisphere.
 - Tracking a location on Earth as a rotating surface point rather than as a sky object.
 - A selectable observer frame while keeping local horizon and zenith definitions explicit.
+
+The new Space & Sky expansion should build on this boundary rather than treating every moving object as a star-map point:
+
+- Canonical location input is latitude/longitude plus optional elevation; a time zone is for time conversion and display, not a unique geographic position.
+- Aircraft and helicopters are atmospheric objects; satellites and rockets require separate orbital or launch-state data with timestamps, source attribution, and freshness indicators.
+- Cloud and rain movement belongs to an optional weather layer backed by a provider or user data. It is not part of the astronomical ephemeris calculation.
+- “Meteor” describes the visible atmospheric streak, “meteoroid” the object in space, and “meteorite” material recovered on the ground. AKASHA should track the first two as sky events; meteorites need a separate field/history workflow.
+- Location is sensitive. Future cloud services must use explicit consent, avoid mandatory upload, and keep provider keys and private journal data out of the browser bundle.

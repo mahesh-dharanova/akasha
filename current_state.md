@@ -49,9 +49,18 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
 - Review recommendation wording with real observing sessions before adding more ranking factors.
 - YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player; local audio and generated ambient remain offline fallbacks.
+- New Sky & Space expansion is documented as future scope only; no aerial, weather, event, Space POV, cloud deployment, or Android feature is implemented by this documentation chunk.
+- Future observer targeting will use latitude/longitude as the canonical location, with a location name resolved explicitly and a time zone treated only as time-conversion metadata.
+- Future dashboards are planned as separate shared-context modules for astronomy, atmospheric/aerial objects, weather, events, and Space POV rather than one overloaded page.
+- Future aerial and weather providers remain unselected. Any adapter must record source, licence, timestamp, coverage/radius semantics, freshness, uncertainty, and privacy/network requirements.
+- Event terminology is fixed for planning: meteoroid is the object in space, meteor is the visible atmospheric streak, and meteorite is recovered ground material; only the first two belong in a live sky-event view.
+- Deployment is planned in phases: local web first, optional responsive cloud delivery second, and an Android client third. Local calculation and private journal behavior must remain useful without cloud access.
 
 ## Open questions / blockers
 
 - `origin` is configured as the private GitHub repository; this working tree is clean and synced with `origin/main`.
 - The starter and OpenNGC-derived catalogue entries need continued source review before broader expansion.
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
+- A provider and licence decision is still required before live aircraft, satellite, rocket, cloud, rain, or event data can be added; no feed is currently bundled or queried.
+- Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
+- Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.

@@ -9,6 +9,17 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 | [OpenNGC addendum](https://raw.githubusercontent.com/mattiaverga/OpenNGC/master/database_files/addendum.csv) | CC BY-SA 4.0 | Pleiades/addendum catalogue record | The M45 entry identifies `OpenNGC addendum · CC BY-SA 4.0`. |
 | [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api) ([documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html)) | Generated reference output; no runtime dependency | Topocentric apparent azimuth/elevation and range samples for Moon, Saturn, and Jupiter | Samples are retained only as regression fixtures in `tests/data/`, with API signature `1.2`, query settings, source URL, UTC date, observer location, and airless-refraction setting. |
 
+## Planned external sources — not yet selected
+
+The following feature areas are documented for planning only. No live feed, provider credentials, or feed dump is currently included in AKASHA.
+
+- **Aircraft and helicopters:** a provider must be selected with a compatible redistribution licence, clear update timestamps, geographic coverage, and a defined meaning for “within radius.” Atmospheric tracks must remain separate from astronomical catalogue objects.
+- **Satellites and rockets:** a public orbital/launch-state source and any required SGP4 or related dependency must be reviewed for licence, update cadence, epoch handling, and prediction uncertainty before implementation. TLE/OMM records must retain their source epoch.
+- **Cloud and precipitation:** a provider or user-supplied observation format must be selected with documented coverage, nowcast/radar semantics, licence, retention, and network requirements. Weather overlays are advisory inputs, not astronomical calculations.
+- **Eclipses, asteroids, and meteor activity:** candidate scientific sources may include existing deterministic astronomy calculations and NASA/JPL small-body/event services, but each runtime use must be verified for endpoint terms, attribution, rate limits, and reproducibility first. Meteorite records would require a separate historical or field-data source.
+
+Future adapters must expose source, licence/attribution, observation or forecast time, retrieval time, geographic coverage, freshness, and uncertainty. Precise observer locations and provider keys must not be uploaded or shipped in the client without explicit consent and an approved deployment boundary.
+
 The v0.3.8 catalogue expansion uses OpenNGC records for M35/NGC 2168, M44/NGC 2632, M37/NGC 2099, M11/NGC 6705, M46/NGC 2437, and M47/NGC 2422. Their coordinates, visual magnitudes, and angular sizes remain source fields; names, descriptions, and finder guidance are application-authored.
 
 The v0.3.14 catalogue expansion uses OpenNGC records for M1/NGC 1952, M20/NGC 6514, M78/NGC 2068, M97/NGC 3587, M101/NGC 5457, and NGC 2070/C 103. Their identifiers, J2000 coordinates, V magnitudes, angular sizes, and M101 surface brightness remain source fields; names, descriptions, classifications, colours, and finder guidance are application-authored.

@@ -170,13 +170,28 @@ npm run test:relationships # validate reciprocal object links
 - Added a guided lesson to each relationship group with three short observing steps: identify the region, compare the targets, and notice the scientific distinction.
 - Lessons are deterministic, local, and application-authored; they do not alter calculated positions or claim calibrated visibility.
 
+## Planned Sky & Space expansion
+
+These are planned capabilities, not features currently shipped in the local application:
+
+- Custom observer targeting by location name or latitude/longitude, with elevation and IANA time zone kept explicit. A time zone alone is not a unique geographic location.
+- Separate modular views for the astronomical sky, aircraft/helicopters, satellites/rockets, weather, astronomical events, and a future Space POV. They may be separate screens rather than one crowded dashboard.
+- Timestamped aerial-object feeds with source, coverage, freshness, and uncertainty shown to the user. Atmospheric aircraft data and orbital satellite data will use different adapters.
+- Optional cloud and rain overlays from a selected provider or user data. Weather can inform observing guidance but cannot change ephemeris positions or guarantee visibility.
+- Eclipses, asteroid close approaches, and meteor/meteoroid events. “Meteorite” means recovered ground material and will not be treated as a live sky position.
+- An explicit Earth POV versus Space POV model. Earth POV uses local horizon/zenith and altitude/azimuth; Space POV needs a defined external observer and reference frame before Earth can be shown as a cosmic body.
+
+Deployment is staged: Phase 1 remains the local web application; Phase 2 may deploy the responsive web client with an optional server-side proxy/cache for feeds that require it; Phase 3 is a future Android client that reuses the domain contracts. Cloud deployment must not become mandatory for local astronomy calculations or private journal data.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
-- Weather, cloud cover, atmospheric transparency, light-pollution, obstruction, and eyesight modelling.
+- Live aircraft, helicopter, rocket, satellite, cloud, and rain feeds with documented providers, licences, coverage, freshness, and privacy boundaries.
 - Automatic weather retrieval and live light-pollution services; v0.3.5 uses explicit local user inputs instead.
+- Eclipses, asteroid close approaches, and meteor/meteoroid event modules.
+- Earth/Space POV rendering and external observer-frame calculations.
 - Advanced constellation boundaries, photographic Milky Way rendering, and a full WebGL planetarium projection.
-- AI question answering, Android client, orientation sensors, and telescope/mount control.
+- AI question answering, Phase 2 deployment, Phase 3 Android client, orientation sensors, and telescope/mount control.
 
 ## Verification results
 
@@ -216,6 +231,6 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 - [data-provenance.md](data-provenance.md) — source, licence, attribution, and handling ledger for catalogue and reference data.
 - [current_state.md](current_state.md) — the verified handoff point for the next agent.
 
-## v0.3 direction
+## Future direction
 
-Add more licensed catalogue targets, improve rise/set tracking windows, and model weather/light pollution where reliable local or user-supplied data is available.
+The next web milestones are richer licensed catalogue coverage, more independent ephemeris references, custom observer locations, modular sky/aerial/weather/event views, and an explicit Earth/Space observer-frame model. Provider selection and licensing will be recorded before any live external feed is added.

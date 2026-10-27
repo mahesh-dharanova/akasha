@@ -66,6 +66,19 @@ The journal stores favourites and observations in `localStorage` behind `src/jou
 
 YouTube links are handled by `src/youtube.ts`. The module validates common YouTube URL forms, stores only the URL in browser `localStorage` when requested, and mounts the official YouTube IFrame Player API in a 220×200 player surface. AKASHA does not download, extract, proxy, or persist YouTube media; playback therefore requires network access and follows YouTube's player availability and browser policies.
 
+### Planned Sky & Space modules
+
+The next expansion is intentionally modular rather than one increasingly crowded page. Each view will consume the shared validated observer context and observation instant, then add its own data source and uncertainty model.
+
+- **Custom observer context:** latitude/longitude are canonical. A location name may be resolved through a local place list or an explicitly selected geocoder result. An IANA time zone controls conversion and display but cannot identify a unique place by itself; elevation remains optional and explicit.
+- **Aerial objects:** aircraft and helicopters are atmospheric tracks; satellites and rockets are orbital or launch objects. They must use separate provider adapters from the astronomy catalogue, with source, observation timestamp, freshness, coverage/radius meaning, and confidence carried in every result. A “radius above a location” must state whether it means ground distance, altitude band, or a three-dimensional volume.
+- **Atmospheric conditions:** cloud and precipitation layers are optional provider-backed nowcasts or user-supplied observations. They may inform observing guidance, but must not alter calculated celestial positions or turn a weather overlay into a guarantee of visibility.
+- **Astronomical events:** eclipses use deterministic event calculations where supported; asteroid close approaches use ephemeris data; meteor/meteoroid activity uses an event source and time window. A meteorite is recovered ground material, so it belongs in a future history/field-data module rather than a live sky tracker.
+- **Observer frames:** Earth POV uses local altitude/azimuth, horizon, cardinal directions, and zenith. Space POV uses an explicitly defined external origin and reference frame to render Earth as a body; it must not reuse Earth-POV altitude/azimuth labels without transformation.
+- **Modular dashboards:** sky map, aerial, weather, event, and Space POV screens can be separate routes or panels. They share time, location, units, and privacy state but retain independent loading, attribution, and stale-data indicators.
+
+These modules are planned boundaries, not current runtime features. External live data must remain optional, timestamped, licensed, and replaceable; the local astronomical calculation core remains usable without it.
+
 ## Data flow
 
 1. The observer changes time, date, or location.
@@ -73,6 +86,19 @@ YouTube links are handled by `src/youtube.ts`. The module validates common YouTu
 3. The calculation adapter recomputes the visible-object view model.
 4. The map, profile, planner, and tracker render from that model.
 5. Observer settings and journal mutations are serialized locally and reloaded at startup; explicit journal export/import moves the same validated journal state between browsers.
+
+Future network-backed modules will add a separate data path:
+
+```text
+observer context + time
+        |                  \
+        v                   v
+local astronomy core    optional provider adapters
+        |                   |
+        +---------> shared view models with source/freshness/uncertainty
+```
+
+Provider adapters must not silently replace local calculations. A deployed version may use a server-side proxy or cache for feeds that require credentials or CORS handling, but provider secrets, private journal data, and precise location must not be placed in the public client bundle without explicit consent.
 
 ## Key decisions
 
@@ -106,3 +132,6 @@ Before v0.3, review and document the exact upstream sources for every non-calcul
 - A domain package can later be shared with Android if its inputs/outputs remain plain data.
 - Telescope control belongs behind a separate adapter with explicit connection state, coordinate epoch, mount limits, and user confirmation; it is not part of v0.1.
 - Optional AI belongs above the deterministic domain layer as an explanation/query client. It must not be the source of positions, rise/set events, or catalogue facts.
+- Aircraft, satellite, rocket, weather, and event feeds belong behind replaceable adapters with explicit licences, timestamps, coverage, and stale-data handling; no provider is selected by this roadmap alone.
+- Cloud deployment is a delivery option, not a calculation dependency. The local-first web client should retain useful astronomy behavior when optional network feeds are unavailable.
+- Android should reuse plain domain contracts rather than copy browser storage or UI code; location and orientation permissions remain optional and user-controlled.
