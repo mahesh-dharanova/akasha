@@ -45,6 +45,7 @@ const state: {
   journal: JournalState;
   journalMessage: string;
   audioMessage: string;
+  audioMinimized: boolean;
   snapshot: SkySnapshot;
 } = {
   instant: new Date(),
@@ -60,6 +61,7 @@ const state: {
   journal: loadJournal(),
   journalMessage: '',
   audioMessage: '',
+  audioMinimized: false,
   snapshot: calculateSky(new Date(), initialObserver),
 };
 
@@ -124,7 +126,7 @@ function renderAudioPlayer(): string {
   const saveLabel = audio.savedTrackAvailable ? 'Forget' : 'Save';
   const youtubeSaveLabel = audio.savedYouTubeAvailable ? 'Forget link' : 'Save link';
   const youtubePlayer = audio.mode === 'youtube' ? '<div class="youtube-player" id="youtube-player" aria-label="YouTube video player"></div><small class="youtube-note">YouTube playback uses the official player and an internet connection.</small>' : '';
-  return `<section class="audio-dock ${audio.mode === 'youtube' ? 'audio-dock-youtube' : ''}" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-save" data-action="audio-save" title="${audio.savedTrackAvailable ? 'Remove the saved local track' : 'Save this track in this browser'}">${saveLabel}</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div><div class="youtube-input"><input id="youtube-url" type="url" placeholder="Paste YouTube link" value="${escapeHtml(audio.youtubeUrl ?? '')}" /><button class="audio-load" data-action="youtube-load">Use YouTube</button><button class="audio-save" data-action="youtube-save">${youtubeSaveLabel}</button></div>${youtubePlayer}</section>`;
+  return `<section class="audio-dock ${audio.mode === 'youtube' ? 'audio-dock-youtube' : ''} ${state.audioMinimized ? 'is-minimized' : ''}" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-save" data-action="audio-save" title="${audio.savedTrackAvailable ? 'Remove the saved local track' : 'Save this track in this browser'}">${saveLabel}</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div><button class="audio-button audio-minimize" data-action="audio-minimize" aria-expanded="${!state.audioMinimized}" aria-label="${state.audioMinimized ? 'Expand audio dock' : 'Minimize audio dock'}">${state.audioMinimized ? '↗' : '—'}</button><div class="youtube-input"><input id="youtube-url" type="url" placeholder="Paste YouTube link" value="${escapeHtml(audio.youtubeUrl ?? '')}" /><button class="audio-load" data-action="youtube-load">Use YouTube</button><button class="audio-save" data-action="youtube-save">${youtubeSaveLabel}</button></div>${youtubePlayer}</section>`;
 }
 
 function renderAudioDock(): void {
@@ -311,6 +313,15 @@ function rerender(): void {
 }
 
 function bindAudioEvents(): void {
+  const audioDock = audioHost.querySelector<HTMLElement>('.audio-dock');
+  audioHost.querySelector<HTMLButtonElement>('[data-action="audio-minimize"]')?.addEventListener('click', (event) => {
+    state.audioMinimized = !state.audioMinimized;
+    audioDock?.classList.toggle('is-minimized', state.audioMinimized);
+    const button = event.currentTarget as HTMLButtonElement;
+    button.textContent = state.audioMinimized ? '↗' : '—';
+    button.setAttribute('aria-expanded', String(!state.audioMinimized));
+    button.setAttribute('aria-label', state.audioMinimized ? 'Expand audio dock' : 'Minimize audio dock');
+  });
   const audioFile = audioHost.querySelector<HTMLInputElement>('#audio-file');
   audioHost.querySelector<HTMLButtonElement>('[data-action="audio-load"]')?.addEventListener('click', () => audioFile?.click());
   audioFile?.addEventListener('change', () => {

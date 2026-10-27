@@ -42,11 +42,14 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .youtube-note { flex-basis: 100%; color: var(--muted); font-size: 9px; text-align: center; }
 .audio-button, .audio-load, .audio-save, .audio-ambient { height: 25px; border: 1px solid var(--border); border-radius: 6px; color: var(--muted-strong); background: rgba(17,24,42,.9); font-size: 10px; }
 .audio-button { width: 25px; padding: 0; }
+.audio-minimize { margin-left: auto; color: var(--muted); }
 .audio-button:hover, .audio-load:hover, .audio-save:hover, .audio-ambient:hover { border-color: var(--cyan); color: var(--cyan); }
 .audio-play { color: var(--cyan); }
 .audio-load, .audio-save, .audio-ambient { padding: 0 7px; }
 .audio-volume { display: flex; align-items: center; gap: 4px; padding: 0 4px; color: var(--muted); font-size: 12px; }
 .audio-volume input { width: 58px; padding: 0; accent-color: var(--cyan); }
+.audio-dock.is-minimized { width: auto; }
+.audio-dock.is-minimized .audio-volume, .audio-dock.is-minimized .audio-load, .audio-dock.is-minimized .audio-save, .audio-dock.is-minimized .audio-ambient, .audio-dock.is-minimized .youtube-input, .audio-dock.is-minimized .youtube-player, .audio-dock.is-minimized .youtube-note { display: none; }
 .app-shell { width: min(1600px, 100%); margin: 0 auto; padding: 22px clamp(14px, 3vw, 46px) 28px; }
 .panel { border: 1px solid var(--border); border-radius: 14px; background: linear-gradient(145deg, rgba(17, 24, 42, .96), rgba(9, 13, 25, .98)); box-shadow: 0 16px 40px rgba(0,0,0,.18); }
 .control-panel { display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; padding: 18px 20px; margin-bottom: 18px; }
