@@ -48,6 +48,8 @@ The typed local catalogue contains the Sun, Moon, planets, bright stars, and sel
 
 The planner ranks catalogue objects using a 0–100 visibility assessment. The score combines calculated altitude, solar twilight, apparent magnitude, surface brightness where available, observing difficulty, and explicit user-supplied observing conditions: Bortle light pollution, cloud cover, transparency, and horizon obstruction. It provides score reasons alongside each recommendation. These inputs affect guidance only; they never alter astronomical positions. It remains guidance, not a guarantee of visibility, and does not automatically retrieve weather.
 
+The selected-object panel exposes the same score as a breakdown: each positive factor reports its normalized value, percentage weight, and weighted contribution; low-altitude horizon obstruction is shown as a penalty; daylight and civil-twilight limits are shown as caps. This presentation is generated from the calculation result, so the UI does not maintain a second scoring formula.
+
 ### Tracking
 
 The selected object tracker recalculates seven hourly snapshots from the current observation instant and observer settings. Each row is a navigation control that changes the shared observation instant, so the map, profile, planner, and event window update together. The observing-window timeline adds rise, transit, set, twilight crossings, and dark-sky bands to the same shared time model. These are explicit calculated samples, not claims about actual visibility.

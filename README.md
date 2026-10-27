@@ -42,6 +42,7 @@ npm run build     # type-check and create a production build
 npm run preview   # serve the production build locally
 npm run check     # run TypeScript's no-emit check
 npm run test:astronomy # run deterministic astronomy checks
+npm run test:visibility # run visibility-score regression checks
 ```
 
 ## Implemented in v0.1
@@ -103,6 +104,11 @@ npm run test:astronomy # run deterministic astronomy checks
 - Stored settings are range-checked and timezone-validated before use.
 - Added a reset action to restore the default observer setup.
 
+## Implemented in v0.3.7
+
+- Added an expandable visibility-score breakdown showing altitude, darkness, catalogue brightness, observing difficulty, local conditions, obstruction penalty, and daylight/twilight caps.
+- Added executable visibility checks for factor weights, cloud impact, low-horizon obstruction, and daylight limits.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -133,6 +139,7 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 - v0.1 uses a curated starter catalogue rather than a complete deep-sky catalogue.
 - The sky map is an altitude/azimuth projection, not a photographic rendering or a full planetarium engine.
 - “Observable” means above the geometric horizon and outside bright twilight; it does not model clouds, seeing, transparency, light pollution, obstructions, or the observer's eyesight.
+- The visibility breakdown explains AKASHA's local guidance score; it is not a calibrated probability of seeing an object.
 - Planetary solar-nearness warnings are angular safety guidance, not a substitute for safe solar-observation practice; never use optics near the Sun without certified equipment.
 - Rise and set times are calculated for the selected location and date, with library/refraction defaults documented in the code.
 - Star catalogue properties are curated display metadata; missing values are shown as unavailable rather than inferred.

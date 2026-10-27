@@ -1,4 +1,4 @@
-import type { CatalogueObject, ObserverSettings, SkyCondition, VisibilityAssessment } from './types';
+import type { CatalogueObject, ObserverSettings, SkyCondition, VisibilityAssessment, VisibilityBreakdown, VisibilityFactor } from './types';
 
 const clamp = (value: number, minimum: number, maximum: number): number => Math.max(minimum, Math.min(maximum, value));
 
@@ -53,24 +53,43 @@ function scoreLabel(band: VisibilityAssessment['band']): string {
   return { excellent: 'excellent conditions', good: 'good conditions', challenging: 'challenging target', 'not-recommended': 'not recommended now' }[band];
 }
 
+function emptyBreakdown(): VisibilityBreakdown {
+  return { factors: [], obstructionPenalty: 0, uncappedScore: 0, cap: null };
+}
+
+function makeBreakdown(factors: VisibilityFactor[], obstructionPenalty: number, cap: number | null): VisibilityBreakdown {
+  const uncappedScore = Math.round(factors.reduce((total, factor) => total + factor.contribution, 0) - obstructionPenalty);
+  return { factors, obstructionPenalty, uncappedScore, cap };
+}
+
 export function assessVisibility(object: CatalogueObject, altitude: number, condition: SkyCondition, solarSeparation: number | null, observerConditions: Pick<ObserverSettings, 'lightPollution' | 'cloudCover' | 'transparency' | 'horizonObstruction'>): VisibilityAssessment {
-  if (object.kind === 'sun') return { score: 0, band: 'not-recommended', label: 'never observe directly', reasons: ['Solar target: use certified solar filters for any optical observation.'] };
-  if (altitude < 0) return { score: 0, band: 'not-recommended', label: 'below horizon', reasons: ['The object is below the geometric horizon from this location.'] };
+  if (object.kind === 'sun') return { score: 0, band: 'not-recommended', label: 'never observe directly', reasons: ['Solar target: use certified solar filters for any optical observation.'], breakdown: emptyBreakdown() };
+  if (altitude < 0) return { score: 0, band: 'not-recommended', label: 'below horizon', reasons: ['The object is below the geometric horizon from this location.'], breakdown: emptyBreakdown() };
 
   if (solarSeparation !== null && solarSeparation < 15) {
-    return { score: 0, band: 'not-recommended', label: 'too close to the Sun', reasons: [`Only ${solarSeparation.toFixed(1)}° from the Sun`, 'Do not use optics while the Sun is above the horizon.'] };
+    return { score: 0, band: 'not-recommended', label: 'too close to the Sun', reasons: [`Only ${solarSeparation.toFixed(1)}° from the Sun`, 'Do not use optics while the Sun is above the horizon.'], breakdown: emptyBreakdown() };
   }
 
   const altitudePoints = altitudeScore(altitude);
   const darknessPoints = darknessScore(condition);
   const brightnessPoints = brightnessScore(object);
   const difficultyPoints = difficultyScore(object.difficulty);
-  const conditionsPoints = (lightPollutionScore(observerConditions.lightPollution) * 0.35)
-    + ((100 - observerConditions.cloudCover) * 0.35)
-    + (observerConditions.transparency * 0.3);
+  const lightPollutionPoints = lightPollutionScore(observerConditions.lightPollution);
+  const cloudPoints = 100 - observerConditions.cloudCover;
+  const transparencyPoints = observerConditions.transparency;
   const obstructionPenalty = altitude < 30 ? observerConditions.horizonObstruction * ((30 - altitude) / 30) * 0.35 : 0;
-  const baseScore = Math.round(altitudePoints * 0.3 + darknessPoints * 0.3 + brightnessPoints * 0.2 + difficultyPoints * 0.1 + conditionsPoints * 0.1 - obstructionPenalty);
+  const factors: VisibilityFactor[] = [
+    { label: 'Altitude', value: altitudePoints, weight: 30, contribution: altitudePoints * 0.3 },
+    { label: 'Sky darkness', value: darknessPoints, weight: 30, contribution: darknessPoints * 0.3 },
+    { label: 'Catalogue brightness', value: brightnessPoints, weight: 20, contribution: brightnessPoints * 0.2 },
+    { label: 'Observing difficulty', value: difficultyPoints, weight: 10, contribution: difficultyPoints * 0.1 },
+    { label: 'Light pollution', value: lightPollutionPoints, weight: 3.5, contribution: lightPollutionPoints * 0.035 },
+    { label: 'Cloud-free sky', value: cloudPoints, weight: 3.5, contribution: cloudPoints * 0.035 },
+    { label: 'Transparency', value: transparencyPoints, weight: 3, contribution: transparencyPoints * 0.03 },
+  ];
   const daylightCap = condition === 'daylight' ? object.kind === 'moon' ? 42 : object.kind === 'planet' ? 22 : 8 : condition === 'civil-twilight' && object.kind === 'deep-sky' ? 22 : 100;
+  const breakdown = makeBreakdown(factors, obstructionPenalty, daylightCap < 100 ? daylightCap : null);
+  const baseScore = breakdown.uncappedScore;
   const score = Math.min(baseScore, daylightCap);
   const band = scoreBand(score);
   const altitudeReason = altitude >= 45 ? `High altitude at ${altitude.toFixed(0)}°` : `Low altitude at ${altitude.toFixed(0)}°`;
@@ -80,5 +99,5 @@ export function assessVisibility(object: CatalogueObject, altitude: number, cond
   if (observerConditions.horizonObstruction > 0 && altitude < 30) reasons.push(`${Math.round(observerConditions.horizonObstruction)}% horizon obstruction affects this low target`);
   if (condition === 'daylight') reasons.unshift(object.kind === 'moon' ? 'Daylight lunar target' : 'Daylight: not recommended for ordinary observing');
   if (condition === 'civil-twilight') reasons.unshift('Twilight: wait for darker conditions where possible');
-  return { score, band, label: scoreLabel(band), reasons };
+  return { score, band, label: scoreLabel(band), reasons, breakdown };
 }

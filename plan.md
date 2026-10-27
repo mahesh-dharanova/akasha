@@ -31,6 +31,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 18. [x] v0.3.4 multi-location validation — success condition: observer-frame invariants pass for Bengaluru, London, and Cape Town while external JPL samples remain committed and reproducible.
 19. [x] v0.3.5 local observing conditions — success condition: user-controlled Bortle, cloud, transparency, and obstruction inputs adjust scores with visible explanations while positions remain unchanged.
 20. [x] v0.3.6 observer setup persistence — success condition: validated observer and condition settings survive reload locally and can be reset to defaults.
+21. [x] v0.3.7 visibility explanation — success condition: the selected-object panel exposes the weighted score factors, penalties, and caps, with executable regression checks for condition impact.
 
 ## Deferred milestones
 

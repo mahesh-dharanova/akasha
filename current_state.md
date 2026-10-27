@@ -23,6 +23,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.4 location validation completed for Bengaluru, London, and Cape Town using Polaris latitude invariants and same-UTC Saturn frame differences.
 - v0.3.5 completed: local Bortle, cloud-cover, transparency, and horizon-obstruction inputs now affect visibility guidance transparently.
 - v0.3.6 completed: observer location, timezone, elevation, and local observing conditions persist in validated browser storage with a reset action.
+- v0.3.7 completed: selected objects now expose the weighted visibility factors, low-horizon penalty, and daylight/twilight cap; visibility regression checks cover factor weights and condition impact.
 
 ## Next
 
@@ -30,6 +31,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Add more licensed catalogue targets and make rise/set tracking windows more explicit.
 - Retry a Moon JPL Horizons reference sample when the service-side `LTKERNL`/`IP_ADDR` failure is resolved.
 - Add London/Cape Town JPL samples when the same Horizons service-side failure is resolved.
+- Expand visibility validation with reference observations only if a defensible labelled dataset becomes available; the current score remains explanatory guidance.
 - Consider optional weather/light-pollution integrations only after choosing reliable, clearly licensed data sources.
 - Keep observer settings local; do not turn persistence into a cloud account requirement.
 - Add weather/light-pollution inputs only where reliable local or user-supplied data is available.
@@ -37,6 +39,6 @@ Updated after each built and verified chunk. Git history contains the detailed c
 
 ## Open questions / blockers
 
-- No remote git repository is configured yet, so commits can be created locally but cannot be pushed until a remote is supplied.
+- `origin` is configured as the private GitHub repository; this working tree currently has five local commits ahead of `origin/main`.
 - The starter and OpenNGC-derived catalogue entries need continued source review before broader expansion.
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.

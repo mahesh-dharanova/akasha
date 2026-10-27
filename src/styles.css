@@ -104,6 +104,17 @@ input, select { min-width: 0; padding: 9px 10px; font-size: 12px; }
 .visibility-summary > div:last-child strong { color: var(--muted-strong); font-size: 11px; }
 .visibility-summary p { color: var(--muted); font-size: 10px; line-height: 1.4; }
 .conditions-summary { margin: -4px 0 12px; color: #9caae1; }
+.visibility-breakdown { margin: -2px 0 13px; border: 1px solid rgba(112,216,255,.12); border-radius: 8px; background: rgba(112,216,255,.025); }
+.visibility-breakdown summary { padding: 8px 10px; color: var(--cyan); cursor: pointer; font-size: 10px; font-weight: 700; list-style-position: inside; }
+.visibility-factors { display: grid; gap: 7px; padding: 0 10px 8px; }
+.visibility-factor { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; }
+.visibility-factor div { display: flex; justify-content: space-between; gap: 6px; min-width: 0; }
+.visibility-factor span { color: var(--muted-strong); font-size: 10px; }
+.visibility-factor small { color: var(--muted); font-size: 9px; white-space: nowrap; }
+.visibility-factor strong { color: var(--green); font-size: 10px; }
+.visibility-factor i { grid-column: 1 / -1; height: 3px; border-radius: 99px; background: rgba(131,144,170,.16); overflow: hidden; }
+.visibility-factor i b { display: block; height: 100%; border-radius: inherit; background: var(--cyan); }
+.visibility-formula { margin: 0; padding: 7px 10px 9px; border-top: 1px solid rgba(32,43,67,.72); color: var(--muted) !important; font-size: 9px !important; line-height: 1.4 !important; }
 .metric-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .metric-grid div { display: grid; gap: 4px; padding: 10px 0; }
 .metric-grid div:nth-child(odd) { padding-right: 10px; }

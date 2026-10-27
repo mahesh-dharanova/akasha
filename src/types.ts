@@ -13,11 +13,26 @@ export interface TwilightWindows {
   civilDusk: Date | null;
 }
 
+export interface VisibilityFactor {
+  label: string;
+  value: number;
+  weight: number;
+  contribution: number;
+}
+
+export interface VisibilityBreakdown {
+  factors: VisibilityFactor[];
+  obstructionPenalty: number;
+  uncappedScore: number;
+  cap: number | null;
+}
+
 export interface VisibilityAssessment {
   score: number;
   band: 'excellent' | 'good' | 'challenging' | 'not-recommended';
   label: string;
   reasons: string[];
+  breakdown: VisibilityBreakdown;
 }
 
 export interface CatalogueObject {
