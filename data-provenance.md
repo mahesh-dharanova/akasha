@@ -11,6 +11,8 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 
 The v0.3.8 catalogue expansion uses OpenNGC records for M35/NGC 2168, M44/NGC 2632, M37/NGC 2099, M11/NGC 6705, M46/NGC 2437, and M47/NGC 2422. Their coordinates, visual magnitudes, and angular sizes remain source fields; names, descriptions, and finder guidance are application-authored.
 
+The v0.3.14 catalogue expansion uses OpenNGC records for M1/NGC 1952, M20/NGC 6514, M78/NGC 2068, M97/NGC 3587, M101/NGC 5457, and NGC 2070/C 103. Their identifiers, J2000 coordinates, V magnitudes, angular sizes, and M101 surface brightness remain source fields; names, descriptions, classifications, colours, and finder guidance are application-authored.
+
 ## Application-authored data
 
 - Bright-star names, coordinates, distances, magnitudes, classifications, descriptions, and finder guidance are currently curated application data in `src/catalogue.ts`. They are not claimed to be a copied database. Exact upstream provenance for these fields remains an open review item; future edits must record a citable source and licence before broader expansion.

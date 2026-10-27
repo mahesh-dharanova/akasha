@@ -146,6 +146,12 @@ npm run test:youtube   # validate YouTube URL parsing
 - YouTube links play through the official embedded IFrame player with the existing play, pause, stop, and volume controls.
 - YouTube URLs can be saved locally and restored without storing video data; playback requires an internet connection and remains subject to YouTube availability and player behavior.
 
+## Implemented in v0.3.14
+
+- Added six OpenNGC-attributed targets: Crab Nebula, Trifid Nebula, M78, Owl Nebula, Pinwheel Galaxy, and Tarantula Nebula.
+- Expanded the catalogue across supernova remnants, emission/reflection nebulae, planetary nebulae, spiral galaxies, and southern-sky targets.
+- Kept catalogue identifiers, J2000 coordinates, V magnitudes, angular sizes, and available surface brightness values explicit and regression-tested.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
@@ -168,6 +174,7 @@ Verified on 2026-10-26:
 - v0.2 browser smoke test — twilight rows, score summary, deep-sky entries, and OpenNGC attribution rendered without unexpected `NaN`, `undefined`, or `null` values.
 - v0.2 catalogue interaction test — selecting Orion Nebula showed `OpenNGC · CC BY-SA 4.0`; searching `M31` returned Andromeda Galaxy.
 - v0.2.1 Mercury check — daylight Mercury was marked `not recommended now` at `22/100`, showed `0.75 AU` distance and `18.0°` solar separation, and displayed rise/transit/set on the same date.
+- v0.3.14 catalogue check — twelve selected OpenNGC targets passed finite-coordinate, metadata, attribution, and unique-identifier checks; production build passed.
 
 The coordinate and event API boundary follows the official [Astronomy Engine JavaScript/TypeScript reference](https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md). The committed observer samples were generated from the [NASA/JPL Horizons API](https://ssd-api.jpl.nasa.gov/doc/horizons.html) with airless apparent azimuth/elevation settings. They are regression references, not a live network dependency; future samples should cover more dates and observer locations.
 

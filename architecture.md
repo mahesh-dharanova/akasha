@@ -42,7 +42,7 @@ The application does not replace the library's ephemeris with hand-authored plan
 
 ### Catalogue
 
-The typed local catalogue contains the Sun, Moon, planets, bright stars, and selected Messier/NGC deep-sky targets. Scientific fields are explicit and nullable. The deep-sky additions use selected OpenNGC fields with CC BY-SA 4.0 attribution recorded on each entry and in the README. The UI can filter deep-sky objects separately from stars and planets. Each future catalogue addition must record its exact upstream source and licence; missing values remain unavailable.
+The typed local catalogue contains the Sun, Moon, planets, bright stars, and selected Messier/NGC deep-sky targets. Scientific fields are explicit and nullable. The deep-sky additions use selected OpenNGC fields with CC BY-SA 4.0 attribution recorded on each entry, in the README, and in the provenance ledger. The UI can filter deep-sky objects separately from stars and planets. Each future catalogue addition must record its exact upstream source and licence; missing values remain unavailable.
 
 ### Planner
 
