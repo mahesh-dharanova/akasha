@@ -60,7 +60,7 @@ The journal stores favourites and observations in `localStorage` behind `src/jou
 
 ### Ambient audio
 
-`src/audio.ts` owns the optional local audio experience. The default soundscape is synthesized in the browser with Web Audio; user-selected audio files are represented by temporary object URLs and are never uploaded or committed. Audio state remains outside the astronomy snapshot so playback does not affect calculations, time controls, or journal data.
+`src/audio.ts` owns the optional local audio experience. The default soundscape is synthesized in the browser with Web Audio; user-selected audio files are stored as Blobs in a versioned IndexedDB store when the user chooses Save, then played through temporary object URLs. They are never uploaded or committed. Audio state remains outside the astronomy snapshot so playback does not affect calculations, time controls, or journal data.
 
 ## Data flow
 

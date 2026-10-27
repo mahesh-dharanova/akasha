@@ -1,5 +1,5 @@
 import './styles.css';
-import { getAudioState, loadLocalAudio, onAudioChange, pauseAudio, playAudio, setAudioVolume, stopAudio, useAmbient } from './audio';
+import { forgetSavedAudio, getAudioState, loadLocalAudio, onAudioChange, pauseAudio, playAudio, restoreSavedAudio, saveCurrentAudio, setAudioVolume, stopAudio, useAmbient } from './audio';
 import { CATALOGUE, DEFAULT_OBJECT_ID, getObject } from './catalogue';
 import { calculateSky, compassDirection, formatDeclination, formatRightAscension } from './astronomy';
 import { loadJournal, parseJournalFile, saveJournal, serializeJournal } from './journal';
@@ -116,7 +116,8 @@ function conditionsSummary(): string {
 function renderAudioPlayer(): string {
   const audio = getAudioState();
   const playLabel = audio.status === 'playing' ? 'Playing' : audio.status === 'paused' ? 'Resume' : 'Play';
-  return `<section class="audio-dock" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div></section>`;
+  const saveLabel = audio.savedTrackAvailable ? 'Forget' : 'Save';
+  return `<section class="audio-dock" aria-label="AKASHA ambient audio"><div class="audio-info"><span class="audio-kicker">AMBIENT AUDIO</span><strong>${escapeHtml(audio.label)}</strong>${state.audioMessage ? `<small>${escapeHtml(state.audioMessage)}</small>` : ''}</div><div class="audio-actions"><button class="audio-button audio-play" data-action="audio-play" aria-label="${playLabel}">${audio.status === 'playing' ? 'Ⅱ' : '▶'}</button><button class="audio-button" data-action="audio-pause" aria-label="Pause audio">Ⅱ</button><button class="audio-button" data-action="audio-stop" aria-label="Stop audio">■</button><label class="audio-volume" title="Volume"><span>♫</span><input id="audio-volume" type="range" min="0" max="1" step="0.05" value="${audio.volume}" /></label><button class="audio-load" data-action="audio-load">Load track</button><button class="audio-save" data-action="audio-save" title="${audio.savedTrackAvailable ? 'Remove the saved local track' : 'Save this track in this browser'}">${saveLabel}</button><button class="audio-ambient" data-action="audio-ambient">Ambient</button><input id="audio-file" type="file" accept="audio/*" hidden /></div></section>`;
 }
 
 function renderVisibilityBreakdown(object: CalculatedObject): string {
@@ -271,6 +272,8 @@ function render(): void {
   const planetOption = catalogueFilter?.querySelector<HTMLOptionElement>('option[value="planet"]');
   if (planetOption) planetOption.textContent = 'Planets';
   if (catalogueFilter && !catalogueFilter.querySelector('option[value="moon"]')) catalogueFilter.insertAdjacentHTML('beforeend', `<option value="moon" ${state.filter === 'moon' ? 'selected' : ''}>Moon</option>`);
+  const versionLabel = app.querySelector<HTMLElement>('.app-footer span');
+  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.10 · positions calculated locally with Astronomy Engine';
   bindEvents();
   updateMapInteractions();
   updateLegendLabel();
@@ -387,6 +390,13 @@ function bindEvents(): void {
     });
   });
   app.querySelector<HTMLButtonElement>('[data-action="audio-ambient"]')?.addEventListener('click', () => useAmbient());
+  app.querySelector<HTMLButtonElement>('[data-action="audio-save"]')?.addEventListener('click', () => {
+    const operation = getAudioState().savedTrackAvailable ? forgetSavedAudio() : saveCurrentAudio();
+    void operation.catch((error: unknown) => {
+      state.audioMessage = error instanceof Error ? error.message : 'The audio track could not be saved locally.';
+      render();
+    });
+  });
   app.querySelector<HTMLInputElement>('#audio-volume')?.addEventListener('input', (event) => setAudioVolume(Number((event.target as HTMLInputElement).value)));
   app.querySelector<HTMLButtonElement>('[data-action="now"]')?.addEventListener('click', () => {
     state.instant = new Date();
@@ -503,4 +513,8 @@ function updateLegendLabel(): void {
 }
 
 onAudioChange(() => render());
+void restoreSavedAudio().catch((error: unknown) => {
+  state.audioMessage = error instanceof Error ? error.message : 'Saved audio could not be restored.';
+  render();
+});
 render();

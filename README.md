@@ -120,6 +120,11 @@ npm run test:catalogue # validate licensed catalogue metadata
 - Added a compact local ambient-audio dock with play, pause, stop, volume, and track selection controls.
 - Added an original Web Audio-generated AKASHA ambient default; personal audio files are selected locally and are not bundled or uploaded.
 
+## Implemented in v0.3.10
+
+- Added optional local audio persistence through browser IndexedDB.
+- Saved tracks can be restored after reload or removed with the Forget control; the audio file remains outside the repository and is never uploaded.
+
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
