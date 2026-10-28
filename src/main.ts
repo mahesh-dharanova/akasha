@@ -8,6 +8,7 @@ import { loadObserverSettings, saveObserverSettings } from './settings';
 import { observingWindowLabel, plannerRank } from './planner';
 import { LEARNING_LESSONS, OBJECT_RELATIONSHIPS } from './relationships';
 import { applyObserverPreset, normalizeLocationName, OBSERVER_PRESETS } from './observer';
+import { DASHBOARD_MODULES, type DashboardModule, type DashboardView } from './dashboard';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -37,6 +38,7 @@ document.body.appendChild(audioHost);
 const state: {
   instant: Date;
   observer: ObserverSettings;
+  activeView: DashboardView;
   selectedId: string;
   filter: 'all' | 'star' | 'planet' | 'moon' | 'sun' | 'deep-sky';
   query: string;
@@ -53,6 +55,7 @@ const state: {
 } = {
   instant: new Date(),
   observer: { ...initialObserver },
+  activeView: 'sky',
   selectedId: DEFAULT_OBJECT_ID,
   filter: 'all',
   query: '',
@@ -299,6 +302,56 @@ function renderJournal(): string {
   return `<section class="panel journal-panel"><div class="journal-heading"><div><div class="panel-kicker">OBSERVATION JOURNAL</div><h2>Make this sky yours</h2></div><div class="journal-tools"><button class="button button-quiet" data-action="export-journal">Export</button><button class="button button-quiet" data-action="import-journal">Import</button><input id="journal-file" type="file" accept="application/json" hidden /></div></div><p class="panel-intro">Save a note for ${escapeHtml(object.name)}. It stays in this browser unless you export it.</p>${state.journalMessage ? `<p class="journal-message" role="status">${escapeHtml(state.journalMessage)}</p>` : ''}<textarea id="journal-note" placeholder="What did you notice?">${escapeHtml(entry?.note ?? '')}</textarea><div class="journal-actions"><label class="checkbox-label"><input type="checkbox" id="journal-observed" ${entry ? 'checked' : ''} /> Mark observed</label><button class="button button-primary" data-action="save-note">Save note</button></div>${entries.length ? `<div class="journal-list">${entries.map((item) => `<button class="journal-entry" data-select-object="${item.objectId}"><strong>${escapeHtml(getObject(item.objectId).name)}</strong><span>${escapeHtml(item.note || 'Observed without a note')}</span></button>`).join('')}</div>` : '<p class="empty-state">Your observing history will appear here.</p>'}</section>`;
 }
 
+function renderPlannedModule(module: DashboardModule): string {
+  return `<section class="panel module-placeholder"><div class="panel-kicker">PLANNED MODULE</div><h2>${escapeHtml(module.label)}</h2><p class="panel-intro">${escapeHtml(module.description)}</p><div class="module-boundary"><strong>Not connected yet</strong><p>This view is reserved for a future data adapter. AKASHA will show source, timestamp, coverage, freshness, and uncertainty before presenting live results.</p></div><p class="science-note">The current local astronomy calculation remains available in the Sky map view. No placeholder data is being presented as real aircraft, weather, event, or Space POV information.</p></section>`;
+}
+
+function setupDashboardViews(): void {
+  const controlPanel = app.querySelector<HTMLElement>('.control-panel');
+  const workspace = app.querySelector<HTMLElement>('.workspace');
+  const lowerGrid = app.querySelector<HTMLElement>('.lower-grid');
+  if (!controlPanel || !workspace) return;
+
+  const plannerPanel = lowerGrid?.querySelector<HTMLElement>('.planner-panel');
+  const journalPanel = lowerGrid?.querySelector<HTMLElement>('.journal-panel');
+  const nav = document.createElement('nav');
+  nav.className = 'dashboard-tabs';
+  nav.setAttribute('aria-label', 'Dashboard views');
+  nav.innerHTML = DASHBOARD_MODULES.map((module) => `<button type="button" class="dashboard-tab ${module.id === state.activeView ? 'is-active' : ''} ${module.implemented ? '' : 'is-planned'}" data-dashboard-view="${module.id}" aria-current="${module.id === state.activeView ? 'page' : 'false'}"><strong>${escapeHtml(module.label)}</strong><small>${module.implemented ? 'available' : 'planned'}</small></button>`).join('');
+
+  const viewHost = document.createElement('div');
+  viewHost.className = 'dashboard-views';
+  for (const module of DASHBOARD_MODULES) {
+    const view = document.createElement('section');
+    view.className = `dashboard-view ${module.id === state.activeView ? 'is-active' : ''}`;
+    view.dataset.dashboardView = module.id;
+    view.setAttribute('aria-hidden', String(module.id !== state.activeView));
+    if (module.id === 'sky') view.append(workspace);
+    else if (module.id === 'planner' && plannerPanel) view.append(plannerPanel);
+    else if (module.id === 'journal' && journalPanel) view.append(journalPanel);
+    else view.innerHTML = renderPlannedModule(module);
+    viewHost.append(view);
+  }
+  lowerGrid?.remove();
+  controlPanel.insertAdjacentElement('afterend', nav);
+  nav.insertAdjacentElement('afterend', viewHost);
+  nav.querySelectorAll<HTMLButtonElement>('[data-dashboard-view]').forEach((button) => button.addEventListener('click', () => {
+    const view = button.dataset.dashboardView as DashboardView | undefined;
+    if (!view) return;
+    state.activeView = view;
+    nav.querySelectorAll<HTMLButtonElement>('[data-dashboard-view]').forEach((item) => {
+      const active = item.dataset.dashboardView === view;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-current', active ? 'page' : 'false');
+    });
+    viewHost.querySelectorAll<HTMLElement>('[data-dashboard-view]').forEach((item) => {
+      const active = item.dataset.dashboardView === view;
+      item.classList.toggle('is-active', active);
+      item.setAttribute('aria-hidden', String(!active));
+    });
+  }));
+}
+
 function render(): void {
   const inputValue = formatInputDate(state.instant, state.observer.timeZone);
   const filterObjects = CATALOGUE.filter((item) => {
@@ -313,7 +366,8 @@ function render(): void {
   if (planetOption) planetOption.textContent = 'Planets';
   if (catalogueFilter && !catalogueFilter.querySelector('option[value="moon"]')) catalogueFilter.insertAdjacentHTML('beforeend', `<option value="moon" ${state.filter === 'moon' ? 'selected' : ''}>Moon</option>`);
   const versionLabel = app.querySelector<HTMLElement>('.app-footer span');
-  if (versionLabel) versionLabel.textContent = 'AKASHA v0.3.17 · positions calculated locally with Astronomy Engine';
+  if (versionLabel) versionLabel.textContent = 'AKASHA v0.4.0 · positions calculated locally with Astronomy Engine';
+  setupDashboardViews();
   bindEvents();
   updateMapInteractions();
   updateLegendLabel();

@@ -68,14 +68,14 @@ YouTube links are handled by `src/youtube.ts`. The module validates common YouTu
 
 ### Planned Sky & Space modules
 
-The next expansion is intentionally modular rather than one increasingly crowded page. Each view will consume the shared validated observer context and observation instant, then add its own data source and uncertainty model.
+The next expansion is intentionally modular rather than one increasingly crowded page. The v0.4 shell now exposes separate Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV views. Each view consumes the shared validated observer context and observation instant, then adds its own data source and uncertainty model. The four future-data views currently show an explicit planned boundary and no fabricated results.
 
 - **Custom observer context:** the current baseline supports a local named-place list plus manually entered latitude/longitude, elevation, and IANA timezone. A custom location name is not geocoded yet. An IANA time zone controls conversion and display but cannot identify a unique place by itself; elevation remains optional and explicit.
 - **Aerial objects:** aircraft and helicopters are atmospheric tracks; satellites and rockets are orbital or launch objects. They must use separate provider adapters from the astronomy catalogue, with source, observation timestamp, freshness, coverage/radius meaning, and confidence carried in every result. A “radius above a location” must state whether it means ground distance, altitude band, or a three-dimensional volume.
 - **Atmospheric conditions:** cloud and precipitation layers are optional provider-backed nowcasts or user-supplied observations. They may inform observing guidance, but must not alter calculated celestial positions or turn a weather overlay into a guarantee of visibility.
 - **Astronomical events:** eclipses use deterministic event calculations where supported; asteroid close approaches use ephemeris data; meteor/meteoroid activity uses an event source and time window. A meteorite is recovered ground material, so it belongs in a future history/field-data module rather than a live sky tracker.
 - **Observer frames:** Earth POV uses local altitude/azimuth, horizon, cardinal directions, and zenith. Space POV uses an explicitly defined external origin and reference frame to render Earth as a body; it must not reuse Earth-POV altitude/azimuth labels without transformation.
-- **Modular dashboards:** sky map, aerial, weather, event, and Space POV screens can be separate routes or panels. They share time, location, units, and privacy state but retain independent loading, attribution, and stale-data indicators.
+- **Modular dashboards:** sky map, planner, journal, aerial, weather, event, and Space POV screens are separate view modules in the current shell. They share time, location, units, and privacy state but retain independent loading, attribution, and stale-data indicators.
 
 These modules are planned boundaries, not current runtime features. External live data must remain optional, timestamped, licensed, and replaceable; the local astronomical calculation core remains usable without it.
 

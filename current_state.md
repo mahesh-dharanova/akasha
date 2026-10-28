@@ -36,6 +36,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.17 learning chunk completed: relationship groups now show application-authored three-step observing lessons that guide identification, comparison, and scientific noticing.
 - v0.4.0 observer-targeting chunk completed: observer settings now persist a location name, named-place presets update coordinates/elevation/timezone together, and manual coordinate entry remains the astronomical source of truth.
 - v0.4.0 verification completed: `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
+- v0.4.0 modular-dashboard chunk completed: Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV now have separate navigation views sharing the observer/time context; future-data views are explicit planned boundaries with no fabricated data.
+- Modular-dashboard verification completed: `npm run test:dashboard`, `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
 
 ## Next
 
