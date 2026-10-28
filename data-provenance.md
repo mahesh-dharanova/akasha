@@ -9,6 +9,9 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 | [OpenNGC addendum](https://raw.githubusercontent.com/mattiaverga/OpenNGC/master/database_files/addendum.csv) | CC BY-SA 4.0 | Pleiades/addendum catalogue record | The M45 entry identifies `OpenNGC addendum · CC BY-SA 4.0`. |
 | [NASA/JPL Horizons API](https://ssd.jpl.nasa.gov/api/horizons.api) ([documentation](https://ssd-api.jpl.nasa.gov/doc/horizons.html)) | Generated reference output; no runtime dependency | Topocentric apparent azimuth/elevation and range samples for Moon, Saturn, and Jupiter | Samples are retained only as regression fixtures in `tests/data/`, with API signature `1.2`, query settings, source URL, UTC date, observer location, and airless-refraction setting. |
 | [adsb.fi open data API](https://github.com/adsbfi/opendata) ([API](https://opendata.adsb.fi/api/)) | Personal, non-commercial terms; attribution required; public endpoint rate-limited to 1 request/second | User-triggered aircraft positions within a requested ground radius | `src/aerialProviders.ts` uses the documented `/v3/lat/{lat}/lon/{lon}/dist/{dist}` endpoint, converts provider units, preserves retrieval/position timestamps, and does not store or bundle feed data. This adapter is local-only and must be reviewed before any cloud deployment. |
+| [CelesTrak GP/OMM data](https://celestrak.org/NORAD/documentation/gp-data-formats.php) ([usage policy](https://celestrak.org/usage-policy.php)) | Public orbital-element service with usage policy and attribution expectations; GP updates are scheduled and downloads must not be overused | On-demand station orbital elements, source epoch, and local observer-frame satellite positions | `src/satelliteProviders.ts` requests only the `STATIONS` group through the local Vite proxy, preserves each OMM epoch, and propagates with local SGP4/SDP4. No orbital feed dump is committed. |
+| [satellite.js](https://github.com/shashwatak/satellite-js) | MIT | Local SGP4/SDP4 propagation, ECI/ECF/geodetic transforms, and observer look angles | Runtime dependency recorded in `package.json` and `package-lock.json`; no orbital data is bundled in the dependency. |
+| [Launch Library 2](https://ll.thespacedevs.com/docs) | Free unauthenticated API with a documented 15-call/hour limit; attribution required | On-demand upcoming launch event records | `src/launchProviders.ts` requests a small upcoming list through the local Vite proxy. Records retain event semantics and are never converted into aircraft or satellite positions. |
 
 ## Planned external sources — not yet selected
 
@@ -18,7 +21,7 @@ The following feature areas are documented for planning only. No live feed, prov
 
 - **Aircraft and helicopters:** adsb.fi is selected for the current local personal aircraft adapter. Its public terms are personal/non-commercial, request-rate limited, and require attribution; it does not by itself provide a licence for a future commercial or unrestricted cloud service. Helicopter classification is not inferred when the feed does not provide a defensible type field.
 - **OpenSky is not selected for the current runtime adapter:** its terms state that operational REST API use requires a written licence, including non-profit or governmental use. It remains a possible research source only after written permission is obtained.
-- **Satellites and rockets:** a public orbital/launch-state source and any required SGP4 or related dependency must be reviewed for licence, update cadence, epoch handling, and prediction uncertainty before implementation. TLE/OMM records must retain their source epoch.
+- **Satellites and rockets:** the current local adapters use CelesTrak OMM plus `satellite.js` for satellite propagation and Launch Library 2 for upcoming launch events. CelesTrak epochs, provider timestamps, source attribution, and geometric-horizon limitations remain visible in the UI; launch records remain non-positional.
 - **Cloud and precipitation:** a provider or user-supplied observation format must be selected with documented coverage, nowcast/radar semantics, licence, retention, and network requirements. Weather overlays are advisory inputs, not astronomical calculations.
 - **Eclipses, asteroids, and meteor activity:** candidate scientific sources may include existing deterministic astronomy calculations and NASA/JPL small-body/event services, but each runtime use must be verified for endpoint terms, attribution, rate limits, and reproducibility first. Meteorite records would require a separate historical or field-data source.
 
@@ -43,6 +46,6 @@ The v0.3.15 ephemeris expansion adds Moon references for Bengaluru on 2026-10-26
 
 ## Dependency licences
 
-Direct development dependencies are used only to build the local application: Vite (MIT), TypeScript (Apache-2.0), and `@types/node` (MIT). Their versions and package metadata are resolved through `package-lock.json`.
+Direct development/runtime dependencies are used only to build and run the local application: Vite (MIT), TypeScript (Apache-2.0), `@types/node` (MIT), `astronomy-engine` (MIT), and `satellite.js` (MIT). Their versions and package metadata are resolved through `package-lock.json`.
 
 AKASHA does not currently bundle images, proprietary catalogues, paid APIs, or cloud-hosted runtime data.

@@ -38,11 +38,11 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.17 learning chunk completed: relationship groups now show application-authored three-step observing lessons that guide identification, comparison, and scientific noticing.
 - v0.4.0 observer-targeting chunk completed: observer settings now persist a location name, named-place presets update coordinates/elevation/timezone together, and manual coordinate entry remains the astronomical source of truth.
 - v0.4.0 verification completed: `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
-- v0.4.0 modular-dashboard chunk completed: Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV now have separate navigation views sharing the observer/time context; future-data views are explicit planned boundaries with no fabricated data.
+- v0.4.0 modular-dashboard chunk completed: Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV now have separate navigation views sharing the observer/time context; Weather, Events, and Space POV remain explicit planned boundaries with no fabricated data.
 - Modular-dashboard verification completed: `npm run test:dashboard`, `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
 - v0.4.0 reproducibility handoff completed: added `npm run verify`, an anonymized importable fixture at `docs/example-journal.json`, and a README return-after-a-break workflow with the code map and tracked/local-state boundary.
 - Reproducibility verification completed: `npm run verify` passed after the fixture and command were added.
-- v0.4.0 aerial-contract foundation completed: `src/aerial.ts` now validates distinct aircraft, helicopter, rocket, and satellite categories with source, timestamp, coverage, confidence, and explicit fixture status; no provider is connected.
+- v0.4.0 aerial-contract foundation completed: `src/aerial.ts` validates distinct aircraft, helicopter, rocket, and satellite categories with source, timestamp, coverage, confidence, and explicit fixture status; aircraft, satellite, and launch adapters remain separate.
 - Aerial verification completed: the offline contract fixture passes valid/invalid snapshot checks through `npm run test:aerial`.
 - v0.4.0 aircraft-provider chunk completed: the Aerial view can query adsb.fi on explicit user action using observer coordinates and a 1–250 nautical-mile radius, convert units, show source/retrieval/coverage metadata, and reject incomplete records without inventing values.
 - Aircraft-provider verification completed: mocked adsb.fi URL/response tests pass through `npm run test:aerial-provider`; the full `npm run verify` suite passes.
@@ -52,6 +52,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.4.0 dynamic-aerial correction completed: aircraft are back to compact radar dots, the display ticks every second while tracking, and dots use a capped 30-second speed/heading estimate between provider responses.
 - Dynamic-aerial correction verification completed: `npm run test:aerial-radar` and the full `npm run verify` suite pass; the provider snapshot remains authoritative and the estimate is labelled in the radar key.
 - Radar sweep polish completed: the sweep is now a full-radius centre-anchored line that begins at north and rotates continuously through a complete 360° loop.
+- v0.4.0 satellite-provider chunk completed: CelesTrak station OMM elements are loaded on demand through a local proxy and propagated for the selected observer/time with MIT-licensed `satellite.js` SGP4/SDP4; the UI shows azimuth, elevation, range, altitude, geodetic position, orbital epoch, and geometric-horizon status.
+- v0.4.0 launch-provider chunk completed: Launch Library 2 upcoming event records are loaded separately on demand with source, retrieval time, event window, provider, location, status, and mission fields; launches are not treated as moving aerial objects.
 
 ## Next
 
@@ -67,10 +69,10 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
 - Review recommendation wording with real observing sessions before adding more ranking factors.
 - The generated `AKASHA · Space-Time` soundscape is the startup default. Saved local audio can still be restored, and saved YouTube links remain available without automatically replacing the offline default. YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player.
-- New Sky & Space expansion is documented as future scope only; no aerial, weather, event, Space POV, cloud deployment, or Android feature is implemented by this documentation chunk.
+- Weather, astronomical events, Space POV, cloud deployment, and Android remain future scope; aircraft, satellite-pass, and launch-event provider slices are now implemented locally.
 - Observer targeting now has a local named-place baseline; arbitrary location-name geocoding remains deferred. Latitude/longitude remain canonical, with timezone used only for time conversion and display.
 - Future dashboards are planned as separate shared-context modules for astronomy, atmospheric/aerial objects, weather, events, and Space POV rather than one overloaded page.
-- Future aerial and weather providers remain unselected. Any adapter must record source, licence, timestamp, coverage/radius semantics, freshness, uncertainty, and privacy/network requirements.
+- Future weather and event providers remain unselected. Any adapter must record source, licence, timestamp, coverage/radius semantics, freshness, uncertainty, and privacy/network requirements.
 - Event terminology is fixed for planning: meteoroid is the object in space, meteor is the visible atmospheric streak, and meteorite is recovered ground material; only the first two belong in a live sky-event view.
 - Deployment is planned in phases: local web first, optional responsive cloud delivery second, and an Android client third. Local calculation and private journal behavior must remain useful without cloud access.
 - Future sessions should begin with `git pull --ff-only origin main`, `npm install`, and `npm run verify`; use `docs/example-journal.json` only as anonymized demo data.
@@ -81,8 +83,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - The starter and OpenNGC-derived catalogue entries need continued source review before broader expansion.
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
 - Named-place presets are local application data; no external geocoder or worldwide place database is currently used.
-- A provider and licence decision is still required before live aircraft, satellite, rocket, cloud, rain, or event data can be added; no feed is currently bundled or queried.
-- adsb.fi is approved only for the current local personal/non-commercial aircraft adapter; cloud deployment, redistribution, satellite propagation, rocket events, and helicopter classification remain unresolved.
+- A provider and licence decision is still required before live weather, rain, or broader astronomical-event data can be added; no feed dump is bundled.
+- adsb.fi is approved only for the current local personal/non-commercial aircraft adapter; CelesTrak/satellite.js and Launch Library 2 are approved for the current local on-demand satellite/launch slices. Cloud deployment, redistribution, and helicopter classification remain unresolved.
 - OpenSky is not selected for runtime use without written permission because its current terms require a licence for operational REST API use.
 - Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
 - Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.

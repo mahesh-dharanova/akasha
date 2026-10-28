@@ -11,7 +11,7 @@ export const DASHBOARD_MODULES: DashboardModule[] = [
   { id: 'sky', label: 'Sky map', description: 'Calculated sky, object profile, and catalogue.', implemented: true },
   { id: 'planner', label: 'Planner', description: 'Tonight targets and twilight windows.', implemented: true },
   { id: 'journal', label: 'Journal', description: 'Local notes, favourites, and observations.', implemented: true },
-  { id: 'aerial', label: 'Aerial', description: 'Aircraft, helicopters, rockets, and satellites; no licensed provider connected yet.', implemented: false },
+  { id: 'aerial', label: 'Aerial', description: 'Aircraft tracking, satellite passes, and upcoming launch events.', implemented: true },
   { id: 'weather', label: 'Weather', description: 'Cloud and precipitation overlays.', implemented: false },
   { id: 'events', label: 'Events', description: 'Eclipses, asteroids, and meteor activity.', implemented: false },
   { id: 'space', label: 'Space POV', description: 'Earth from a defined external observer.', implemented: false },

@@ -71,6 +71,8 @@ npm run test:dashboard # validate current and planned dashboard modules
 npm run test:aerial # validate the source-neutral aerial data contract
 npm run test:reproducibility # validate the committed demo journal fixture
 npm run test:aerial-radar # validate the aerial radar projection
+npm run test:satellites # validate CelesTrak OMM and local SGP4 propagation
+npm run test:launches # validate Launch Library event parsing
 npm run verify       # run all checks and the production build
 ```
 
@@ -202,17 +204,16 @@ npm run verify       # run all checks and the production build
 - Added observer-context regression checks and bumped the application package metadata to `0.4.0`.
 - Added modular dashboard navigation for Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV; future-data views are visibly marked as planned and share the observer/time context without presenting fake data.
 - Added a source-neutral aerial snapshot contract for aircraft, helicopters, rockets, and satellites, with validation for source attribution, timestamps, coverage semantics, confidence, and invalid data. The committed fixture is test-only; no live provider is connected.
-- Added the first live aerial adapter for user-triggered local aircraft queries through adsb.fi, with radius controls, unit conversion, source/timestamp display, incomplete-data handling, personal-use attribution, and a Vite same-origin development proxy. Satellites, rockets, and helicopter classification remain separate deferred work.
+- Added the first live aerial adapter for user-triggered local aircraft queries through adsb.fi, with radius controls, unit conversion, source/timestamp display, incomplete-data handling, personal-use attribution, and a Vite same-origin development proxy.
 - Added a north-up radar-style Aerial view with observer-centred ground-radius rings, cardinal directions, projected aircraft points, out-of-radius edge clipping, and exact values in the supporting table.
 - Added manual refresh and start/pause tracking controls. Tracking requests a fresh adsb.fi snapshot every 15 seconds; compact radar dots update every second and use a clearly labelled, capped speed/heading estimate between provider responses.
+- Added on-demand satellite stations through CelesTrak OMM data and local `satellite.js` SGP4/SDP4 propagation, showing calculated azimuth, elevation, range, geodetic position, altitude, and orbital epoch for the selected observer and time.
+- Added on-demand upcoming launch events through Launch Library 2. Launch records retain event time, provider, location, status, and mission description and are never presented as aircraft or satellite positions.
 
-## Planned Sky & Space expansion
+## Remaining planned Sky & Space expansion
 
 These are planned capabilities, not features currently shipped in the local application:
 
-- Custom observer targeting by location name or latitude/longitude, with elevation and IANA time zone kept explicit. A time zone alone is not a unique geographic location.
-- Separate modular views for the astronomical sky, aircraft/helicopters, satellites/rockets, weather, astronomical events, and a future Space POV. They may be separate screens rather than one crowded dashboard.
-- Timestamped aerial-object feeds with source, coverage, freshness, and uncertainty shown to the user. Atmospheric aircraft data and orbital satellite data will use different adapters.
 - Optional cloud and rain overlays from a selected provider or user data. Weather can inform observing guidance but cannot change ephemeris positions or guarantee visibility.
 - Eclipses, asteroid close approaches, and meteor/meteoroid events. “Meteorite” means recovered ground material and will not be treated as a live sky position.
 - An explicit Earth POV versus Space POV model. Earth POV uses local horizon/zenith and altitude/azimuth; Space POV needs a defined external observer and reference frame before Earth can be shown as a cosmic body.
@@ -223,7 +224,7 @@ Deployment is staged: Phase 1 remains the local web application; Phase 2 may dep
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
 - Geocoding arbitrary location names beyond the local named-place presets.
-- Live satellite, rocket, and weather feeds with documented providers, licences, coverage, freshness, and privacy boundaries; aircraft queries currently depend on adsb.fi's personal/non-commercial terms and remain local-only.
+- Live weather feeds, richer satellite groups, launch alerts, and cloud deployment proxying remain deferred; current aircraft, satellite, and launch queries are local-only adapters with documented provider terms.
 - Automatic weather retrieval and live light-pollution services; v0.3.5 uses explicit local user inputs instead.
 - Eclipses, asteroid close approaches, and meteor/meteoroid event modules.
 - Earth/Space POV rendering and external observer-frame calculations.

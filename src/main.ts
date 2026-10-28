@@ -12,6 +12,10 @@ import { DASHBOARD_MODULES, type DashboardModule, type DashboardView } from './d
 import { fetchAdsbFiAircraft } from './aerialProviders';
 import type { AerialSnapshot } from './aerial';
 import { estimateAerialObjectPosition, projectAerialObject } from './aerialRadar';
+import { fetchCelestrakStations } from './satelliteProviders';
+import type { SatelliteSnapshot } from './satelliteProviders';
+import { fetchUpcomingLaunches } from './launchProviders';
+import type { LaunchSnapshot } from './launchProviders';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -49,6 +53,12 @@ const state: {
   aerialStatus: 'idle' | 'loading' | 'ready' | 'error';
   aerialMessage: string;
   aerialSnapshot: AerialSnapshot | null;
+  satelliteStatus: 'idle' | 'loading' | 'ready' | 'error';
+  satelliteMessage: string;
+  satelliteSnapshot: SatelliteSnapshot | null;
+  launchStatus: 'idle' | 'loading' | 'ready' | 'error';
+  launchMessage: string;
+  launchSnapshot: LaunchSnapshot | null;
   selectedId: string;
   filter: 'all' | 'star' | 'planet' | 'moon' | 'sun' | 'deep-sky';
   query: string;
@@ -72,6 +82,12 @@ const state: {
   aerialStatus: 'idle',
   aerialMessage: '',
   aerialSnapshot: null,
+  satelliteStatus: 'idle',
+  satelliteMessage: '',
+  satelliteSnapshot: null,
+  launchStatus: 'idle',
+  launchMessage: '',
+  launchSnapshot: null,
   selectedId: DEFAULT_OBJECT_ID,
   filter: 'all',
   query: '',
@@ -364,7 +380,7 @@ function renderAerialModule(): string {
   const status = state.aerialStatus === 'loading' ? 'Updating…' : state.aerialStatus === 'error' ? state.aerialMessage : state.aerialTracking ? `Tracking · ${snapshot ? aerialFreshness(snapshot) : 'starting'}` : snapshot ? `${snapshot.objects.length} aircraft returned` : 'No request made';
   const objects = snapshot?.objects ?? [];
   const rows = objects.map((object) => `<div class="aerial-row"><div><strong>${escapeHtml(object.name)}</strong><small>${escapeHtml(object.id.replace('adsb-fi:', ''))}</small></div><span>${object.altitudeMeters.toFixed(0)} m</span><span>${object.speedMetersPerSecond === null ? 'speed unavailable' : `${(object.speedMetersPerSecond * 3.6).toFixed(0)} km/h`}</span><span>${object.headingDegrees === null ? 'heading unavailable' : `${object.headingDegrees.toFixed(0)}°`}</span></div>`).join('');
-  return `<section class="panel aerial-panel"><div class="panel-kicker">AIRCRAFT TRACKING</div><div class="section-heading"><div><h2>Aircraft near ${escapeHtml(state.observer.locationName)}</h2><p>Optional personal-use query through the adsb.fi public endpoint. This is not an astronomical position calculation.</p></div><span class="condition-chip">${escapeHtml(status)}</span></div><div class="aerial-controls"><label>Ground radius <span class="unit">nautical miles</span><input id="aerial-radius" type="number" min="1" max="250" step="1" value="${state.aerialRadiusNauticalMiles}" /></label><button class="button button-primary" data-action="load-aerial" ${state.aerialStatus === 'loading' ? 'disabled' : ''}>${state.aerialStatus === 'loading' ? 'Updating…' : 'Refresh now'}</button><button class="button button-quiet" data-action="toggle-aerial-tracking" ${state.aerialStatus === 'loading' && !state.aerialTracking ? 'disabled' : ''}>${state.aerialTracking ? 'Pause tracking' : 'Start tracking'}</button></div>${state.aerialMessage && state.aerialStatus === 'error' ? `<p class="journal-message" role="alert">${escapeHtml(state.aerialMessage)}</p>` : ''}${snapshot ? `<div class="aerial-meta"><span>Retrieved ${formatDateTime(new Date(snapshot.retrievedAt))} · ${aerialFreshness(snapshot)}</span><span>Coverage ${snapshot.coverage.radiusKm?.toFixed(1) ?? '—'} km ground radius</span><span>Source: ${escapeHtml(snapshot.source.label)}</span><span>Auto-refresh: ${state.aerialTracking ? '15 seconds' : 'off'}</span></div><div class="radar-layout"><div class="radar-screen" aria-label="Radar view of aircraft near the observer"><div class="radar-sweep" aria-hidden="true"></div>${renderAerialRadar(snapshot)}</div><div class="radar-key"><strong>RADAR VIEW</strong><span>Centre: ${escapeHtml(state.observer.locationName)}</span><span>North is up · east is right</span><span>Rings show 25%, 50%, 75%, and 100% of the selected ground radius.</span><span>Dots move between provider updates using the latest reported speed and heading for up to 30 seconds.</span></div></div>${rows ? `<div class="aerial-list">${rows}</div>` : '<p class="empty-state">No aircraft with usable position and altitude data were returned in this radius.</p>'}` : '<div class="module-boundary"><strong>No live data loaded</strong><p>Choose a radius and press Refresh now, or start tracking. Observer coordinates are sent to the provider only when you request data.</p></div>'}<p class="science-note">adsb.fi provides community ADS-B data with limited coverage. It may omit aircraft, contain stale positions, or lack altitude/identity fields. Personal, non-commercial terms and attribution apply.</p></section>`;
+  return `<section class="panel aerial-panel"><div class="panel-kicker">AERIAL AND SPACE OBJECTS</div><div class="section-heading"><div><h2>Aircraft near ${escapeHtml(state.observer.locationName)}</h2><p>Aircraft use the adsb.fi public endpoint. Satellite passes and launch events use separate providers and calculation semantics.</p></div><span class="condition-chip">${escapeHtml(status)}</span></div><div class="aerial-controls"><label>Ground radius <span class="unit">nautical miles</span><input id="aerial-radius" type="number" min="1" max="250" step="1" value="${state.aerialRadiusNauticalMiles}" /></label><button class="button button-primary" data-action="load-aerial" ${state.aerialStatus === 'loading' ? 'disabled' : ''}>${state.aerialStatus === 'loading' ? 'Updating…' : 'Refresh now'}</button><button class="button button-quiet" data-action="toggle-aerial-tracking" ${state.aerialStatus === 'loading' && !state.aerialTracking ? 'disabled' : ''}>${state.aerialTracking ? 'Pause tracking' : 'Start tracking'}</button></div>${state.aerialMessage && state.aerialStatus === 'error' ? `<p class="journal-message" role="alert">${escapeHtml(state.aerialMessage)}</p>` : ''}${snapshot ? `<div class="aerial-meta"><span>Retrieved ${formatDateTime(new Date(snapshot.retrievedAt))} · ${aerialFreshness(snapshot)}</span><span>Coverage ${snapshot.coverage.radiusKm?.toFixed(1) ?? '—'} km ground radius</span><span>Source: ${escapeHtml(snapshot.source.label)}</span><span>Auto-refresh: ${state.aerialTracking ? '15 seconds' : 'off'}</span></div><div class="radar-layout"><div class="radar-screen" aria-label="Radar view of aircraft near the observer"><div class="radar-sweep" aria-hidden="true"></div>${renderAerialRadar(snapshot)}</div><div class="radar-key"><strong>RADAR VIEW</strong><span>Centre: ${escapeHtml(state.observer.locationName)}</span><span>North is up · east is right</span><span>Rings show 25%, 50%, 75%, and 100% of the selected ground radius.</span><span>Dots move between provider updates using the latest reported speed and heading for up to 30 seconds.</span></div></div>${rows ? `<div class="aerial-list">${rows}</div>` : '<p class="empty-state">No aircraft with usable position and altitude data were returned in this radius.</p>'}` : '<div class="module-boundary"><strong>No live data loaded</strong><p>Choose a radius and press Refresh now, or start tracking. Observer coordinates are sent to the provider only when you request data.</p></div>'}<p class="science-note">adsb.fi provides community ADS-B data with limited coverage. It may omit aircraft, contain stale positions, or lack altitude/identity fields. Personal, non-commercial terms and attribution apply.</p>${renderSpaceDataModules()}</section>`;
 }
 
 function renderAerialRadar(snapshot: AerialSnapshot): string {
@@ -375,6 +391,54 @@ function renderAerialRadar(snapshot: AerialSnapshot): string {
     return `<g class="radar-object ${point.withinRadius ? '' : 'is-outside'}" transform="translate(${point.x.toFixed(2)} ${point.y.toFixed(2)})"><title>${escapeHtml(label)}</title><circle r="1.65"></circle><text x="2.6" y="-2.2">${escapeHtml(object.name)}</text></g>`;
   }).join('');
   return `<svg class="radar-svg" viewBox="0 0 100 100" role="img" aria-label="Top-down aircraft radar"><circle class="radar-ring" cx="50" cy="50" r="44"></circle><circle class="radar-ring" cx="50" cy="50" r="33"></circle><circle class="radar-ring" cx="50" cy="50" r="22"></circle><circle class="radar-ring" cx="50" cy="50" r="11"></circle><path class="radar-axis" d="M50 6V94M6 50H94"></path><text class="radar-direction" x="50" y="4">N</text><text class="radar-direction" x="96" y="51">E</text><text class="radar-direction" x="50" y="98">S</text><text class="radar-direction" x="4" y="51">W</text><circle class="radar-observer" cx="50" cy="50" r="1.7"></circle>${points}</svg>`;
+}
+
+async function loadSatellites(): Promise<void> {
+  if (state.satelliteStatus === 'loading') return;
+  state.satelliteStatus = 'loading';
+  state.satelliteMessage = '';
+  render();
+  try {
+    state.satelliteSnapshot = await fetchCelestrakStations({ latitude: state.observer.latitude, longitude: state.observer.longitude, elevationMeters: state.observer.elevation }, state.instant);
+    state.satelliteStatus = 'ready';
+  } catch (error) {
+    state.satelliteStatus = 'error';
+    state.satelliteMessage = error instanceof Error ? error.message : 'The satellite provider could not be reached.';
+  }
+  render();
+}
+
+async function loadLaunches(): Promise<void> {
+  if (state.launchStatus === 'loading') return;
+  state.launchStatus = 'loading';
+  state.launchMessage = '';
+  render();
+  try {
+    state.launchSnapshot = await fetchUpcomingLaunches();
+    state.launchStatus = 'ready';
+  } catch (error) {
+    state.launchStatus = 'error';
+    state.launchMessage = error instanceof Error ? error.message : 'The launch provider could not be reached.';
+  }
+  render();
+}
+
+function renderSatelliteSection(): string {
+  const snapshot = state.satelliteSnapshot;
+  const status = state.satelliteStatus === 'loading' ? 'Loading…' : state.satelliteStatus === 'error' ? state.satelliteMessage : snapshot ? `${snapshot.objects.filter((object) => object.aboveHorizon).length} above horizon` : 'Not loaded';
+  const rows = snapshot?.objects.slice().sort((a, b) => b.elevationDegrees - a.elevationDegrees).map((object) => `<div class="provider-row"><div><strong>${escapeHtml(object.name)}</strong><small>NORAD ${escapeHtml(object.noradCatalogId)} · epoch ${escapeHtml(object.orbitEpoch.slice(0, 10))}</small></div><span>${object.azimuthDegrees.toFixed(0)}° az · ${object.elevationDegrees.toFixed(1)}° el</span><span>${object.altitudeMeters.toFixed(0)} m</span><span>${object.rangeKm.toFixed(0)} km</span></div>`).join('') ?? '';
+  return `<section class="provider-card"><div class="section-heading"><div><div class="panel-kicker">SATELLITE PASSES</div><h2>Stations above ${escapeHtml(state.observer.locationName)}</h2><p>Latest CelesTrak orbital elements propagated locally with SGP4/SDP4.</p></div><span class="condition-chip">${escapeHtml(status)}</span></div><button class="button button-primary" data-action="load-satellites" ${state.satelliteStatus === 'loading' ? 'disabled' : ''}>${state.satelliteStatus === 'loading' ? 'Loading…' : 'Load satellite positions'}</button>${state.satelliteMessage && state.satelliteStatus === 'error' ? `<p class="journal-message" role="alert">${escapeHtml(state.satelliteMessage)}</p>` : ''}${snapshot ? `<div class="provider-meta"><span>Elements retrieved ${formatDateTime(new Date(snapshot.retrievedAt))}</span><span>Calculated for ${formatDateTime(new Date(snapshot.observedAt))}</span><span>Source: ${escapeHtml(snapshot.source.label)}</span></div>${rows ? `<div class="provider-list">${rows}</div>` : '<p class="empty-state">No station positions propagated successfully for this time.</p>'}` : '<div class="module-boundary"><strong>No satellite data loaded</strong><p>Load the current station element set when you want a fresh local calculation. CelesTrak element downloads are not polled automatically.</p></div>'}<p class="science-note">Above horizon means geometric elevation above 0°. It is not a promise of naked-eye visibility; brightness, eclipse state, clouds, and light pollution are separate concerns.</p></section>`;
+}
+
+function renderLaunchSection(): string {
+  const snapshot = state.launchSnapshot;
+  const status = state.launchStatus === 'loading' ? 'Loading…' : state.launchStatus === 'error' ? state.launchMessage : snapshot ? `${snapshot.events.length} upcoming` : 'Not loaded';
+  const rows = snapshot?.events.map((event) => `<div class="provider-row launch-row"><div><strong>${escapeHtml(event.name)}</strong><small>${escapeHtml(event.launchServiceProvider ?? 'Provider unavailable')} · ${escapeHtml(event.status)}</small></div><span>${formatDateTime(new Date(event.net))}</span><span>${escapeHtml(event.location ?? 'Location unavailable')}</span></div>`).join('') ?? '';
+  return `<section class="provider-card"><div class="section-heading"><div><div class="panel-kicker">LAUNCH EVENTS</div><h2>Upcoming launches</h2><p>Event records only; a launch is not treated as an aircraft or satellite position.</p></div><span class="condition-chip">${escapeHtml(status)}</span></div><button class="button button-primary" data-action="load-launches" ${state.launchStatus === 'loading' ? 'disabled' : ''}>${state.launchStatus === 'loading' ? 'Loading…' : 'Load upcoming launches'}</button>${state.launchMessage && state.launchStatus === 'error' ? `<p class="journal-message" role="alert">${escapeHtml(state.launchMessage)}</p>` : ''}${snapshot ? `<div class="provider-meta"><span>Retrieved ${formatDateTime(new Date(snapshot.retrievedAt))}</span><span>Source: ${escapeHtml(snapshot.source.label)}</span></div>${rows ? `<div class="provider-list">${rows}</div>` : '<p class="empty-state">No upcoming launch events were returned.</p>'}` : '<div class="module-boundary"><strong>No launch data loaded</strong><p>Load upcoming launch events on demand. The unauthenticated provider is rate-limited, so AKASHA does not refresh this list continuously.</p></div>'}<p class="science-note">Launch times can change and may be estimates. Use the source event page for operational decisions.</p></section>`;
+}
+
+function renderSpaceDataModules(): string {
+  return `<div class="provider-grid">${renderSatelliteSection()}${renderLaunchSection()}</div>`;
 }
 
 function renderPlannedModule(module: DashboardModule): string {
@@ -605,6 +669,8 @@ function bindEvents(): void {
       render();
     } else startAerialTracking();
   });
+  app.querySelector<HTMLButtonElement>('[data-action="load-satellites"]')?.addEventListener('click', () => { void loadSatellites(); });
+  app.querySelector<HTMLButtonElement>('[data-action="load-launches"]')?.addEventListener('click', () => { void loadLaunches(); });
   app.querySelector<HTMLInputElement>('#catalogue-search')?.addEventListener('input', (event) => {
     state.query = (event.target as HTMLInputElement).value;
     render();

@@ -19,12 +19,15 @@
     "test:aerial": "node --experimental-strip-types tests/aerial-check.mjs",
     "test:aerial-provider": "node --experimental-strip-types tests/aerial-provider-check.mjs",
     "test:aerial-radar": "node --experimental-strip-types tests/aerial-radar-check.mjs",
+    "test:satellites": "node --experimental-strip-types tests/satellite-provider-check.mjs",
+    "test:launches": "node --experimental-strip-types tests/launch-provider-check.mjs",
     "test:reproducibility": "node --experimental-strip-types tests/reproducibility-check.mjs",
-    "verify": "npm run check && npm run test:astronomy && npm run test:visibility && npm run test:catalogue && npm run test:windows && npm run test:planner && npm run test:youtube && npm run test:relationships && npm run test:observer && npm run test:dashboard && npm run test:aerial && npm run test:aerial-provider && npm run test:aerial-radar && npm run test:reproducibility && npm run build",
+    "verify": "npm run check && npm run test:astronomy && npm run test:visibility && npm run test:catalogue && npm run test:windows && npm run test:planner && npm run test:youtube && npm run test:relationships && npm run test:observer && npm run test:dashboard && npm run test:aerial && npm run test:aerial-provider && npm run test:aerial-radar && npm run test:satellites && npm run test:launches && npm run test:reproducibility && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {
-    "astronomy-engine": "^2.1.3"
+    "astronomy-engine": "^2.1.3",
+    "satellite.js": "^6.0.1"
   },
   "devDependencies": {
     "@types/node": "^24.8.1",
