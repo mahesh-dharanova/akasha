@@ -34,6 +34,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.15 ephemeris chunk completed: the Horizons fixture now uses the current endpoint/signature and covers Moon samples across two dates plus London/Cape Town Moon and Saturn observer frames.
 - v0.3.16 relationship chunk completed: selected objects now expose 14 reciprocal, explicitly labelled observing connections, including physical pairs, same-region links, and comparison links.
 - v0.3.17 learning chunk completed: relationship groups now show application-authored three-step observing lessons that guide identification, comparison, and scientific noticing.
+- v0.4.0 observer-targeting chunk completed: observer settings now persist a location name, named-place presets update coordinates/elevation/timezone together, and manual coordinate entry remains the astronomical source of truth.
+- v0.4.0 verification completed: `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
 
 ## Next
 
@@ -50,7 +52,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Review recommendation wording with real observing sessions before adding more ranking factors.
 - YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player; local audio and generated ambient remain offline fallbacks.
 - New Sky & Space expansion is documented as future scope only; no aerial, weather, event, Space POV, cloud deployment, or Android feature is implemented by this documentation chunk.
-- Future observer targeting will use latitude/longitude as the canonical location, with a location name resolved explicitly and a time zone treated only as time-conversion metadata.
+- Observer targeting now has a local named-place baseline; arbitrary location-name geocoding remains deferred. Latitude/longitude remain canonical, with timezone used only for time conversion and display.
 - Future dashboards are planned as separate shared-context modules for astronomy, atmospheric/aerial objects, weather, events, and Space POV rather than one overloaded page.
 - Future aerial and weather providers remain unselected. Any adapter must record source, licence, timestamp, coverage/radius semantics, freshness, uncertainty, and privacy/network requirements.
 - Event terminology is fixed for planning: meteoroid is the object in space, meteor is the visible atmospheric streak, and meteorite is recovered ground material; only the first two belong in a live sky-event view.
@@ -61,6 +63,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - `origin` is configured as the private GitHub repository; this working tree is clean and synced with `origin/main`.
 - The starter and OpenNGC-derived catalogue entries need continued source review before broader expansion.
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
+- Named-place presets are local application data; no external geocoder or worldwide place database is currently used.
 - A provider and licence decision is still required before live aircraft, satellite, rocket, cloud, rain, or event data can be added; no feed is currently bundled or queried.
 - Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
 - Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.

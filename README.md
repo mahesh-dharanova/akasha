@@ -48,6 +48,7 @@ npm run test:windows   # validate dark-sky observing windows
 npm run test:planner   # validate planner labels and ranking
 npm run test:youtube   # validate YouTube URL parsing
 npm run test:relationships # validate reciprocal object links
+npm run test:observer # validate named observer context and timezone pairing
 ```
 
 ## Implemented in v0.1
@@ -170,6 +171,13 @@ npm run test:relationships # validate reciprocal object links
 - Added a guided lesson to each relationship group with three short observing steps: identify the region, compare the targets, and notice the scientific distinction.
 - Lessons are deterministic, local, and application-authored; they do not alter calculated positions or claim calibrated visibility.
 
+## Implemented in v0.4.0
+
+- Added a persisted observer location name alongside latitude, longitude, elevation, and IANA timezone.
+- Added deterministic named-place presets for Bengaluru, London, New York, and Cape Town; selecting one updates its coordinates and timezone together.
+- Added a custom location-name field with clear wording that coordinates define the calculated sky; no geocoder or network dependency was added.
+- Added observer-context regression checks and bumped the application package metadata to `0.4.0`.
+
 ## Planned Sky & Space expansion
 
 These are planned capabilities, not features currently shipped in the local application:
@@ -186,6 +194,7 @@ Deployment is staged: Phase 1 remains the local web application; Phase 2 may dep
 ## Deferred from v0.1
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
+- Geocoding arbitrary location names beyond the local named-place presets.
 - Live aircraft, helicopter, rocket, satellite, cloud, and rain feeds with documented providers, licences, coverage, freshness, and privacy boundaries.
 - Automatic weather retrieval and live light-pollution services; v0.3.5 uses explicit local user inputs instead.
 - Eclipses, asteroid close approaches, and meteor/meteoroid event modules.

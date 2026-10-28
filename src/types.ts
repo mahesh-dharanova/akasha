@@ -56,6 +56,7 @@ export interface CatalogueObject {
 }
 
 export interface ObserverSettings {
+  locationName: string;
   latitude: number;
   longitude: number;
   elevation: number;

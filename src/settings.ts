@@ -1,4 +1,5 @@
 import type { ObserverSettings } from './types';
+import { DEFAULT_LOCATION_NAME, normalizeLocationName } from './observer';
 
 const SETTINGS_KEY = 'akasha-observer-v1';
 
@@ -22,6 +23,7 @@ export function loadObserverSettings(defaults: ObserverSettings): ObserverSettin
   try {
     const stored = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}') as Partial<ObserverSettings>;
     return {
+      locationName: normalizeLocationName(stored.locationName, defaults.locationName || DEFAULT_LOCATION_NAME),
       latitude: numberOrDefault(stored.latitude, defaults.latitude, -90, 90),
       longitude: numberOrDefault(stored.longitude, defaults.longitude, -180, 180),
       elevation: numberOrDefault(stored.elevation, defaults.elevation, -500, 9000),

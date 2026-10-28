@@ -7,13 +7,15 @@ import { loadJournal, parseJournalFile, saveJournal, serializeJournal } from './
 import { loadObserverSettings, saveObserverSettings } from './settings';
 import { observingWindowLabel, plannerRank } from './planner';
 import { LEARNING_LESSONS, OBJECT_RELATIONSHIPS } from './relationships';
+import { applyObserverPreset, normalizeLocationName, OBSERVER_PRESETS } from './observer';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
-const TIME_ZONES = Array.from(new Set([detectedTimeZone, 'UTC', 'Asia/Kolkata', 'Europe/London', 'America/New_York', 'America/Los_Angeles', 'Australia/Sydney']));
+const TIME_ZONES = Array.from(new Set([detectedTimeZone, 'UTC', 'Asia/Kolkata', 'Europe/London', 'America/New_York', 'America/Los_Angeles', 'Australia/Sydney', ...OBSERVER_PRESETS.map((preset) => preset.timeZone)]));
 const BORTLE_LABELS = ['pristine', 'dark rural', 'rural', 'suburban-rural', 'suburban', 'bright suburban', 'urban', 'city', 'inner city'];
 
 const DEFAULT_OBSERVER: ObserverSettings = {
+  locationName: 'Bengaluru',
   latitude: 12.9716,
   longitude: 77.5946,
   elevation: 920,
@@ -304,6 +306,8 @@ function render(): void {
     return (state.filter === 'all' || item.kind === state.filter) && (item.name.toLowerCase().includes(query) || item.catalogueId?.toLowerCase().includes(query));
   });
   app.innerHTML = `<header class="topbar"><div class="brand-mark">✦</div><div><div class="eyebrow">PERSONAL ASTRONOMY OBSERVATORY</div><h1>AKASHA</h1></div><div class="topbar-status"><span class="live-dot"></span> local calculation · ${escapeHtml(state.observer.timeZone)}</div></header><main class="app-shell"><section class="control-panel panel"><div class="control-group location-controls"><div class="panel-kicker">OBSERVER</div><div class="control-row"><label>Latitude<input id="latitude" type="number" min="-90" max="90" step="0.0001" value="${state.observer.latitude}" /></label><label>Longitude<input id="longitude" type="number" min="-180" max="180" step="0.0001" value="${state.observer.longitude}" /></label><label>Elevation <span class="unit">m</span><input id="elevation" type="number" min="-500" max="9000" step="1" value="${state.observer.elevation}" /></label><label>Time zone<select id="timezone">${TIME_ZONES.map((zone) => `<option value="${zone}" ${zone === state.observer.timeZone ? 'selected' : ''}>${zone}</option>`).join('')}</select></label></div><div class="preset-row"><span>Presets</span><button data-preset="12.9716,77.5946,920">Bengaluru</button><button data-preset="51.5072,-0.1276,11">London</button><button data-preset="40.7128,-74.006,10">New York</button><button data-preset="-33.9249,18.4241,15">Cape Town</button><button class="reset-observer-button" data-action="reset-observer">Reset setup</button></div><div class="conditions-row"><label>Light pollution<select id="light-pollution">${BORTLE_LABELS.map((label, index) => `<option value="${index + 1}" ${state.observer.lightPollution === index + 1 ? 'selected' : ''}>Bortle ${index + 1} · ${label}</option>`).join('')}</select></label><label>Cloud cover <output>${state.observer.cloudCover}%</output><input id="cloud-cover" type="range" min="0" max="100" step="5" value="${state.observer.cloudCover}" /></label><label>Transparency <output>${state.observer.transparency}%</output><input id="transparency" type="range" min="0" max="100" step="5" value="${state.observer.transparency}" /></label><label>Horizon obstruction <output>${state.observer.horizonObstruction}%</output><input id="horizon-obstruction" type="range" min="0" max="100" step="5" value="${state.observer.horizonObstruction}" /></label></div><p class="conditions-note">Manual observing conditions · ${conditionsSummary()} · saved locally in this browser · these adjust guidance, not astronomical positions.</p></div><div class="control-group time-controls"><div class="panel-kicker">OBSERVATION TIME</div><div class="time-row"><input id="observation-time" type="datetime-local" value="${inputValue}" /><button class="button button-quiet" data-action="now">Now</button></div><div class="time-actions"><button class="button button-quiet" data-step="-60">− 1 h</button><button class="button button-primary play-button" data-action="toggle-play">${state.playing ? 'Ⅱ Pause' : '▶ Play'}</button><button class="button button-quiet" data-step="60">+ 1 h</button></div><div class="time-readout">${formatDateTime(state.instant)} · ${state.snapshot.twilight.replace('-', ' ')}</div></div></section><section class="workspace"><section class="panel map-panel"><div class="map-heading"><div><div class="panel-kicker">THE SKY ABOVE YOU</div><h2>${formatDateTime(state.instant)}</h2><p>Zenith at centre · horizon at edge · drag to pan · scroll to zoom</p></div><div class="map-status"><strong>${state.snapshot.objects.filter((item) => item.aboveHorizon).length}</strong><span>starter objects<br />above horizon</span></div></div><div class="sky-stage">${renderMap()}<div class="map-scale"><span>30°</span><span>60°</span><span>horizon</span></div></div><div class="map-footer"><span><i class="legend-line legend-horizon"></i> horizon</span><span><i class="legend-line legend-constellation"></i> constellation guide</span><span><i class="legend-dot"></i> calculated object</span><button data-action="reset-map">Reset view</button></div></section><aside class="side-column">${renderObjectPanel()}<section class="panel catalogue-panel"><div class="panel-kicker">OBJECT CATALOGUE</div><div class="catalogue-tools"><input id="catalogue-search" type="search" placeholder="Search objects" value="${escapeHtml(state.query)}" /><select id="catalogue-filter"><option value="all" ${state.filter === 'all' ? 'selected' : ''}>All types</option><option value="star" ${state.filter === 'star' ? 'selected' : ''}>Stars</option><option value="planet" ${state.filter === 'planet' ? 'selected' : ''}>Moon</option><option value="deep-sky" ${state.filter === 'deep-sky' ? 'selected' : ''}>Deep sky</option></select></div><div class="catalogue-list">${filterObjects.map((item) => `<button class="catalogue-item ${item.id === state.selectedId ? 'is-selected' : ''}" data-select-object="${item.id}"><span class="catalogue-symbol" style="color:${item.color}">${item.kind === 'star' ? '✦' : item.kind === 'moon' ? '◐' : item.kind === 'deep-sky' ? '◇' : '●'}</span><span><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.classification)}</small></span><span class="catalogue-alt">${state.snapshot.objects.find((calculated) => calculated.id === item.id)?.horizontal.altitude.toFixed(0)}°</span></button>`).join('')}</div></section></aside></section><section class="lower-grid"><section class="panel planner-panel"><div class="panel-kicker">TONIGHT'S OBSERVATION PLANNER</div><div class="section-heading"><div><h2>Start with what is ready</h2><p>Ranked from the local calculation for ${escapeHtml(state.observer.timeZone)}.</p></div><span class="planner-badge">${state.snapshot.twilight === 'night' ? 'dark sky' : state.snapshot.twilight}</span></div><div class="planner-list">${renderPlanner()}</div></section>${renderJournal()}</section><footer class="app-footer"><span>AKASHA v0.3.9 · positions calculated locally with Astronomy Engine</span><span>Geometric horizon and twilight are not a promise of visibility.</span></footer></main>`;
+  const locationControls = app.querySelector<HTMLElement>('.location-controls');
+  locationControls?.insertAdjacentHTML('afterbegin', `<div class="location-name-row"><label>Location name<input id="location-name" type="text" maxlength="80" value="${escapeHtml(state.observer.locationName)}" placeholder="e.g. Bengaluru" /></label><p class="field-help">A label for this observer. The sky is calculated from the coordinates below.</p></div>`);
   const catalogueFilter = app.querySelector<HTMLSelectElement>('#catalogue-filter');
   const planetOption = catalogueFilter?.querySelector<HTMLOptionElement>('option[value="planet"]');
   if (planetOption) planetOption.textContent = 'Planets';
@@ -401,9 +405,8 @@ function bindEvents(): void {
   }));
   app.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((button) => button.addEventListener('click', () => {
     const [latitude, longitude, elevation] = (button.dataset.preset ?? '').split(',').map(Number);
-    state.observer.latitude = latitude;
-    state.observer.longitude = longitude;
-    state.observer.elevation = elevation;
+    const preset = OBSERVER_PRESETS.find((item) => item.latitude === latitude && item.longitude === longitude && item.elevation === elevation);
+    state.observer = preset ? applyObserverPreset(state.observer, preset) : { ...state.observer, latitude, longitude, elevation };
     rerender();
   }));
   app.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((button) => button.addEventListener('click', () => {
@@ -434,6 +437,10 @@ function bindEvents(): void {
     state.observer.timeZone = timezone.value;
     saveObserverSettings(state.observer);
     render();
+  });
+  app.querySelector<HTMLInputElement>('#location-name')?.addEventListener('change', (event) => {
+    state.observer.locationName = normalizeLocationName((event.target as HTMLInputElement).value);
+    rerender();
   });
   ['latitude', 'longitude', 'elevation'].forEach((id) => app.querySelector<HTMLInputElement>(`#${id}`)?.addEventListener('change', (event) => {
     const value = Number((event.target as HTMLInputElement).value);

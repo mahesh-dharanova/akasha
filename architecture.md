@@ -23,7 +23,7 @@ Vite serves a responsive single-page application. The layout is organized around
 
 ### Observation state
 
-The session state contains observer latitude/longitude, elevation, IANA time zone, local observing conditions, observation instant, selected object, map view, and local journal state. Observer settings persist through `src/settings.ts` in browser `localStorage`; numeric ranges and IANA timezone values are validated before use. The instant is stored as an ISO value; display formatting is derived from it so time-zone conversions do not drift.
+The session state contains a local observer name, observer latitude/longitude, elevation, IANA time zone, local observing conditions, observation instant, selected object, map view, and local journal state. Observer settings persist through `src/settings.ts` in browser `localStorage`; numeric ranges and IANA timezone values are validated before use. Named-place presets are application data and update coordinates, elevation, and timezone together. A custom location name is a label only; the coordinates remain the source of truth. The instant is stored as an ISO value; display formatting is derived from it so time-zone conversions do not drift.
 
 ### Calculation layer
 
@@ -70,7 +70,7 @@ YouTube links are handled by `src/youtube.ts`. The module validates common YouTu
 
 The next expansion is intentionally modular rather than one increasingly crowded page. Each view will consume the shared validated observer context and observation instant, then add its own data source and uncertainty model.
 
-- **Custom observer context:** latitude/longitude are canonical. A location name may be resolved through a local place list or an explicitly selected geocoder result. An IANA time zone controls conversion and display but cannot identify a unique place by itself; elevation remains optional and explicit.
+- **Custom observer context:** the current baseline supports a local named-place list plus manually entered latitude/longitude, elevation, and IANA timezone. A custom location name is not geocoded yet. An IANA time zone controls conversion and display but cannot identify a unique place by itself; elevation remains optional and explicit.
 - **Aerial objects:** aircraft and helicopters are atmospheric tracks; satellites and rockets are orbital or launch objects. They must use separate provider adapters from the astronomy catalogue, with source, observation timestamp, freshness, coverage/radius meaning, and confidence carried in every result. A “radius above a location” must state whether it means ground distance, altitude band, or a three-dimensional volume.
 - **Atmospheric conditions:** cloud and precipitation layers are optional provider-backed nowcasts or user-supplied observations. They may inform observing guidance, but must not alter calculated celestial positions or turn a weather overlay into a guarantee of visibility.
 - **Astronomical events:** eclipses use deterministic event calculations where supported; asteroid close approaches use ephemeris data; meteor/meteoroid activity uses an event source and time window. A meteorite is recovered ground material, so it belongs in a future history/field-data module rather than a live sky tracker.
