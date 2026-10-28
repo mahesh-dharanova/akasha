@@ -204,7 +204,7 @@ npm run verify       # run all checks and the production build
 - Added a source-neutral aerial snapshot contract for aircraft, helicopters, rockets, and satellites, with validation for source attribution, timestamps, coverage semantics, confidence, and invalid data. The committed fixture is test-only; no live provider is connected.
 - Added the first live aerial adapter for user-triggered local aircraft queries through adsb.fi, with radius controls, unit conversion, source/timestamp display, incomplete-data handling, personal-use attribution, and a Vite same-origin development proxy. Satellites, rockets, and helicopter classification remain separate deferred work.
 - Added a north-up radar-style Aerial view with observer-centred ground-radius rings, cardinal directions, projected aircraft points, out-of-radius edge clipping, and exact values in the supporting table.
-- Added manual refresh and start/pause tracking controls. Tracking requests a fresh adsb.fi snapshot every 15 seconds and rotates plane icons from provider heading; it does not invent movement between provider updates.
+- Added manual refresh and start/pause tracking controls. Tracking requests a fresh adsb.fi snapshot every 15 seconds; compact radar dots update every second and use a clearly labelled, capped speed/heading estimate between provider responses.
 
 ## Planned Sky & Space expansion
 

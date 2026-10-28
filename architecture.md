@@ -87,7 +87,7 @@ The current aerial foundation in `src/aerial.ts` validates a source-labelled sna
 
 The Aerial view uses a separate top-down radar projection in `src/aerialRadar.ts`. It converts latitude/longitude offsets to local east/north kilometres around the observer, keeps north up and east right, clips out-of-radius records to the edge, and leaves exact altitude/speed/heading values in the table below the radar. It is not an astronomical altitude/azimuth projection.
 
-Tracking is provider-refresh-based rather than locally interpolated. Manual refresh is always available; Start tracking schedules a 15-second refresh loop, and Pause tracking clears it. The radar plane icon rotates from the provider heading when available, while the animated sweep has no data meaning.
+Tracking refreshes the provider every 15 seconds while the display ticks every second. Between responses, `src/aerialRadar.ts` estimates a dot's short-range position from the latest reported speed and heading for at most 30 seconds; the provider snapshot remains authoritative and the UI labels this estimate. Manual refresh is always available; Pause tracking clears the display timer. The animated sweep has no data meaning.
 
 ## Data flow
 

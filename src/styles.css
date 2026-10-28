@@ -85,7 +85,6 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .radar-observer { fill: #f3c763; stroke: #fff4c9; stroke-width: .35; }
 .radar-object { cursor: help; }
 .radar-object circle { fill: #70d8ff; stroke: #d9f6ff; stroke-width: .35; filter: drop-shadow(0 0 1.4px #70d8ff); }
-.radar-plane { fill: #70d8ff; stroke: #d9f6ff; stroke-width: .3; filter: drop-shadow(0 0 1.4px #70d8ff); }
 .radar-object text { fill: #bfe8f3; font-size: 2px; pointer-events: none; }
 .radar-object.is-outside { opacity: .45; }
 .radar-key { display: grid; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; }
