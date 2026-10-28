@@ -47,6 +47,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - The adsb.fi endpoint was live-smoke-tested successfully through the temporary local Vite `/api/adsb-fi` proxy, returning current aircraft JSON. The provider does not expose browser CORS headers; Phase 2 deployment must provide an equivalent proxy/cache.
 - v0.4.0 aerial-radar chunk completed: returned aircraft now render in a north-up, observer-centred radar with ground-radius rings, cardinal labels, edge clipping, and exact data retained in the table.
 - Aerial-radar verification completed: `npm run test:aerial-radar` and the full `npm run verify` suite pass.
+- v0.4.0 dynamic-aerial chunk completed: Aerial now supports manual refresh or a 15-second start/pause refresh loop, freshness/error status, and heading-aware plane icons; movement comes only from refreshed provider positions.
+- Dynamic-aerial verification completed: `npm run verify` passes after the tracking controls and icons were added.
 
 ## Next
 

@@ -72,6 +72,7 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .aerial-controls { display: flex; align-items: end; gap: 10px; margin: 12px 0; }
 .aerial-controls label { width: 180px; }
 .aerial-controls button { height: 36px; }
+.aerial-controls button:disabled { cursor: wait; opacity: .6; }
 .aerial-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 15px 0 8px; color: var(--muted); font-size: 10px; }
 .radar-layout { display: grid; grid-template-columns: minmax(260px, 520px) minmax(180px, 1fr); gap: 20px; align-items: center; margin: 12px 0 16px; }
 .radar-screen { position: relative; aspect-ratio: 1; max-width: 520px; overflow: hidden; border: 1px solid rgba(101,213,160,.34); border-radius: 50%; background: radial-gradient(circle, rgba(101,213,160,.08), rgba(4,18,22,.98) 68%); box-shadow: inset 0 0 35px rgba(101,213,160,.1), 0 0 26px rgba(101,213,160,.06); }
@@ -84,6 +85,7 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .radar-observer { fill: #f3c763; stroke: #fff4c9; stroke-width: .35; }
 .radar-object { cursor: help; }
 .radar-object circle { fill: #70d8ff; stroke: #d9f6ff; stroke-width: .35; filter: drop-shadow(0 0 1.4px #70d8ff); }
+.radar-plane { fill: #70d8ff; stroke: #d9f6ff; stroke-width: .3; filter: drop-shadow(0 0 1.4px #70d8ff); }
 .radar-object text { fill: #bfe8f3; font-size: 2px; pointer-events: none; }
 .radar-object.is-outside { opacity: .45; }
 .radar-key { display: grid; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; }
