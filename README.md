@@ -70,6 +70,7 @@ npm run test:observer # validate named observer context and timezone pairing
 npm run test:dashboard # validate current and planned dashboard modules
 npm run test:aerial # validate the source-neutral aerial data contract
 npm run test:reproducibility # validate the committed demo journal fixture
+npm run test:aerial-radar # validate the aerial radar projection
 npm run verify       # run all checks and the production build
 ```
 
@@ -202,6 +203,7 @@ npm run verify       # run all checks and the production build
 - Added modular dashboard navigation for Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV; future-data views are visibly marked as planned and share the observer/time context without presenting fake data.
 - Added a source-neutral aerial snapshot contract for aircraft, helicopters, rockets, and satellites, with validation for source attribution, timestamps, coverage semantics, confidence, and invalid data. The committed fixture is test-only; no live provider is connected.
 - Added the first live aerial adapter for user-triggered local aircraft queries through adsb.fi, with radius controls, unit conversion, source/timestamp display, incomplete-data handling, personal-use attribution, and a Vite same-origin development proxy. Satellites, rockets, and helicopter classification remain separate deferred work.
+- Added a north-up radar-style Aerial view with observer-centred ground-radius rings, cardinal directions, projected aircraft points, out-of-radius edge clipping, and exact values in the supporting table.
 
 ## Planned Sky & Space expansion
 

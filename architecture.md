@@ -85,6 +85,8 @@ The current aerial foundation in `src/aerial.ts` validates a source-labelled sna
 
 `src/aerialProviders.ts` currently contains the first live adapter: an explicit, user-triggered adsb.fi aircraft query using the selected observer coordinates and a ground radius in nautical miles. The browser calls a same-origin `/api/adsb-fi/...` path; the Vite development server proxies that path to adsb.fi because the provider response is not browser-CORS-enabled. The adapter converts feet/knots into SI units, preserves provider timestamps, skips records without usable position/altitude, and returns source attribution. It is intentionally local-only and personal/non-commercial; it is not a cloud proxy or a satellite/rocket adapter.
 
+The Aerial view uses a separate top-down radar projection in `src/aerialRadar.ts`. It converts latitude/longitude offsets to local east/north kilometres around the observer, keeps north up and east right, clips out-of-radius records to the edge, and leaves exact altitude/speed/heading values in the table below the radar. It is not an astronomical altitude/azimuth projection.
+
 ## Data flow
 
 1. The observer changes time, date, or location.

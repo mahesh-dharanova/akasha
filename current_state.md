@@ -45,6 +45,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.4.0 aircraft-provider chunk completed: the Aerial view can query adsb.fi on explicit user action using observer coordinates and a 1–250 nautical-mile radius, convert units, show source/retrieval/coverage metadata, and reject incomplete records without inventing values.
 - Aircraft-provider verification completed: mocked adsb.fi URL/response tests pass through `npm run test:aerial-provider`; the full `npm run verify` suite passes.
 - The adsb.fi endpoint was live-smoke-tested successfully through the temporary local Vite `/api/adsb-fi` proxy, returning current aircraft JSON. The provider does not expose browser CORS headers; Phase 2 deployment must provide an equivalent proxy/cache.
+- v0.4.0 aerial-radar chunk completed: returned aircraft now render in a north-up, observer-centred radar with ground-radius rings, cardinal labels, edge clipping, and exact data retained in the table.
+- Aerial-radar verification completed: `npm run test:aerial-radar` and the full `npm run verify` suite pass.
 
 ## Next
 
