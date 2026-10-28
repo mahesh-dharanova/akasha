@@ -25,7 +25,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.6 completed: observer location, timezone, elevation, and local observing conditions persist in validated browser storage with a reset action.
 - v0.3.7 completed: selected objects now expose the weighted visibility factors, low-horizon penalty, and daylight/twilight cap; visibility regression checks cover factor weights and condition impact.
 - v0.3.8 completed: six additional OpenNGC open clusters (M35, M44, M37, M11, M46, and M47) are searchable, calculable, attributed, and covered by catalogue checks.
-- v0.3.9 completed: a compact local audio dock provides play, pause, stop, volume, a generated AKASHA ambient default, and user-selected local track playback without bundling audio files.
+- v0.3.9 completed: a compact local audio dock provides play, pause, stop, volume, and user-selected local track playback without bundling audio files.
+- Audio-default correction completed: the startup ambient is now the original Web Audio-generated `AKASHA · Space-Time` soundscape with layered drones, slow pulses, delayed reflections, and a sparse note phrase; saved YouTube links no longer replace this offline default automatically.
 - v0.3.10 completed: user-selected audio can be saved and restored through browser IndexedDB, with an explicit Forget action; no audio asset enters Git or network requests.
 - v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
 - v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.
@@ -63,7 +64,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Consider a local playlist only if browser storage limits and file-permission behavior remain explicit.
 - Improve the planner later with richer twilight-window explanations and optional weather data only after selecting reliable sources.
 - Review recommendation wording with real observing sessions before adding more ranking factors.
-- YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player; local audio and generated ambient remain offline fallbacks.
+- The generated `AKASHA · Space-Time` soundscape is the startup default. Saved local audio can still be restored, and saved YouTube links remain available without automatically replacing the offline default. YouTube playback depends on network access, browser autoplay policy, video embedding availability, and the official player.
 - New Sky & Space expansion is documented as future scope only; no aerial, weather, event, Space POV, cloud deployment, or Android feature is implemented by this documentation chunk.
 - Observer targeting now has a local named-place baseline; arbitrary location-name geocoding remains deferred. Latitude/longitude remain canonical, with timezone used only for time conversion and display.
 - Future dashboards are planned as separate shared-context modules for astronomy, atmospheric/aerial objects, weather, events, and Space POV rather than one overloaded page.

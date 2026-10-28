@@ -16,15 +16,24 @@ type StoredTrack = { id: 'last'; name: string; type: string; blob: Blob };
 
 const AUDIO_DB_NAME = 'akasha-audio-v1';
 const AUDIO_STORE_NAME = 'tracks';
+const AMBIENT_GAIN_SCALE = 0.12;
+const AMBIENT_NOTE_INTERVAL_MS = 8_000;
+const AMBIENT_PHRASE = [261.63, 329.63, 392, 493.88, 392, 329.63, 293.66, 349.23];
 
 const savedYouTubeUrl = loadSavedYouTubeUrl();
-let state: AudioState = { mode: savedYouTubeUrl ? 'youtube' : 'ambient', status: 'stopped', label: savedYouTubeUrl ? 'YouTube track' : 'AKASHA ambient', volume: 0.35, savedTrackAvailable: false, youtubeUrl: savedYouTubeUrl, savedYouTubeAvailable: Boolean(savedYouTubeUrl) };
+let state: AudioState = { mode: 'ambient', status: 'stopped', label: 'AKASHA · Space-Time', volume: 0.35, savedTrackAvailable: false, youtubeUrl: savedYouTubeUrl, savedYouTubeAvailable: Boolean(savedYouTubeUrl) };
 let localAudio: HTMLAudioElement | null = null;
 let localUrl: string | null = null;
 let localBlob: Blob | null = null;
 let audioContext: AudioContext | null = null;
 let masterGain: GainNode | null = null;
+let ambientFilter: BiquadFilterNode | null = null;
+let ambientDelay: DelayNode | null = null;
+let ambientFeedback: GainNode | null = null;
+let ambientWet: GainNode | null = null;
 let ambientNodes: AudioScheduledSourceNode[] = [];
+let ambientPhraseTimer: number | null = null;
+let ambientPhraseIndex = 0;
 const listeners = new Set<AudioListener>();
 
 function openAudioDatabase(): Promise<IDBDatabase> {
@@ -80,6 +89,8 @@ function updateStatus(status: AudioStatus): void {
 }
 
 function stopAmbientNodes(): void {
+  if (ambientPhraseTimer !== null) window.clearInterval(ambientPhraseTimer);
+  ambientPhraseTimer = null;
   ambientNodes.forEach((node) => {
     try {
       node.stop();
@@ -89,6 +100,14 @@ function stopAmbientNodes(): void {
     node.disconnect();
   });
   ambientNodes = [];
+  ambientFilter?.disconnect();
+  ambientDelay?.disconnect();
+  ambientFeedback?.disconnect();
+  ambientWet?.disconnect();
+  ambientFilter = null;
+  ambientDelay = null;
+  ambientFeedback = null;
+  ambientWet = null;
   masterGain?.disconnect();
   masterGain = null;
   if (audioContext) void audioContext.close();
@@ -98,26 +117,68 @@ function stopAmbientNodes(): void {
 function buildAmbientSoundscape(): void {
   audioContext = new AudioContext();
   masterGain = audioContext.createGain();
-  masterGain.gain.value = state.volume * 0.18;
+  masterGain.gain.value = state.volume * AMBIENT_GAIN_SCALE;
   masterGain.connect(audioContext.destination);
 
-  const filter = audioContext.createBiquadFilter();
-  filter.type = 'lowpass';
-  filter.frequency.value = 900;
-  filter.Q.value = 0.6;
-  filter.connect(masterGain);
+  ambientFilter = audioContext.createBiquadFilter();
+  ambientFilter.type = 'lowpass';
+  ambientFilter.frequency.value = 1_100;
+  ambientFilter.Q.value = 0.7;
+  ambientFilter.connect(masterGain);
+
+  ambientDelay = audioContext.createDelay(4);
+  ambientDelay.delayTime.value = 1.8;
+  ambientFeedback = audioContext.createGain();
+  ambientFeedback.gain.value = 0.22;
+  ambientWet = audioContext.createGain();
+  ambientWet.gain.value = 0.16;
+  ambientFilter.connect(ambientDelay);
+  ambientDelay.connect(ambientFeedback);
+  ambientFeedback.connect(ambientDelay);
+  ambientDelay.connect(ambientWet);
+  ambientWet.connect(masterGain);
 
   [55, 82.41, 110, 164.81].forEach((frequency, index) => {
     const oscillator = audioContext!.createOscillator();
     const voiceGain = audioContext!.createGain();
+    const pulse = audioContext!.createOscillator();
+    const pulseGain = audioContext!.createGain();
     oscillator.type = index % 2 === 0 ? 'sine' : 'triangle';
     oscillator.frequency.value = frequency;
-    voiceGain.gain.value = index === 0 ? 0.34 : 0.16;
+    voiceGain.gain.value = index === 0 ? 0.28 : 0.13;
+    pulse.frequency.value = 0.035 + index * 0.012;
+    pulseGain.gain.value = index === 0 ? 0.08 : 0.04;
+    pulse.connect(pulseGain);
+    pulseGain.connect(voiceGain.gain);
     oscillator.connect(voiceGain);
-    voiceGain.connect(filter);
+    voiceGain.connect(ambientFilter!);
     oscillator.start();
-    ambientNodes.push(oscillator);
+    pulse.start();
+    ambientNodes.push(oscillator, pulse);
   });
+
+  ambientPhraseIndex = 0;
+  playAmbientNote();
+  ambientPhraseTimer = window.setInterval(playAmbientNote, AMBIENT_NOTE_INTERVAL_MS);
+}
+
+function playAmbientNote(): void {
+  if (!audioContext || !ambientFilter) return;
+  const oscillator = audioContext.createOscillator();
+  const noteGain = audioContext.createGain();
+  const now = audioContext.currentTime;
+  oscillator.type = 'sine';
+  oscillator.frequency.value = AMBIENT_PHRASE[ambientPhraseIndex % AMBIENT_PHRASE.length];
+  noteGain.gain.setValueAtTime(0.0001, now);
+  noteGain.gain.exponentialRampToValueAtTime(0.055, now + 1.8);
+  noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 7.2);
+  oscillator.connect(noteGain);
+  noteGain.connect(ambientFilter);
+  oscillator.start(now);
+  oscillator.stop(now + 7.4);
+  oscillator.addEventListener('ended', () => noteGain.disconnect());
+  ambientNodes.push(oscillator);
+  ambientPhraseIndex += 1;
 }
 
 function assignLocalAudio(blob: Blob, label: string, savedTrackAvailable: boolean): void {
@@ -145,7 +206,7 @@ export function onAudioChange(listener: AudioListener): () => void {
 export function setAudioVolume(volume: number): void {
   state = { ...state, volume: Math.max(0, Math.min(1, volume)) };
   if (localAudio) localAudio.volume = state.volume;
-  if (masterGain) masterGain.gain.value = state.volume * 0.18;
+  if (masterGain) masterGain.gain.value = state.volume * AMBIENT_GAIN_SCALE;
   if (state.mode === 'youtube') setYouTubeVolume(state.volume);
 }
 
@@ -178,7 +239,7 @@ export function forgetSavedYouTube(): void {
   forgetYouTubeUrl();
   if (state.mode === 'youtube') {
     clearYouTubePlayer();
-    state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA ambient', youtubeUrl: null, savedYouTubeAvailable: false };
+    state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA · Space-Time', youtubeUrl: null, savedYouTubeAvailable: false };
   } else {
     state = { ...state, youtubeUrl: null, savedYouTubeAvailable: false };
   }
@@ -213,7 +274,7 @@ export function useAmbient(): void {
   localBlob = null;
   clearYouTubePlayer();
   stopAmbientNodes();
-  state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA ambient', youtubeUrl: null };
+  state = { ...state, mode: 'ambient', status: 'stopped', label: 'AKASHA · Space-Time', youtubeUrl: null };
   notify();
 }
 
