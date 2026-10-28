@@ -17,8 +17,9 @@
     "test:observer": "node --experimental-strip-types tests/observer-context-check.mjs",
     "test:dashboard": "node --experimental-strip-types tests/dashboard-check.mjs",
     "test:aerial": "node --experimental-strip-types tests/aerial-check.mjs",
+    "test:aerial-provider": "node --experimental-strip-types tests/aerial-provider-check.mjs",
     "test:reproducibility": "node --experimental-strip-types tests/reproducibility-check.mjs",
-    "verify": "npm run check && npm run test:astronomy && npm run test:visibility && npm run test:catalogue && npm run test:windows && npm run test:planner && npm run test:youtube && npm run test:relationships && npm run test:observer && npm run test:dashboard && npm run test:aerial && npm run test:reproducibility && npm run build",
+    "verify": "npm run check && npm run test:astronomy && npm run test:visibility && npm run test:catalogue && npm run test:windows && npm run test:planner && npm run test:youtube && npm run test:relationships && npm run test:observer && npm run test:dashboard && npm run test:aerial && npm run test:aerial-provider && npm run test:reproducibility && npm run build",
     "preview": "vite preview"
   },
   "dependencies": {

@@ -42,6 +42,9 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Reproducibility verification completed: `npm run verify` passed after the fixture and command were added.
 - v0.4.0 aerial-contract foundation completed: `src/aerial.ts` now validates distinct aircraft, helicopter, rocket, and satellite categories with source, timestamp, coverage, confidence, and explicit fixture status; no provider is connected.
 - Aerial verification completed: the offline contract fixture passes valid/invalid snapshot checks through `npm run test:aerial`.
+- v0.4.0 aircraft-provider chunk completed: the Aerial view can query adsb.fi on explicit user action using observer coordinates and a 1–250 nautical-mile radius, convert units, show source/retrieval/coverage metadata, and reject incomplete records without inventing values.
+- Aircraft-provider verification completed: mocked adsb.fi URL/response tests pass through `npm run test:aerial-provider`; the full `npm run verify` suite passes.
+- The adsb.fi endpoint was live-smoke-tested successfully through the temporary local Vite `/api/adsb-fi` proxy, returning current aircraft JSON. The provider does not expose browser CORS headers; Phase 2 deployment must provide an equivalent proxy/cache.
 
 ## Next
 
@@ -72,6 +75,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
 - Named-place presets are local application data; no external geocoder or worldwide place database is currently used.
 - A provider and licence decision is still required before live aircraft, satellite, rocket, cloud, rain, or event data can be added; no feed is currently bundled or queried.
-- The next aerial step is provider selection and adapter design; the current fixture must never be presented as live tracking data.
+- adsb.fi is approved only for the current local personal/non-commercial aircraft adapter; cloud deployment, redistribution, satellite propagation, rocket events, and helicopter classification remain unresolved.
+- OpenSky is not selected for runtime use without written permission because its current terms require a licence for operational REST API use.
 - Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
 - Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.

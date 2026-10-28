@@ -201,6 +201,7 @@ npm run verify       # run all checks and the production build
 - Added observer-context regression checks and bumped the application package metadata to `0.4.0`.
 - Added modular dashboard navigation for Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV; future-data views are visibly marked as planned and share the observer/time context without presenting fake data.
 - Added a source-neutral aerial snapshot contract for aircraft, helicopters, rockets, and satellites, with validation for source attribution, timestamps, coverage semantics, confidence, and invalid data. The committed fixture is test-only; no live provider is connected.
+- Added the first live aerial adapter for user-triggered local aircraft queries through adsb.fi, with radius controls, unit conversion, source/timestamp display, incomplete-data handling, personal-use attribution, and a Vite same-origin development proxy. Satellites, rockets, and helicopter classification remain separate deferred work.
 
 ## Planned Sky & Space expansion
 
@@ -219,7 +220,7 @@ Deployment is staged: Phase 1 remains the local web application; Phase 2 may dep
 
 - Complete Messier/NGC/deep-sky catalogue and richer sourced physical properties beyond the selected v0.2 targets.
 - Geocoding arbitrary location names beyond the local named-place presets.
-- Live aircraft, helicopter, rocket, satellite, cloud, and rain feeds with documented providers, licences, coverage, freshness, and privacy boundaries.
+- Live satellite, rocket, and weather feeds with documented providers, licences, coverage, freshness, and privacy boundaries; aircraft queries currently depend on adsb.fi's personal/non-commercial terms and remain local-only.
 - Automatic weather retrieval and live light-pollution services; v0.3.5 uses explicit local user inputs instead.
 - Eclipses, asteroid close approaches, and meteor/meteoroid event modules.
 - Earth/Space POV rendering and external observer-frame calculations.

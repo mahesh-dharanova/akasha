@@ -9,6 +9,8 @@ import { observingWindowLabel, plannerRank } from './planner';
 import { LEARNING_LESSONS, OBJECT_RELATIONSHIPS } from './relationships';
 import { applyObserverPreset, normalizeLocationName, OBSERVER_PRESETS } from './observer';
 import { DASHBOARD_MODULES, type DashboardModule, type DashboardView } from './dashboard';
+import { fetchAdsbFiAircraft } from './aerialProviders';
+import type { AerialSnapshot } from './aerial';
 import type { CalculatedObject, JournalState, ObserverSettings, SkyCondition, SkySnapshot } from './types';
 
 const detectedTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -39,6 +41,10 @@ const state: {
   instant: Date;
   observer: ObserverSettings;
   activeView: DashboardView;
+  aerialRadiusNauticalMiles: number;
+  aerialStatus: 'idle' | 'loading' | 'ready' | 'error';
+  aerialMessage: string;
+  aerialSnapshot: AerialSnapshot | null;
   selectedId: string;
   filter: 'all' | 'star' | 'planet' | 'moon' | 'sun' | 'deep-sky';
   query: string;
@@ -56,6 +62,10 @@ const state: {
   instant: new Date(),
   observer: { ...initialObserver },
   activeView: 'sky',
+  aerialRadiusNauticalMiles: 25,
+  aerialStatus: 'idle',
+  aerialMessage: '',
+  aerialSnapshot: null,
   selectedId: DEFAULT_OBJECT_ID,
   filter: 'all',
   query: '',
@@ -302,7 +312,16 @@ function renderJournal(): string {
   return `<section class="panel journal-panel"><div class="journal-heading"><div><div class="panel-kicker">OBSERVATION JOURNAL</div><h2>Make this sky yours</h2></div><div class="journal-tools"><button class="button button-quiet" data-action="export-journal">Export</button><button class="button button-quiet" data-action="import-journal">Import</button><input id="journal-file" type="file" accept="application/json" hidden /></div></div><p class="panel-intro">Save a note for ${escapeHtml(object.name)}. It stays in this browser unless you export it.</p>${state.journalMessage ? `<p class="journal-message" role="status">${escapeHtml(state.journalMessage)}</p>` : ''}<textarea id="journal-note" placeholder="What did you notice?">${escapeHtml(entry?.note ?? '')}</textarea><div class="journal-actions"><label class="checkbox-label"><input type="checkbox" id="journal-observed" ${entry ? 'checked' : ''} /> Mark observed</label><button class="button button-primary" data-action="save-note">Save note</button></div>${entries.length ? `<div class="journal-list">${entries.map((item) => `<button class="journal-entry" data-select-object="${item.objectId}"><strong>${escapeHtml(getObject(item.objectId).name)}</strong><span>${escapeHtml(item.note || 'Observed without a note')}</span></button>`).join('')}</div>` : '<p class="empty-state">Your observing history will appear here.</p>'}</section>`;
 }
 
+function renderAerialModule(): string {
+  const snapshot = state.aerialSnapshot;
+  const status = state.aerialStatus === 'loading' ? 'Loading aircraft…' : state.aerialStatus === 'error' ? state.aerialMessage : snapshot ? `${snapshot.objects.length} aircraft returned` : 'No request made';
+  const objects = snapshot?.objects ?? [];
+  const rows = objects.map((object) => `<div class="aerial-row"><div><strong>${escapeHtml(object.name)}</strong><small>${escapeHtml(object.id.replace('adsb-fi:', ''))}</small></div><span>${object.altitudeMeters.toFixed(0)} m</span><span>${object.speedMetersPerSecond === null ? 'speed unavailable' : `${(object.speedMetersPerSecond * 3.6).toFixed(0)} km/h`}</span><span>${object.headingDegrees === null ? 'heading unavailable' : `${object.headingDegrees.toFixed(0)}°`}</span></div>`).join('');
+  return `<section class="panel aerial-panel"><div class="panel-kicker">AIRCRAFT TRACKING</div><div class="section-heading"><div><h2>Aircraft near ${escapeHtml(state.observer.locationName)}</h2><p>Optional personal-use query through the adsb.fi public endpoint. This is not an astronomical position calculation.</p></div><span class="condition-chip">${escapeHtml(status)}</span></div><div class="aerial-controls"><label>Ground radius <span class="unit">nautical miles</span><input id="aerial-radius" type="number" min="1" max="250" step="1" value="${state.aerialRadiusNauticalMiles}" /></label><button class="button button-primary" data-action="load-aerial" ${state.aerialStatus === 'loading' ? 'disabled' : ''}>${state.aerialStatus === 'loading' ? 'Loading…' : 'Load aircraft'}</button></div>${state.aerialMessage && state.aerialStatus === 'error' ? `<p class="journal-message" role="alert">${escapeHtml(state.aerialMessage)}</p>` : ''}${snapshot ? `<div class="aerial-meta"><span>Retrieved ${formatDateTime(new Date(snapshot.retrievedAt))}</span><span>Coverage ${snapshot.coverage.radiusKm?.toFixed(1) ?? '—'} km ground radius</span><span>Source: ${escapeHtml(snapshot.source.label)}</span></div>${rows ? `<div class="aerial-list">${rows}</div>` : '<p class="empty-state">No aircraft with usable position and altitude data were returned in this radius.</p>'}` : '<div class="module-boundary"><strong>No live data loaded</strong><p>Choose a radius and request a snapshot. The observer coordinates will be sent to the provider only when you press Load aircraft.</p></div>'}<p class="science-note">adsb.fi provides community ADS-B data with limited coverage. It may omit aircraft, contain stale positions, or lack altitude/identity fields. Personal, non-commercial terms and attribution apply.</p></section>`;
+}
+
 function renderPlannedModule(module: DashboardModule): string {
+  if (module.id === 'aerial') return renderAerialModule();
   return `<section class="panel module-placeholder"><div class="panel-kicker">PLANNED MODULE</div><h2>${escapeHtml(module.label)}</h2><p class="panel-intro">${escapeHtml(module.description)}</p><div class="module-boundary"><strong>Not connected yet</strong><p>This view is reserved for a future data adapter. AKASHA will show source, timestamp, coverage, freshness, and uncertainty before presenting live results.</p></div><p class="science-note">The current local astronomy calculation remains available in the Sky map view. No placeholder data is being presented as real aircraft, weather, event, or Space POV information.</p></section>`;
 }
 
@@ -517,6 +536,26 @@ function bindEvents(): void {
   app.querySelector<HTMLButtonElement>('[data-action="reset-observer"]')?.addEventListener('click', () => {
     state.observer = { ...DEFAULT_OBSERVER };
     rerender();
+  });
+  app.querySelector<HTMLInputElement>('#aerial-radius')?.addEventListener('change', (event) => {
+    state.aerialRadiusNauticalMiles = Math.max(1, Math.min(250, Number((event.target as HTMLInputElement).value)));
+  });
+  app.querySelector<HTMLButtonElement>('[data-action="load-aerial"]')?.addEventListener('click', async () => {
+    state.aerialStatus = 'loading';
+    state.aerialMessage = '';
+    render();
+    try {
+      state.aerialSnapshot = await fetchAdsbFiAircraft({
+        latitude: state.observer.latitude,
+        longitude: state.observer.longitude,
+        radiusNauticalMiles: state.aerialRadiusNauticalMiles,
+      });
+      state.aerialStatus = 'ready';
+    } catch (error) {
+      state.aerialStatus = 'error';
+      state.aerialMessage = error instanceof Error ? error.message : 'The aircraft provider could not be reached.';
+    }
+    render();
   });
   app.querySelector<HTMLInputElement>('#catalogue-search')?.addEventListener('input', (event) => {
     state.query = (event.target as HTMLInputElement).value;

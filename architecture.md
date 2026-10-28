@@ -83,6 +83,8 @@ These modules are planned boundaries, not current runtime features. External liv
 
 The current aerial foundation in `src/aerial.ts` validates a source-labelled snapshot without connecting to a provider. Every snapshot declares whether it is fixture data, how its coverage is measured, when it was retrieved, and which object categories it contains. Object positions are not passed into the astronomy calculation layer; a future provider adapter must translate its own coordinate conventions explicitly.
 
+`src/aerialProviders.ts` currently contains the first live adapter: an explicit, user-triggered adsb.fi aircraft query using the selected observer coordinates and a ground radius in nautical miles. The browser calls a same-origin `/api/adsb-fi/...` path; the Vite development server proxies that path to adsb.fi because the provider response is not browser-CORS-enabled. The adapter converts feet/knots into SI units, preserves provider timestamps, skips records without usable position/altitude, and returns source attribution. It is intentionally local-only and personal/non-commercial; it is not a cloud proxy or a satellite/rocket adapter.
+
 ## Data flow
 
 1. The observer changes time, date, or location.
