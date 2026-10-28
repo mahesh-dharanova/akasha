@@ -50,6 +50,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Aerial-radar verification completed: `npm run test:aerial-radar` and the full `npm run verify` suite pass.
 - v0.4.0 dynamic-aerial correction completed: aircraft are back to compact radar dots, the display ticks every second while tracking, and dots use a capped 30-second speed/heading estimate between provider responses.
 - Dynamic-aerial correction verification completed: `npm run test:aerial-radar` and the full `npm run verify` suite pass; the provider snapshot remains authoritative and the estimate is labelled in the radar key.
+- Radar sweep polish completed: the sweep is now a full-radius centre-anchored line that begins at north and rotates continuously through a complete 360° loop.
 
 ## Next
 

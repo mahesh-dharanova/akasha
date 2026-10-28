@@ -76,7 +76,8 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .aerial-meta { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 15px 0 8px; color: var(--muted); font-size: 10px; }
 .radar-layout { display: grid; grid-template-columns: minmax(260px, 520px) minmax(180px, 1fr); gap: 20px; align-items: center; margin: 12px 0 16px; }
 .radar-screen { position: relative; aspect-ratio: 1; max-width: 520px; overflow: hidden; border: 1px solid rgba(101,213,160,.34); border-radius: 50%; background: radial-gradient(circle, rgba(101,213,160,.08), rgba(4,18,22,.98) 68%); box-shadow: inset 0 0 35px rgba(101,213,160,.1), 0 0 26px rgba(101,213,160,.06); }
-.radar-sweep { position: absolute; inset: 5%; z-index: 1; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0deg 322deg, rgba(101,213,160,.04) 340deg, rgba(101,213,160,.35) 358deg, transparent 360deg); animation: radar-sweep 7s linear infinite; pointer-events: none; }
+.radar-sweep { position: absolute; inset: 0; z-index: 1; border-radius: 50%; transform-origin: 50% 50%; animation: radar-sweep 7s linear infinite; pointer-events: none; }
+.radar-sweep::before { position: absolute; top: 50%; left: 50%; width: 50%; height: 2px; content: ''; transform: translateY(-50%); transform-origin: left center; background: linear-gradient(90deg, rgba(101,213,160,.42), rgba(101,213,160,.08) 72%, transparent); box-shadow: 0 0 8px rgba(101,213,160,.28); }
 .radar-svg { position: relative; z-index: 2; display: block; width: 100%; height: 100%; }
 .radar-ring { fill: none; stroke: rgba(101,213,160,.25); stroke-width: .28; }
 .radar-ring:first-child { stroke: rgba(101,213,160,.55); stroke-dasharray: 1.2 1; }
@@ -89,7 +90,7 @@ h3 { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: v
 .radar-object.is-outside { opacity: .45; }
 .radar-key { display: grid; gap: 8px; color: var(--muted); font-size: 11px; line-height: 1.45; }
 .radar-key strong { color: #b4ebc9; font-size: 11px; letter-spacing: .12em; }
-@keyframes radar-sweep { to { transform: rotate(360deg); } }
+@keyframes radar-sweep { from { transform: rotate(-90deg); } to { transform: rotate(270deg); } }
 .aerial-list { overflow: auto; border-top: 1px solid var(--border); }
 .aerial-row { display: grid; grid-template-columns: minmax(150px, 1fr) repeat(3, minmax(90px, auto)); gap: 12px; align-items: center; padding: 10px 4px; border-bottom: 1px solid rgba(32,43,67,.72); color: var(--muted-strong); font-size: 11px; }
 .aerial-row div { display: grid; gap: 3px; }
