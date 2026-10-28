@@ -40,6 +40,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Modular-dashboard verification completed: `npm run test:dashboard`, `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
 - v0.4.0 reproducibility handoff completed: added `npm run verify`, an anonymized importable fixture at `docs/example-journal.json`, and a README return-after-a-break workflow with the code map and tracked/local-state boundary.
 - Reproducibility verification completed: `npm run verify` passed after the fixture and command were added.
+- v0.4.0 aerial-contract foundation completed: `src/aerial.ts` now validates distinct aircraft, helicopter, rocket, and satellite categories with source, timestamp, coverage, confidence, and explicit fixture status; no provider is connected.
+- Aerial verification completed: the offline contract fixture passes valid/invalid snapshot checks through `npm run test:aerial`.
 
 ## Next
 
@@ -70,5 +72,6 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Browser timezone selection currently offers the detected IANA timezone plus a small set of common zones; it is not yet a complete timezone browser.
 - Named-place presets are local application data; no external geocoder or worldwide place database is currently used.
 - A provider and licence decision is still required before live aircraft, satellite, rocket, cloud, rain, or event data can be added; no feed is currently bundled or queried.
+- The next aerial step is provider selection and adapter design; the current fixture must never be presented as live tracking data.
 - Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
 - Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.

@@ -68,6 +68,7 @@ npm run test:youtube   # validate YouTube URL parsing
 npm run test:relationships # validate reciprocal object links
 npm run test:observer # validate named observer context and timezone pairing
 npm run test:dashboard # validate current and planned dashboard modules
+npm run test:aerial # validate the source-neutral aerial data contract
 npm run test:reproducibility # validate the committed demo journal fixture
 npm run verify       # run all checks and the production build
 ```
@@ -199,6 +200,7 @@ npm run verify       # run all checks and the production build
 - Added a custom location-name field with clear wording that coordinates define the calculated sky; no geocoder or network dependency was added.
 - Added observer-context regression checks and bumped the application package metadata to `0.4.0`.
 - Added modular dashboard navigation for Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV; future-data views are visibly marked as planned and share the observer/time context without presenting fake data.
+- Added a source-neutral aerial snapshot contract for aircraft, helicopters, rockets, and satellites, with validation for source attribution, timestamps, coverage semantics, confidence, and invalid data. The committed fixture is test-only; no live provider is connected.
 
 ## Planned Sky & Space expansion
 

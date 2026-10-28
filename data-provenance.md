@@ -13,6 +13,8 @@ This ledger records the origin, licence, and handling of data used by AKASHA. Ne
 
 The following feature areas are documented for planning only. No live feed, provider credentials, or feed dump is currently included in AKASHA.
 
+`tests/data/aerial-fixture.json` is application-authored validation data. It intentionally represents aircraft, helicopters, rockets, and a satellite footprint without claiming that any object was observed or that it comes from a live provider.
+
 - **Aircraft and helicopters:** a provider must be selected with a compatible redistribution licence, clear update timestamps, geographic coverage, and a defined meaning for “within radius.” Atmospheric tracks must remain separate from astronomical catalogue objects.
 - **Satellites and rockets:** a public orbital/launch-state source and any required SGP4 or related dependency must be reviewed for licence, update cadence, epoch handling, and prediction uncertainty before implementation. TLE/OMM records must retain their source epoch.
 - **Cloud and precipitation:** a provider or user-supplied observation format must be selected with documented coverage, nowcast/radar semantics, licence, retention, and network requirements. Weather overlays are advisory inputs, not astronomical calculations.

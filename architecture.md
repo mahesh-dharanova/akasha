@@ -81,6 +81,8 @@ The next expansion is intentionally modular rather than one increasingly crowded
 
 These modules are planned boundaries, not current runtime features. External live data must remain optional, timestamped, licensed, and replaceable; the local astronomical calculation core remains usable without it.
 
+The current aerial foundation in `src/aerial.ts` validates a source-labelled snapshot without connecting to a provider. Every snapshot declares whether it is fixture data, how its coverage is measured, when it was retrieved, and which object categories it contains. Object positions are not passed into the astronomy calculation layer; a future provider adapter must translate its own coordinate conventions explicitly.
+
 ## Data flow
 
 1. The observer changes time, date, or location.
