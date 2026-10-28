@@ -54,6 +54,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Radar sweep polish completed: the sweep is now a full-radius centre-anchored line that begins at north and rotates continuously through a complete 360° loop.
 - v0.4.0 satellite-provider chunk completed: CelesTrak station OMM elements are loaded on demand through a local proxy and propagated for the selected observer/time with MIT-licensed `satellite.js` SGP4/SDP4; the UI shows azimuth, elevation, range, altitude, geodetic position, orbital epoch, and geometric-horizon status.
 - v0.4.0 launch-provider chunk completed: Launch Library 2 upcoming event records are loaded separately on demand with source, retrieval time, event window, provider, location, status, and mission fields; launches are not treated as moving aerial objects.
+- Future satellite/spacecraft expansion documented in `docs/satellite-spacecraft-roadmap.md`: next work begins with 34f satellite sky-radar presentation, followed by Earth-orbit search/details, clickable launch-event handling, and a separate deep-space spacecraft ephemeris path.
+- Scientific boundary recorded: Earth-orbit satellites use OMM/TLE plus SGP4/SDP4; deep-space spacecraft require a separate JPL Horizons-style ephemeris path; launch records are events until a valid post-launch orbit or trajectory is available.
 
 ## Next
 
@@ -76,6 +78,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Event terminology is fixed for planning: meteoroid is the object in space, meteor is the visible atmospheric streak, and meteorite is recovered ground material; only the first two belong in a live sky-event view.
 - Deployment is planned in phases: local web first, optional responsive cloud delivery second, and an Android client third. Local calculation and private journal behavior must remain useful without cloud access.
 - Future sessions should begin with `git pull --ff-only origin main`, `npm install`, and `npm run verify`; use `docs/example-journal.json` only as anonymized demo data.
+- Future sessions resuming satellite/spacecraft work should also read `docs/satellite-spacecraft-roadmap.md` and begin with chunk 34f only; no implementation from that roadmap is currently started.
 
 ## Open questions / blockers
 
@@ -88,3 +91,4 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - OpenSky is not selected for runtime use without written permission because its current terms require a licence for operational REST API use.
 - Space POV needs a concrete external observer origin and coordinate-frame contract before implementation; Earth-POV altitude/azimuth labels cannot be reused directly.
 - Cloud deployment needs an explicit privacy and proxy boundary for precise location, provider credentials, live-feed caching, and local journal data.
+- Satellite/spacecraft continuation is intentionally paused until the next work session: 34f is the next concrete implementation chunk, and launch tracking/deep-space search must remain separate propagation domains.
