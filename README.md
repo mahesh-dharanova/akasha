@@ -34,6 +34,24 @@ npm run dev
 
 Open the local URL printed by Vite, normally `http://localhost:5173`.
 
+## Returning after a long break
+
+The repository is the source of truth for the application. After cloning it again or returning months later:
+
+```bash
+cd ~/Dev/Projects/Web/akasha
+git pull --ff-only origin main
+npm install
+npm run verify
+npm run dev
+```
+
+`npm run verify` runs the type-check, astronomy, visibility, catalogue, observing-window, planner, YouTube, relationship, observer, dashboard, and production-build checks. To see realistic sample journal content, open the Journal view, choose Import, and select [docs/example-journal.json](docs/example-journal.json). It is anonymized demo data and does not overwrite personal browser data until explicitly imported.
+
+The main code map is: `src/astronomy.ts` for deterministic calculations, `src/catalogue.ts` for local object data, `src/main.ts` for the browser shell, `src/observer.ts` and `src/settings.ts` for observer context, `src/dashboard.ts` for view modules, `src/visibility.ts` and `src/planner.ts` for guidance, `src/journal.ts` for local persistence, and `tests/` for executable checks. Read [current_state.md](current_state.md) first to find the latest verified chunk, then [plan.md](plan.md) for the next scope.
+
+Git intentionally excludes `node_modules`, `dist`, browser storage, cached audio, local settings, and secrets. Dependencies and reproducible commands are committed; personal browser data should be preserved through the app's journal export when needed.
+
 ## Development commands
 
 ```bash
@@ -50,6 +68,8 @@ npm run test:youtube   # validate YouTube URL parsing
 npm run test:relationships # validate reciprocal object links
 npm run test:observer # validate named observer context and timezone pairing
 npm run test:dashboard # validate current and planned dashboard modules
+npm run test:reproducibility # validate the committed demo journal fixture
+npm run verify       # run all checks and the production build
 ```
 
 ## Implemented in v0.1
@@ -241,6 +261,7 @@ The coordinate and event API boundary follows the official [Astronomy Engine Jav
 - [architecture.md](architecture.md) — component boundaries, data flow, and scientific decisions.
 - [data-provenance.md](data-provenance.md) — source, licence, attribution, and handling ledger for catalogue and reference data.
 - [current_state.md](current_state.md) — the verified handoff point for the next agent.
+- [docs/example-journal.json](docs/example-journal.json) — anonymized, importable journal data for orientation and demos.
 
 ## Future direction
 

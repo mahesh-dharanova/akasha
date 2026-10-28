@@ -1,0 +1,29 @@
+{
+  "format": "akasha-journal",
+  "version": 1,
+  "exportedAt": "2026-01-01T00:00:00.000Z",
+  "journal": {
+    "favourites": [
+      "vega",
+      "m42"
+    ],
+    "entries": [
+      {
+        "id": "demo-vega-observation",
+        "objectId": "vega",
+        "note": "Demo entry: bright star used to practise the orientation guide.",
+        "observedAt": "2026-01-01T19:30:00.000Z",
+        "latitude": 12.9716,
+        "longitude": 77.5946
+      },
+      {
+        "id": "demo-m42-observation",
+        "objectId": "m42",
+        "note": "Demo entry: binocular target with a soft central glow.",
+        "observedAt": "2026-01-02T19:45:00.000Z",
+        "latitude": 12.9716,
+        "longitude": 77.5946
+      }
+    ]
+  }
+}

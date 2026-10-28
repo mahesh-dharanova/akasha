@@ -60,6 +60,8 @@ The selected object tracker recalculates seven hourly snapshots from the current
 
 The journal stores favourites and observations in `localStorage` behind `src/journal.ts`. Records include object id, note, observed timestamp, and observer location. Export files use a versioned `akasha-journal` JSON envelope; imports are validated before local data is replaced. A future SQLite-backed desktop/server adapter can implement the same interface without changing the calculation layer or UI contracts.
 
+`docs/example-journal.json` is a committed, anonymized fixture for returning developers. It is valid import data, not a copy of a user's journal. Personal observations remain browser-local unless the user explicitly exports them.
+
 ### Ambient audio
 
 `src/audio.ts` owns the optional local audio experience. The default soundscape is synthesized in the browser with Web Audio; user-selected audio files are stored as Blobs in a versioned IndexedDB store when the user chooses Save, then played through temporary object URLs. They are never uploaded or committed. Audio state remains outside the astronomy snapshot so playback does not affect calculations, time controls, or journal data.

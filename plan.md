@@ -51,6 +51,7 @@ Roadmap broken into chunks. Change this document only when scope or a design dec
 38. [ ] Phase 2 web deployment — success condition: the local-first web client can be deployed as a responsive static application, with any live-data proxy/cache boundary documented and no provider secrets exposed in the browser.
 39. [ ] Phase 3 Android client — success condition: a native client reuses the calculation/domain contracts, keeps location permission optional and explicit, and supports a responsive observing workflow before adding orientation sensors.
 40. [ ] Future telescope integration — success condition: a separately permissioned astronomy-control adapter handles mount limits, coordinate epoch, connection state, and user confirmation without coupling hardware control to the sky map.
+41. [x] v0.4 reproducibility handoff — success condition: a fresh clone has a documented return workflow, one verification command, and an anonymized importable journal fixture without committing browser state or generated files.
 
 ## Deferred milestones
 

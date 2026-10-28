@@ -38,6 +38,8 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.4.0 verification completed: `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
 - v0.4.0 modular-dashboard chunk completed: Sky map, Planner, Journal, Aerial, Weather, Events, and Space POV now have separate navigation views sharing the observer/time context; future-data views are explicit planned boundaries with no fabricated data.
 - Modular-dashboard verification completed: `npm run test:dashboard`, `npm run check`, `npm run test:observer`, `npm run test:astronomy`, `npm run test:windows`, and `npm run build` all passed.
+- v0.4.0 reproducibility handoff completed: added `npm run verify`, an anonymized importable fixture at `docs/example-journal.json`, and a README return-after-a-break workflow with the code map and tracked/local-state boundary.
+- Reproducibility verification completed: `npm run verify` passed after the fixture and command were added.
 
 ## Next
 
@@ -59,6 +61,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - Future aerial and weather providers remain unselected. Any adapter must record source, licence, timestamp, coverage/radius semantics, freshness, uncertainty, and privacy/network requirements.
 - Event terminology is fixed for planning: meteoroid is the object in space, meteor is the visible atmospheric streak, and meteorite is recovered ground material; only the first two belong in a live sky-event view.
 - Deployment is planned in phases: local web first, optional responsive cloud delivery second, and an Android client third. Local calculation and private journal behavior must remain useful without cloud access.
+- Future sessions should begin with `git pull --ff-only origin main`, `npm install`, and `npm run verify`; use `docs/example-journal.json` only as anonymized demo data.
 
 ## Open questions / blockers
 
