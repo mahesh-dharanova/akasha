@@ -27,6 +27,7 @@ Updated after each built and verified chunk. Git history contains the detailed c
 - v0.3.8 completed: six additional OpenNGC open clusters (M35, M44, M37, M11, M46, and M47) are searchable, calculable, attributed, and covered by catalogue checks.
 - v0.3.9 completed: a compact local audio dock provides play, pause, stop, volume, and user-selected local track playback without bundling audio files.
 - Audio-default correction completed: the startup ambient is now the original Web Audio-generated `AKASHA · Space-Time` soundscape with layered drones, slow pulses, delayed reflections, and a sparse note phrase; saved YouTube links no longer replace this offline default automatically.
+- Ambient playback correction completed: increased the generated soundtrack's laptop-speaker output level, added a browser audio-context state error, and made playback controls reflect status changes immediately.
 - v0.3.10 completed: user-selected audio can be saved and restored through browser IndexedDB, with an explicit Forget action; no audio asset enters Git or network requests.
 - v0.3.11 completed: every calculated object now exposes remaining astronomical-night overlap; the planner uses it as a secondary ranking signal and displays the dark-sky window.
 - v0.3.12 completed: planner cards now explain timing with “Best now,” “Good for,” “Short window,” or “Later tonight” labels and show the score context used for the recommendation.

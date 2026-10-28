@@ -146,7 +146,7 @@ npm run verify       # run all checks and the production build
 ## Implemented in v0.3.9
 
 - Added a compact local ambient-audio dock with play, pause, stop, volume, and track selection controls.
-- Added an original Web Audio-generated `AKASHA · Space-Time` cinematic ambient default with slow drones, evolving pulses, delayed reflections, and a sparse note phrase; personal audio files are selected locally and are not bundled or uploaded.
+- Added an original Web Audio-generated `AKASHA · Space-Time` cinematic ambient default with audible slow drones, evolving pulses, delayed reflections, and a sparse note phrase; personal audio files are selected locally and are not bundled or uploaded.
 
 ## Implemented in v0.3.10
 

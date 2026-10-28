@@ -16,12 +16,12 @@ type StoredTrack = { id: 'last'; name: string; type: string; blob: Blob };
 
 const AUDIO_DB_NAME = 'akasha-audio-v1';
 const AUDIO_STORE_NAME = 'tracks';
-const AMBIENT_GAIN_SCALE = 0.12;
+const AMBIENT_GAIN_SCALE = 0.28;
 const AMBIENT_NOTE_INTERVAL_MS = 8_000;
 const AMBIENT_PHRASE = [261.63, 329.63, 392, 493.88, 392, 329.63, 293.66, 349.23];
 
 const savedYouTubeUrl = loadSavedYouTubeUrl();
-let state: AudioState = { mode: 'ambient', status: 'stopped', label: 'AKASHA · Space-Time', volume: 0.35, savedTrackAvailable: false, youtubeUrl: savedYouTubeUrl, savedYouTubeAvailable: Boolean(savedYouTubeUrl) };
+let state: AudioState = { mode: 'ambient', status: 'stopped', label: 'AKASHA · Space-Time', volume: 0.45, savedTrackAvailable: false, youtubeUrl: savedYouTubeUrl, savedYouTubeAvailable: Boolean(savedYouTubeUrl) };
 let localAudio: HTMLAudioElement | null = null;
 let localUrl: string | null = null;
 let localBlob: Blob | null = null;
@@ -86,6 +86,7 @@ function notify(): void {
 
 function updateStatus(status: AudioStatus): void {
   state = { ...state, status };
+  notify();
 }
 
 function stopAmbientNodes(): void {
@@ -145,7 +146,7 @@ function buildAmbientSoundscape(): void {
     const pulseGain = audioContext!.createGain();
     oscillator.type = index % 2 === 0 ? 'sine' : 'triangle';
     oscillator.frequency.value = frequency;
-    voiceGain.gain.value = index === 0 ? 0.28 : 0.13;
+    voiceGain.gain.value = index === 0 ? 0.34 : 0.17;
     pulse.frequency.value = 0.035 + index * 0.012;
     pulseGain.gain.value = index === 0 ? 0.08 : 0.04;
     pulse.connect(pulseGain);
@@ -170,7 +171,7 @@ function playAmbientNote(): void {
   oscillator.type = 'sine';
   oscillator.frequency.value = AMBIENT_PHRASE[ambientPhraseIndex % AMBIENT_PHRASE.length];
   noteGain.gain.setValueAtTime(0.0001, now);
-  noteGain.gain.exponentialRampToValueAtTime(0.055, now + 1.8);
+  noteGain.gain.exponentialRampToValueAtTime(0.09, now + 1.8);
   noteGain.gain.exponentialRampToValueAtTime(0.0001, now + 7.2);
   oscillator.connect(noteGain);
   noteGain.connect(ambientFilter);
@@ -292,6 +293,7 @@ export async function playAudio(): Promise<void> {
   }
   if (!audioContext) buildAmbientSoundscape();
   await audioContext!.resume();
+  if (audioContext!.state !== 'running') throw new Error(`Ambient audio could not start; the browser audio context is ${audioContext!.state}. Click Play again after interacting with the page.`);
   updateStatus('playing');
 }
 
